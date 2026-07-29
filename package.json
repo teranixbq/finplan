@@ -10,6 +10,7 @@
     "db:migrate:remote": "wrangler d1 migrations apply finplan --remote"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "drizzle-orm": "^0.44.2",
     "hono": "^4.7.11"
   },

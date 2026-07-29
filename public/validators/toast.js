@@ -1,8 +1,8 @@
 const TOAST_TYPES = {
-  error:   { bg: 'rgba(248,81,73,0.12)',  border: 'rgba(248,81,73,0.35)',  color: '#f85149' },
-  success: { bg: 'rgba(63,185,80,0.12)',  border: 'rgba(63,185,80,0.35)',  color: '#3fb950' },
-  warning: { bg: 'rgba(210,153,34,0.12)', border: 'rgba(210,153,34,0.35)', color: '#d29922' },
-  info:    { bg: 'rgba(88,166,255,0.12)', border: 'rgba(88,166,255,0.35)', color: '#58a6ff' },
+  error:   { color: '#e74c3c' },
+  success: { color: '#27ae60' },
+  warning: { color: '#f39c12' },
+  info:    { color: '#4a90d9' },
 };
 
 function getContainer() {
@@ -20,9 +20,8 @@ function toast(message, type = 'info', duration = 3000) {
   const style = TOAST_TYPES[type] || TOAST_TYPES.info;
 
   const el = document.createElement('div');
-  el.className = 'toast';
-  el.style.cssText = `background:${style.bg};border:1px solid ${style.border};color:${style.color};`;
-  el.innerHTML = `<span class="toast-msg">${message}</span><button class="toast-close" onclick="this.closest('.toast').remove()">&#10005;</button>`;
+  el.className = 'toast toast-' + (TOAST_TYPES[type] ? type : 'info');
+  el.innerHTML = `<span class="toast-msg" style="color:${style.color}">${message}</span><button class="toast-close" onclick="this.closest('.toast').remove()">&#10005;</button>`;
 
   container.appendChild(el);
 
@@ -37,6 +36,7 @@ function toast(message, type = 'info', duration = 3000) {
   }
 }
 
+function showToast(msg, type = 'info', duration = 3000) { toast(msg, type, duration); }
 function toastError(msg)   { toast(msg, 'error'); }
 function toastSuccess(msg) { toast(msg, 'success'); }
 function toastWarning(msg) { toast(msg, 'warning'); }

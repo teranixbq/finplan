@@ -53,7 +53,6 @@
         <span class="page-title" id="page-title">Beranda</span>
         <div class="month-select-wrap">
           <select id="month-select" class="form-select" style="width:auto;padding:5px 10px;font-size:13px;"></select>
-          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
         </div>
       </div>
       <div class="topbar-right">
@@ -80,25 +79,27 @@
           <span id="cashflow-status" class="status"></span>
         </div>
 
-        <!-- UPCOMING SALARY -->
-        <div class="salary-card">
+        <!-- UPCOMING SALARY (with edit) -->
+        <div class="salary-card" style="margin-bottom:16px;">
           <div>
-            <div class="label" data-i18n="incomingIncome">Pemasukan Mendatang</div>
+            <div class="label">
+              <span data-i18n="incomingIncome">Pemasukan Mendatang</span>
+            </div>
             <div class="value" id="val-salary">Rp0</div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:11px;color:var(--blue);margin-bottom:4px;" data-i18n="salaryDate">Tanggal Gaji</div>
-            <div id="val-salary-date" style="font-size:20px;font-weight:700;color:var(--blue);">-</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;" data-i18n="salaryDate">Tanggal Gaji</div>
+            <div id="val-salary-date" class="salary-date-num">-</div>
           </div>
         </div>
 
         <!-- SUMMARY GRID -->
         <div class="summary-grid">
-          <div class="stat-card blue">
+          <div class="stat-card">
             <div class="stat-label" data-i18n="totalCash">Dana Cair</div>
             <div class="stat-value" id="val-total-cash">Rp0</div>
           </div>
-          <div class="stat-card purple">
+          <div class="stat-card">
             <div class="stat-label" data-i18n="totalInvestment">Investasi</div>
             <div class="stat-value" id="val-total-investment">Rp0</div>
           </div>
@@ -106,41 +107,76 @@
             <div class="stat-label" data-i18n="totalOut">Total Keluar</div>
             <div class="stat-value" id="val-total-out">Rp0</div>
           </div>
-          <div class="stat-card green">
+          <div class="stat-card">
             <div class="stat-label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
             <div class="stat-value" id="val-remaining-before">Rp0</div>
           </div>
-          <div class="stat-card green">
+          <div class="stat-card">
             <div class="stat-label" data-i18n="remaining">Sisa Akhir Bulan</div>
             <div class="stat-value" id="val-remaining">Rp0</div>
           </div>
-          <div class="stat-card orange">
+          <div class="stat-card yellow">
             <div class="stat-label" data-i18n="avgDaily">Rata-rata Harian</div>
             <div class="stat-value" id="val-avg-daily">Rp0</div>
           </div>
         </div>
 
-        <!-- BREAKDOWN -->
+        <!-- CHART + BREAKDOWN ROW -->
+        <div class="grid-2">
+          <!-- DONUT CHART -->
+          <div class="card chart-card">
+            <div class="card-title" data-i18n="expenseChart">Komposisi Pengeluaran</div>
+            <div class="chart-wrap">
+              <canvas id="chart-breakdown"></canvas>
+              <div class="chart-center">
+                <div class="chart-center-label" data-i18n="totalOut">Total Keluar</div>
+                <div class="chart-center-value" id="chart-center-total">Rp0</div>
+              </div>
+            </div>
+            <div class="chart-legend" id="chart-legend"></div>
+          </div>
+
+          <!-- BREAKDOWN -->
+          <div class="card">
+            <div class="card-title" data-i18n="breakdown">Rincian Pengeluaran</div>
+            <div id="breakdown-content"></div>
+          </div>
+        </div>
+
+        <!-- ASSET vs INVEST BAR CHART -->
         <div class="card section">
-          <div class="card-title" data-i18n="breakdown">Rincian Pengeluaran</div>
-          <div id="breakdown-content"></div>
+          <div class="card-title" data-i18n="assetChart">Aset & Arus Kas</div>
+          <div class="chart-wrap" style="height:180px;">
+            <canvas id="chart-assets"></canvas>
+          </div>
+        </div>
+
+        <!-- NEXT MONTH PROJECTION -->
+        <div class="card section">
+          <div class="card-title" data-i18n="projectionHome">Proyeksi Bulan Depan</div>
+          <div id="home-projection"></div>
         </div>
 
         <!-- INCOMES -->
         <div class="section">
           <div class="section-header">
             <span class="section-title" data-i18n="incomes">Pemasukan Tambahan</span>
-            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-income')" data-i18n="addIncome">Tambah Pemasukan</button>
           </div>
           <div class="table-wrap">
             <table>
               <thead><tr>
                 <th data-i18n="name">Nama</th>
-                <th data-i18n="source">Sumber Dana</th>
                 <th style="text-align:right" data-i18n="amount">Nominal</th>
                 <th></th>
               </tr></thead>
               <tbody id="incomes-body"></tbody>
+              <tfoot><tr class="add-row">
+                <td colspan="3">
+                  <button class="btn btn-ghost btn-add-full" onclick="openModal('modal-income')">
+                    <span>+</span> <span data-i18n="addIncome">Tambah Pemasukan</span>
+                  </button>
+                </td>
+              </tr></tfoot>
             </table>
           </div>
         </div>
@@ -148,10 +184,26 @@
 
       <!-- PAGE: SETUP -->
       <div id="page-setup" class="page">
+        <!-- MONTH MANAGE BAR (setup only) -->
+        <div class="setup-manage">
+          <div class="setup-manage-info">
+            <span class="setup-manage-label" data-i18n="salary">Gaji</span>
+            <span class="setup-manage-value" id="setup-salary-value">Rp0</span>
+            <span class="setup-manage-sep">·</span>
+            <span class="setup-manage-label" data-i18n="salaryDate">Tanggal Gaji</span>
+            <span class="setup-manage-value" id="setup-salarydate-value">-</span>
+          </div>
+          <div class="setup-manage-actions">
+            <button class="btn btn-ghost btn-sm" onclick="openEditSalary()" data-i18n="editSalary">Edit Gaji</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
+          </div>
+        </div>
+
         <div class="setup-tabs">
           <button class="tab-btn active" data-tab="assets" onclick="switchTab('assets')" data-i18n="assets">Dana Cair</button>
           <button class="tab-btn" data-tab="investments" onclick="switchTab('investments')" data-i18n="investments">Investasi</button>
           <button class="tab-btn" data-tab="expenses" onclick="switchTab('expenses')" data-i18n="expenses">Pengeluaran</button>
+          <button class="tab-btn" data-tab="projection" onclick="switchTab('projection')" data-i18n="projection">Proyeksi Bulan Depan</button>
         </div>
 
         <!-- TAB: ASSETS -->
@@ -209,6 +261,38 @@
                 <th></th>
               </tr></thead>
               <tbody id="expenses-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: PROJECTION (next month) -->
+        <div id="tab-projection" class="tab-panel">
+          <div class="section-note" data-i18n="projectionNote">Rencana pengeluaran bulan depan. Otomatis disalin dari bulan ini (periodik tidak disertakan). Ubah bila perlu.</div>
+          <div class="section-header">
+            <span class="section-title">
+              <span data-i18n="projectionForMonth">Proyeksi untuk</span>
+              <span id="proj-target-label" class="proj-target">-</span>
+            </span>
+            <div class="setup-manage-actions">
+              <button class="btn btn-ghost btn-sm" onclick="resetProjection()" data-i18n="resetProjection">Samakan dengan Bulan Ini</button>
+              <button class="btn btn-primary btn-sm" onclick="openProjectionModal()" data-i18n="addProjection">Tambah Item</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="name">Nama</th>
+                <th data-i18n="category">Kategori</th>
+                <th data-i18n="source">Sumber</th>
+                <th style="text-align:right" data-i18n="amount">Nominal</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="projection-body"></tbody>
+              <tfoot><tr class="proj-total-row">
+                <td colspan="3" data-i18n="projectionTotal">Total Proyeksi</td>
+                <td style="text-align:right" id="proj-total">Rp0</td>
+                <td></td>
+              </tr></tfoot>
             </table>
           </div>
         </div>
@@ -293,6 +377,27 @@
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-newmonth')" data-i18n="cancel">Batal</button>
       <button class="btn btn-primary" onclick="submitNewMonth()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT SALARY -->
+<div id="modal-salary" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" data-i18n="editSalary">Edit Gaji</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" data-i18n="salary">Gaji</label>
+        <input id="edit-salary" type="text" inputmode="numeric" class="form-input amount-input" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="salaryDate">Tgl Gaji</label>
+        <input id="edit-salarydate" type="number" class="form-input" value="28" min="1" max="31">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-salary')" data-i18n="cancel">Batal</button>
+      <button class="btn btn-primary" onclick="submitEditSalary()" data-i18n="save">Simpan</button>
     </div>
   </div>
 </div>
@@ -419,6 +524,42 @@
   </div>
 </div>
 
+<!-- MODAL: PROJECTION ITEM -->
+<div id="modal-projection" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" id="proj-modal-title" data-i18n="addProjection">Tambah Item</div>
+    <input type="hidden" id="proj-id">
+    <div class="form-group">
+      <label class="form-label" data-i18n="name">Nama</label>
+      <input id="proj-name" type="text" class="form-input" placeholder="Nama pengeluaran">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" data-i18n="category">Kategori</label>
+        <select id="proj-category" class="form-select">
+          <option value="fixed">Tetap</option>
+          <option value="variable">Variabel</option>
+          <option value="tabungan">Tabungan</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="source">Sumber Dana</label>
+        <select id="proj-asset" class="form-select">
+          <option value="">- Pilih -</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="amount">Nominal</label>
+      <input id="proj-amount" type="text" inputmode="numeric" class="form-input amount-input" placeholder="0">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-projection')" data-i18n="cancel">Batal</button>
+      <button class="btn btn-primary" onclick="submitProjection()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: ADD DAILY -->
 <div id="modal-daily" class="modal-overlay hidden">
   <div class="modal">
@@ -452,6 +593,7 @@
   </div>
 </div>
 
+<script src="/vendor/chart.min.js"></script>
 <script src="/i18n.js"></script>
 <script src="/validators/toast.js"></script>
 <script src="/app.js"></script>

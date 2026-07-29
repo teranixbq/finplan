@@ -63,3 +63,16 @@ export const dailyExpenses = sqliteTable('daily_expenses', {
   note: text('note'),
   createdAt: integer('created_at').notNull(),
 });
+
+export const expenseProjections = sqliteTable('expense_projections', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userEmail: text('user_email').notNull(),
+  targetMonth: integer('target_month').notNull(),
+  targetYear: integer('target_year').notNull(),
+  name: text('name').notNull(),
+  category: text('category', { enum: ['fixed', 'variable', 'tabungan'] }).notNull(),
+  amount: real('amount').notNull().default(0),
+  assetId: integer('asset_id'),
+  createdAt: integer('created_at').notNull(),
+  updatedAt: integer('updated_at').notNull(),
+});

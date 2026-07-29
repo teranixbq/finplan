@@ -8,6 +8,7 @@ import investmentsRoute from './routes/investments';
 import expensesRoute from './routes/expenses';
 import incomesRoute from './routes/incomes';
 import dailyRoute from './routes/daily';
+import projectionsRoute from './routes/projections';
 
 interface AppEnv extends Env {
   ASSETS: Fetcher;
@@ -34,6 +35,7 @@ app.route('/api/investments', investmentsRoute);
 app.route('/api/expenses', expensesRoute);
 app.route('/api/incomes', incomesRoute);
 app.route('/api/daily', dailyRoute);
+app.route('/api/projections', projectionsRoute);
 
 app.get('/api/me', authMiddleware, async (c) => {
   const cookie = c.req.header('Cookie') || '';
