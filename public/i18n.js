@@ -47,6 +47,13 @@ const translations = {
     salaryInfo: 'Gaji masuk tanggal',
     setupMonth: 'Setup Bulan',
     selectMonth: 'Pilih bulan yang ingin dilihat',
+    validNameRequired: 'Nama tidak boleh kosong.',
+    validAmountRequired: 'Nominal tidak boleh kosong.',
+    validMonthRequired: 'Bulan tidak boleh kosong.',
+    validYearRequired: 'Tahun tidak boleh kosong.',
+    savedSuccess: 'Berhasil disimpan.',
+    deletedSuccess: 'Berhasil dihapus.',
+    deleteConfirm: 'Klik hapus sekali lagi untuk konfirmasi.',
   },
   en: {
     appName: 'FinPlan',
@@ -96,6 +103,13 @@ const translations = {
     salaryInfo: 'Salary arrives on day',
     setupMonth: 'Setup Month',
     selectMonth: 'Select a month to view',
+    validNameRequired: 'Name is required.',
+    validAmountRequired: 'Amount is required.',
+    validMonthRequired: 'Month is required.',
+    validYearRequired: 'Year is required.',
+    savedSuccess: 'Saved successfully.',
+    deletedSuccess: 'Deleted successfully.',
+    deleteConfirm: 'Click delete again to confirm.',
   }
 };
 

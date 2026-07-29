@@ -23,6 +23,19 @@ const API = {
 
 const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
 
+const _pendingDelete = {};
+
+function confirmDelete(key, onConfirm) {
+  if (_pendingDelete[key]) {
+    clearTimeout(_pendingDelete[key]);
+    delete _pendingDelete[key];
+    onConfirm();
+  } else {
+    toastWarning(t('deleteConfirm'));
+    _pendingDelete[key] = setTimeout(() => delete _pendingDelete[key], 3000);
+  }
+}
+
 let state = {
   months: [],
   activeMonthId: null,
@@ -116,8 +129,7 @@ function renderSummary() {
     statusEl.textContent = t('danger');
   }
 
-  const salaryInfoEl = document.getElementById('salary-info');
-  salaryInfoEl.textContent = `${t('salaryInfo')} ${s.month.salaryDate} — ${fmt(s.month.salary)}`;
+  document.getElementById('salary-info').textContent = `${t('salaryInfo')} ${s.month.salaryDate} — ${fmt(s.month.salary)}`;
 }
 
 function renderAssets() {
@@ -166,50 +178,73 @@ function renderExpenses() {
 }
 
 async function updateAsset(id, key, value) {
-  await API.put(`/api/assets/${id}`, { [key]: value });
-  await refreshSummary();
+  try {
+    await API.put(`/api/assets/${id}`, { [key]: value });
+    await refreshSummary();
+    toastSuccess(t('savedSuccess'));
+  } catch (e) { toastError(e.message); }
 }
 
 async function deleteAsset(id) {
-  if (!confirm(t('confirmDelete'))) return;
-  await API.del(`/api/assets/${id}`);
-  state.assets = state.assets.filter(a => a.id !== id);
-  renderAssets();
-  await refreshSummary();
+  confirmDelete(`asset-${id}`, async () => {
+    try {
+      await API.del(`/api/assets/${id}`);
+      state.assets = state.assets.filter(a => a.id !== id);
+      renderAssets();
+      await refreshSummary();
+      toastSuccess(t('deletedSuccess'));
+    } catch (e) { toastError(e.message); }
+  });
 }
 
 async function updateInvestment(id, key, value) {
-  await API.put(`/api/investments/${id}`, { [key]: value });
-  await refreshSummary();
+  try {
+    await API.put(`/api/investments/${id}`, { [key]: value });
+    await refreshSummary();
+    toastSuccess(t('savedSuccess'));
+  } catch (e) { toastError(e.message); }
 }
 
 async function deleteInvestment(id) {
-  if (!confirm(t('confirmDelete'))) return;
-  await API.del(`/api/investments/${id}`);
-  state.investments = state.investments.filter(i => i.id !== id);
-  renderInvestments();
-  await refreshSummary();
+  confirmDelete(`inv-${id}`, async () => {
+    try {
+      await API.del(`/api/investments/${id}`);
+      state.investments = state.investments.filter(i => i.id !== id);
+      renderInvestments();
+      await refreshSummary();
+      toastSuccess(t('deletedSuccess'));
+    } catch (e) { toastError(e.message); }
+  });
 }
 
 async function updateExpense(id, key, value) {
-  await API.put(`/api/expenses/${id}`, { [key]: value });
-  await refreshSummary();
+  try {
+    await API.put(`/api/expenses/${id}`, { [key]: value });
+    await refreshSummary();
+    toastSuccess(t('savedSuccess'));
+  } catch (e) { toastError(e.message); }
 }
 
 async function toggleExpense(id, current) {
-  await API.put(`/api/expenses/${id}`, { isActive: current ? 0 : 1 });
-  const exp = state.expenses.find(e => e.id === id);
-  if (exp) exp.isActive = current ? 0 : 1;
-  renderExpenses();
-  await refreshSummary();
+  try {
+    await API.put(`/api/expenses/${id}`, { isActive: current ? 0 : 1 });
+    const exp = state.expenses.find(e => e.id === id);
+    if (exp) exp.isActive = current ? 0 : 1;
+    renderExpenses();
+    await refreshSummary();
+  } catch (e) { toastError(e.message); }
 }
 
 async function deleteExpense(id) {
-  if (!confirm(t('confirmDelete'))) return;
-  await API.del(`/api/expenses/${id}`);
-  state.expenses = state.expenses.filter(e => e.id !== id);
-  renderExpenses();
-  await refreshSummary();
+  confirmDelete(`exp-${id}`, async () => {
+    try {
+      await API.del(`/api/expenses/${id}`);
+      state.expenses = state.expenses.filter(e => e.id !== id);
+      renderExpenses();
+      await refreshSummary();
+      toastSuccess(t('deletedSuccess'));
+    } catch (e) { toastError(e.message); }
+  });
 }
 
 async function refreshSummary() {
@@ -223,57 +258,79 @@ function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 async function submitAddAsset() {
   const name = document.getElementById('asset-name').value.trim();
   const amount = parseFloat(document.getElementById('asset-amount').value);
-  if (!name || !amount) return;
-  const result = await API.post('/api/assets', { monthId: state.activeMonthId, name, amount });
-  state.assets.push(result);
-  renderAssets();
-  await refreshSummary();
-  closeModal('modal-asset');
-  document.getElementById('asset-name').value = '';
-  document.getElementById('asset-amount').value = '';
+  if (!validate([
+    { value: name, message: t('validNameRequired') },
+    { value: isNaN(amount) ? '' : amount, message: t('validAmountRequired') },
+  ])) return;
+  try {
+    const result = await API.post('/api/assets', { monthId: state.activeMonthId, name, amount });
+    state.assets.push(result);
+    renderAssets();
+    await refreshSummary();
+    closeModal('modal-asset');
+    document.getElementById('asset-name').value = '';
+    document.getElementById('asset-amount').value = '';
+    toastSuccess(t('addAsset'));
+  } catch (e) { toastError(e.message); }
 }
 
 async function submitAddInvestment() {
   const name = document.getElementById('inv-name').value.trim();
   const type = document.getElementById('inv-type').value;
   const amount = parseFloat(document.getElementById('inv-amount').value);
-  if (!name || !amount) return;
-  const result = await API.post('/api/investments', { monthId: state.activeMonthId, name, type, amount });
-  state.investments.push(result);
-  renderInvestments();
-  await refreshSummary();
-  closeModal('modal-investment');
-  document.getElementById('inv-name').value = '';
-  document.getElementById('inv-amount').value = '';
+  if (!validate([
+    { value: name, message: t('validNameRequired') },
+    { value: isNaN(amount) ? '' : amount, message: t('validAmountRequired') },
+  ])) return;
+  try {
+    const result = await API.post('/api/investments', { monthId: state.activeMonthId, name, type, amount });
+    state.investments.push(result);
+    renderInvestments();
+    await refreshSummary();
+    closeModal('modal-investment');
+    document.getElementById('inv-name').value = '';
+    document.getElementById('inv-amount').value = '';
+    toastSuccess(t('addInvestment'));
+  } catch (e) { toastError(e.message); }
 }
 
 async function submitAddExpense() {
   const name = document.getElementById('exp-name').value.trim();
   const category = document.getElementById('exp-category').value;
   const amount = parseFloat(document.getElementById('exp-amount').value);
-  if (!name || !amount) return;
-  const result = await API.post('/api/expenses', { monthId: state.activeMonthId, name, category, amount, isActive: 1 });
-  state.expenses.push(result);
-  renderExpenses();
-  await refreshSummary();
-  closeModal('modal-expense');
-  document.getElementById('exp-name').value = '';
-  document.getElementById('exp-amount').value = '';
+  if (!validate([
+    { value: name, message: t('validNameRequired') },
+    { value: isNaN(amount) ? '' : amount, message: t('validAmountRequired') },
+  ])) return;
+  try {
+    const result = await API.post('/api/expenses', { monthId: state.activeMonthId, name, category, amount, isActive: 1 });
+    state.expenses.push(result);
+    renderExpenses();
+    await refreshSummary();
+    closeModal('modal-expense');
+    document.getElementById('exp-name').value = '';
+    document.getElementById('exp-amount').value = '';
+    toastSuccess(t('addExpense'));
+  } catch (e) { toastError(e.message); }
 }
 
 async function submitNewMonth() {
   const month = parseInt(document.getElementById('nm-month').value);
   const year = parseInt(document.getElementById('nm-year').value);
-  const salary = parseFloat(document.getElementById('nm-salary').value);
-  const salaryDate = parseInt(document.getElementById('nm-salarydate').value);
-  if (!month || !year) return;
+  const salary = parseFloat(document.getElementById('nm-salary').value) || 0;
+  const salaryDate = parseInt(document.getElementById('nm-salarydate').value) || 28;
+  if (!validate([
+    { value: month, message: t('validMonthRequired') },
+    { value: year, message: t('validYearRequired') },
+  ])) return;
   try {
     const result = await API.post('/api/months', { month, year, salary, salaryDate });
     state.months.push(result);
     closeModal('modal-newmonth');
+    toastSuccess(t('newMonth'));
     await selectMonth(result.id);
   } catch (e) {
-    alert(t('monthExists'));
+    toastError(t('monthExists'));
   }
 }
 
@@ -284,6 +341,7 @@ async function logout() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   setLang(currentLang);
+  document.getElementById('lang-toggle').textContent = currentLang.toUpperCase();
   document.getElementById('nm-year').value = new Date().getFullYear();
   document.getElementById('nm-month').value = new Date().getMonth() + 1;
   await loadUser();
