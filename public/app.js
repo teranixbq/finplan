@@ -257,7 +257,7 @@ function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
 async function submitAddAsset() {
   const name = document.getElementById('asset-name').value.trim();
-  const amount = parseFloat(document.getElementById('asset-amount').value);
+  const amount = getAmountValue("asset-amount");
   if (!validate([
     { value: name, message: t('validNameRequired') },
     { value: isNaN(amount) ? '' : amount, message: t('validAmountRequired') },
@@ -277,7 +277,7 @@ async function submitAddAsset() {
 async function submitAddInvestment() {
   const name = document.getElementById('inv-name').value.trim();
   const type = document.getElementById('inv-type').value;
-  const amount = parseFloat(document.getElementById('inv-amount').value);
+  const amount = getAmountValue("inv-amount");
   if (!validate([
     { value: name, message: t('validNameRequired') },
     { value: isNaN(amount) ? '' : amount, message: t('validAmountRequired') },
@@ -297,7 +297,7 @@ async function submitAddInvestment() {
 async function submitAddExpense() {
   const name = document.getElementById('exp-name').value.trim();
   const category = document.getElementById('exp-category').value;
-  const amount = parseFloat(document.getElementById('exp-amount').value);
+  const amount = getAmountValue("exp-amount");
   if (!validate([
     { value: name, message: t('validNameRequired') },
     { value: isNaN(amount) ? '' : amount, message: t('validAmountRequired') },
@@ -317,7 +317,7 @@ async function submitAddExpense() {
 async function submitNewMonth() {
   const month = parseInt(document.getElementById('nm-month').value);
   const year = parseInt(document.getElementById('nm-year').value);
-  const salary = parseFloat(document.getElementById('nm-salary').value) || 0;
+  const salary = getAmountValue("nm-salary");
   const salaryDate = parseInt(document.getElementById('nm-salarydate').value) || 28;
   if (!validate([
     { value: month, message: t('validMonthRequired') },
@@ -344,6 +344,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('lang-toggle').textContent = currentLang.toUpperCase();
   document.getElementById('nm-year').value = new Date().getFullYear();
   document.getElementById('nm-month').value = new Date().getMonth() + 1;
+  initAllAmountInputs();
   await loadUser();
   await loadMonths();
 

@@ -49,3 +49,42 @@ function validate(fields) {
   }
   return true;
 }
+
+function formatNumber(n) {
+  return new Intl.NumberFormat('id-ID').format(n);
+}
+
+function parseNumber(str) {
+  return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+}
+
+function initAmountInput(el) {
+  el.setAttribute('type', 'text');
+  el.setAttribute('inputmode', 'numeric');
+
+  el.addEventListener('focus', function () {
+    const raw = parseNumber(this.value);
+    this.value = raw === 0 ? '' : String(raw);
+  });
+
+  el.addEventListener('input', function () {
+    const pos = this.selectionStart;
+    const raw = this.value.replace(/[^\d]/g, '');
+    this.value = raw;
+    this.setSelectionRange(pos, pos);
+  });
+
+  el.addEventListener('blur', function () {
+    const raw = parseNumber(this.value);
+    this.value = raw === 0 ? '' : formatNumber(raw);
+  });
+}
+
+function initAllAmountInputs() {
+  document.querySelectorAll('.amount-input').forEach(initAmountInput);
+}
+
+function getAmountValue(id) {
+  const el = document.getElementById(id);
+  return parseNumber(el ? el.value : '0');
+}
