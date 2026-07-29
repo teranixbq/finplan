@@ -129,7 +129,16 @@ function renderSummary() {
     statusEl.textContent = t('danger');
   }
 
-  document.getElementById('salary-info').textContent = `${t('salaryInfo')} ${s.month.salaryDate} — ${fmt(s.month.salary)}`;
+  const salaryEl = document.getElementById('salary-info');
+  salaryEl.innerHTML = `
+    ${t('salaryInfo')} ${s.month.salaryDate} —
+    <span
+      id="salary-editable"
+      style="cursor:pointer;border-bottom:1px dashed currentColor;padding:0 2px;"
+      title="${t('edit')}"
+      onclick="editSalaryInline()"
+    >${fmt(s.month.salary)}</span>
+  `;
 }
 
 function renderAssets() {
@@ -358,3 +367,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (state.activeMonthId) renderAll();
   });
 });
+
+async function editSalaryInline() {
+  const s = state.summary;
+  const el = document.getElementById('salary-editable');
+  if (!el) return;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.inputMode = 'numeric';
+  input.className = 'editable-input amount-input';
+  input.style.cssText = 'width:120px;text-align:right;font-size:inherit;';
+  input.value = formatNumber(s.month.salary);
+  initAmountInput(input);
+
+  el.replaceWith(input);
+  input.focus();
+  input.select();
+
+  let saved = false;
+
+  async function saveSalary() {
+    if (saved) return;
+    saved = true;
+    const newSalary = parseNumber(input.value);
+    if (newSalary === s.month.salary) { await refreshSummary(); return; }
+    try {
+      await API.put(`/api/months/${state.activeMonthId}`, { salary: newSalary });
+      toastSuccess(t('savedSuccess'));
+      await selectMonth(state.activeMonthId);
+    } catch (e) { toastError(e.message); await refreshSummary(); }
+  }
+
+  input.addEventListener('blur', saveSalary);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { input.blur(); }
+    if (e.key === 'Escape') { saved = true; refreshSummary(); }
+  });
+}
