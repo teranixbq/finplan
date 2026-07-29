@@ -102,10 +102,13 @@ app.get('/:id/summary', async (c) => {
   const totalTabungan = allExpenses.filter(e => e.isActive && e.category === 'tabungan').reduce((s, e) => s + e.amount, 0);
   const totalDaily = allDaily.reduce((s, d) => s + d.amount, 0);
   const totalIncomes = allIncomes.reduce((s, i) => s + i.amount, 0);
-  const totalExpenses = totalFixed + totalVariable + totalPeriodic + totalTabungan;
-  const totalOut = totalExpenses + totalDaily;
+  const totalBudget = totalFixed + totalVariable + totalPeriodic + totalTabungan;
+  const totalExpenses = totalBudget; // alias, kept for compatibility
+  const totalOut = totalBudget + totalDaily; // budget + aktual harian
 
-  const sisaSebelumGajian = totalCash - totalOut;
+  // sisaSebelumGajian pakai totalDaily saja (pengeluaran aktual nyata)
+  // bukan totalOut karena budget adalah rencana, bukan pengeluaran aktual
+  const sisaSebelumGajian = totalCash - totalDaily;
   const sisaAkhirBulan = sisaSebelumGajian + month.salary;
 
   const dailyByDate: Record<string, number> = {};
@@ -127,6 +130,7 @@ app.get('/:id/summary', async (c) => {
     totalTabungan,
     totalDaily,
     totalIncomes,
+    totalBudget,
     totalExpenses,
     totalOut,
     sisaSebelumGajian,

@@ -74,21 +74,45 @@
       <!-- PAGE: HOME -->
       <div id="page-home" class="page active">
 
-        <!-- ROW 1: UPCOMING INCOME + SALARY SCHEDULE -->
+        <!-- ROW 1: KIRI (income + summary) | KANAN (schedule) -->
         <div class="home-top-grid">
 
-          <!-- UPCOMING INCOME -->
-          <div class="card income-card">
-            <div class="card-title" data-i18n="incomingIncome">Pemasukan Mendatang</div>
-            <div class="income-amount" id="val-salary">Rp0</div>
-            <div class="income-sub" id="income-sub">-</div>
-            <div class="income-status">
-              <span class="status-dot" id="income-status-dot"></span>
-              <span id="income-status-text">-</span>
+          <!-- KOLOM KIRI: income card + 4 summary cards -->
+          <div class="home-left-col">
+            <div class="card income-card">
+              <div class="income-card-header">
+                <div class="card-title" data-i18n="incomingIncome">Pemasukan Mendatang</div>
+                <span class="income-status-badge" id="income-status-badge">Aman</span>
+              </div>
+              <div class="income-amount" id="val-salary">Rp0</div>
+              <div class="income-sub" id="income-sub">-</div>
+            </div>
+            <div class="summary-grid">
+              <div class="stat-card">
+                <div class="stat-label" data-i18n="totalCash">Dana Cair</div>
+                <div class="stat-value-row">
+                  <span class="stat-value" id="val-total-cash">Rp0</span>
+                  <button class="stat-history-btn" onclick="openAssetHistory()" title="Riwayat Dana Cair">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label" data-i18n="totalInvestment">Investasi</div>
+                <div class="stat-value" id="val-total-investment">Rp0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
+                <div class="stat-value" id="val-remaining-before">Rp0</div>
+              </div>
+              <div class="stat-card yellow">
+                <div class="stat-label" data-i18n="remaining">Sisa Akhir Bulan</div>
+                <div class="stat-value" id="val-remaining">Rp0</div>
+              </div>
             </div>
           </div>
 
-          <!-- SALARY SCHEDULE & PROJECTION -->
+          <!-- KOLOM KANAN: schedule + proyeksi -->
           <div class="card schedule-card">
             <div class="card-title" data-i18n="scheduleProjection">Jadwal Gaji &amp; Proyeksi</div>
             <div class="schedule-dates">
@@ -115,51 +139,12 @@
           </div>
         </div>
 
-        <!-- SUMMARY GRID -->
-        <div class="summary-grid">
-          <div class="stat-card">
-            <div class="stat-label" data-i18n="totalCash">Dana Cair</div>
-            <div class="stat-value-row">
-              <span class="stat-value" id="val-total-cash">Rp0</span>
-              <button class="stat-history-btn" onclick="openAssetHistory()" title="Riwayat Dana Cair">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-              </button>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label" data-i18n="totalInvestment">Investasi</div>
-            <div class="stat-value" id="val-total-investment">Rp0</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
-            <div class="stat-value" id="val-remaining-before">Rp0</div>
-          </div>
-          <div class="stat-card yellow stat-card-wide">
-            <div class="stat-label" data-i18n="remaining">Sisa Akhir Bulan</div>
-            <div class="stat-value" id="val-remaining">Rp0</div>
-          </div>
-        </div>
-
         <!-- CHART + BREAKDOWN ROW -->
-        <div class="grid-2">
-          <!-- DONUT CHART -->
-          <div class="card chart-card">
-            <div class="card-title" data-i18n="expenseChart">Komposisi Pengeluaran</div>
-            <div class="chart-wrap">
-              <canvas id="chart-breakdown"></canvas>
-              <div class="chart-center">
-                <div class="chart-center-label" data-i18n="totalOut">Total Keluar</div>
-                <div class="chart-center-value" id="chart-center-total">Rp0</div>
-              </div>
-            </div>
-            <div class="chart-legend" id="chart-legend"></div>
-          </div>
-
-          <!-- BREAKDOWN -->
-          <div class="card">
-            <div class="card-title" data-i18n="breakdown">Rincian Pengeluaran</div>
-            <div id="breakdown-content"></div>
-          </div>
+        <!-- BUDGET VS ACTUAL — full width -->
+        <div class="card chart-card section bva-card">
+          <div class="card-title" data-i18n="budgetActual">Budget vs Actual</div>
+          <div id="budget-actual-list" class="bva-scroll-list"></div>
+          <div id="bva-total-footer"></div>
         </div>
 
         <!-- PEMASUKAN TAMBAHAN -->

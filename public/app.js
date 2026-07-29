@@ -294,9 +294,11 @@ function renderHome() {
   // ----- INCOME CARD -----
   el('val-salary').textContent = rp(m.salary);
   el('income-sub').textContent = `${t('salaryInfo')} ${m.salaryDate} (${days_left} ${t('daysLeft')})`;
-  const dot = el('income-status-dot');
-  if (dot) dot.className = 'status-dot ' + status;
-  el('income-status-text').textContent = `${statusLabel} ${pct}%`;
+  const badge = el('income-status-badge');
+  if (badge) {
+    badge.textContent = `${statusLabel} ${pct}%`;
+    badge.className = 'income-status-badge ' + status;
+  }
 
   // ----- SALARY SCHEDULE CARD -----
   renderSchedule(m, now, today_day, days_left);
@@ -308,21 +310,6 @@ function renderHome() {
   el('val-total-investment').textContent = rp(s.totalInvestment);
   el('val-remaining-before').textContent = rp(s.sisaSebelumGajian);
   el('val-remaining').textContent = rp(s.sisaAkhirBulan);
-
-  // breakdown — FontAwesome category icons (colored)
-  const bEl = el('breakdown-content');
-  const brow = (cat, label, val) => `
-    <div class="breakdown-row">
-      <span class="bd-left"><span class="bd-icon" style="color:${CAT_ICON_COLOR[cat]}">${CAT_ICON[cat]}</span><span>${label}</span></span>
-      <span>${rp(val)}</span>
-    </div>`;
-  bEl.innerHTML =
-    brow('fixed',    t('totalFixed'),    s.totalFixed) +
-    brow('variable', t('totalVariable'), s.totalVariable) +
-    brow('periodic', t('totalPeriodic'), s.totalPeriodic) +
-    brow('tabungan', t('totalTabungan'), s.totalTabungan) +
-    brow('daily',    t('totalDaily'),    s.totalDaily) +
-    `<div class="breakdown-row total"><span>${t('totalOut')}</span><span>${rp(s.totalOut)}</span></div>`;
 
   // charts
   renderCharts(s);
@@ -345,11 +332,9 @@ function fmtFullDate(d) {
 
 // ---- SALARY SCHEDULE & PROJECTION (top-right card) --------
 function renderSchedule(m, now, today_day, days_left) {
-  // today number + full date
   el('sched-today-num').textContent = today_day;
   el('sched-today-full').textContent = fmtFullDate(now);
 
-  // salary date: this month if not passed, else next month
   let salDate;
   if (m.salaryDate >= today_day) {
     salDate = new Date(now.getFullYear(), now.getMonth(), m.salaryDate);
@@ -358,91 +343,89 @@ function renderSchedule(m, now, today_day, days_left) {
   }
   el('sched-salary-num').textContent = m.salaryDate;
   el('sched-salary-full').textContent = fmtFullDate(salDate);
-
-  // countdown
   el('sched-countdown').textContent = `${days_left} ${t('daysLeft')}`;
 
-  // upcoming cashflow projection: salary in (gaji pokok) → total
+  // proyeksi: hanya item dari S.projection, tanpa gaji pokok / total / sisa
   const list = el('schedule-proj-list');
-  const dLabel = `${salDate.getDate()} ${MONTH_NAMES[salDate.getMonth()]}`;
-  list.innerHTML = `
+  const projItems = (S.projection && S.projection.items) ? S.projection.items : [];
+
+  if (!projItems.length) {
+    list.innerHTML = `<div class="empty" style="padding:12px 0;font-size:12px;">${t('noData')}</div>`;
+    return;
+  }
+
+  list.innerHTML = projItems.map(it => `
     <div class="sched-proj-row">
-      <span>${dLabel}</span>
-      <span data-i18n="basicSalary">Gaji Pokok</span>
-      <span class="sched-proj-amt">${rp(m.salary)}</span>
-    </div>
-    <div class="sched-proj-row total">
-      <span>${dLabel}</span>
-      <span data-i18n="total">Total</span>
-      <span class="sched-proj-amt">${rp(m.salary)}</span>
-    </div>
-  `;
+      <span class="sched-proj-name">${it.name}</span>
+      <span class="sched-proj-amt">${rp(it.amount)}</span>
+    </div>`).join('');
 }
 
 // ---- CHARTS ------------------------------------------------
 function renderCharts(s) {
-  if (typeof Chart === 'undefined') return;
-
-  // ----- DONUT: expense composition -----
-  const segs = [
-    { cat: 'fixed',    label: t('totalFixed'),    val: s.totalFixed,    color: CHART_COLORS.fixed },
-    { cat: 'variable', label: t('totalVariable'), val: s.totalVariable, color: CHART_COLORS.variable },
-    { cat: 'periodic', label: t('totalPeriodic'), val: s.totalPeriodic, color: CHART_COLORS.periodic },
-    { cat: 'tabungan', label: t('totalTabungan'), val: s.totalTabungan, color: CHART_COLORS.tabungan },
-    { cat: 'daily',    label: t('totalDaily'),    val: s.totalDaily,    color: CHART_COLORS.daily },
-  ].filter(x => x.val > 0);
-
-  el('chart-center-total').textContent = rp(s.totalOut);
-
-  const donutCanvas = el('chart-breakdown');
-  const hasData = segs.length > 0;
-  const data = hasData ? segs.map(x => x.val) : [1];
-  const colors = hasData ? segs.map(x => x.color) : [CHART_COLORS.track];
-
-  if (S.charts.donut) S.charts.donut.destroy();
-  S.charts.donut = new Chart(donutCanvas, {
-    type: 'doughnut',
-    data: {
-      labels: hasData ? segs.map(x => x.label) : [t('noData')],
-      datasets: [{
-        data,
-        backgroundColor: colors,
-        borderColor: 'rgba(18,30,18,0.6)',
-        borderWidth: 2,
-        hoverOffset: 6,
-      }],
-    },
-    options: {
-      cutout: '72%',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          enabled: hasData,
-          backgroundColor: 'rgba(18,30,18,0.92)',
-          borderColor: 'rgba(180,196,180,0.2)',
-          borderWidth: 1,
-          padding: 10,
-          callbacks: {
-            label: (ctx) => ' ' + ctx.label + ': ' + rp(ctx.parsed),
-          },
-        },
-      },
-    },
+  // ----- BUDGET VS ACTUAL: horizontal progress bars -----
+  // aggregate dailyExpenses by expenseId → actual per expense
+  const actualMap = {};
+  (S.daily || []).forEach(d => {
+    if (d.expenseId) {
+      actualMap[d.expenseId] = (actualMap[d.expenseId] || 0) + d.amount;
+    }
   });
 
-  // legend — FA category icon (colored) + label + value
-  const legendEl = el('chart-legend');
-  legendEl.innerHTML = hasData ? segs.map(x =>
-    `<div class="legend-item">
-      <span class="legend-icon" style="color:${CAT_ICON_COLOR[x.cat] || x.color}">${CAT_ICON[x.cat] || ''}</span>
-      <span>${x.label}</span>
-      <span class="legend-val">${rp(x.val)}</span>
-    </div>`
-  ).join('') : `<div class="legend-item"><span>${t('noData')}</span></div>`;
+  const activeExp = S.expenses.filter(e => e.isActive && e.category !== 'daily');
+  const listEl = el('budget-actual-list');
+
+  if (!activeExp.length) {
+    listEl.innerHTML = `<div class="empty" style="padding:24px 0;">${t('noData')}</div>`;
+  } else {
+    let totalBudget = 0, totalActual = 0;
+    listEl.innerHTML = activeExp.map(e => {
+      const budget = e.amount || 0;
+      const actual = actualMap[e.id] || 0;
+      totalBudget += budget;
+      totalActual += actual;
+      const pct = budget > 0 ? Math.min((actual / budget) * 100, 100) : 0;
+      const over = budget > 0 && actual > budget;
+      const pctDisplay = budget > 0 ? Math.round((actual / budget) * 100) : 0;
+      let barColor = '#8fb88f';
+      if (pctDisplay >= 100) barColor = '#d98a7f';
+      else if (pctDisplay >= 80) barColor = '#d9b877';
+      return `
+        <div class="bva-row">
+          <div class="bva-header">
+            <span class="bva-name">${e.name}</span>
+            <span class="bva-amounts">
+              <span class="bva-actual" style="color:${barColor}">${rp(actual)}</span>
+              <span class="bva-sep">/</span>
+              <span class="bva-budget">${rp(budget)}</span>
+            </span>
+          </div>
+          <div class="bva-bar-track">
+            <div class="bva-bar-fill" style="width:${pct}%;background:${barColor};"></div>
+          </div>
+          <div class="bva-pct" style="color:${barColor}">${pctDisplay}%${over ? ' ⚠' : ''}</div>
+        </div>`;
+    }).join('');
+
+    const footerEl = el('bva-total-footer');
+    if (footerEl) {
+      footerEl.innerHTML = `
+        <div class="bva-total-row">
+          <div class="bva-total-item">
+            <span class="bva-total-label">${t('totalActual') || 'Total Aktual'}</span>
+            <span class="bva-total-value actual">${rp(totalActual)}</span>
+          </div>
+          <div class="bva-total-divider"></div>
+          <div class="bva-total-item">
+            <span class="bva-total-label">${t('totalBudget') || 'Total Budget'}</span>
+            <span class="bva-total-value budget">${rp(totalBudget)}</span>
+          </div>
+        </div>`;
+    }
+  }
 
   // ----- BAR: assets & cashflow -----
+  if (typeof Chart === 'undefined') return;
   const barCanvas = el('chart-assets');
   if (S.charts.bar) S.charts.bar.destroy();
   S.charts.bar = new Chart(barCanvas, {
