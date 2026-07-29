@@ -1,7 +1,8 @@
 import type { Context } from 'hono';
 import { drizzle } from 'drizzle-orm/d1';
 import { sessions } from './db/schema';
-import { eq, gt } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
+import { getDb, now } from './lib/db';
 
 export interface Env {
   DB: D1Database;
@@ -14,7 +15,9 @@ export interface Env {
 function generateToken(): string {
   const arr = new Uint8Array(32);
   crypto.getRandomValues(arr);
-  return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+  return Array.from(arr)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 export async function handleGithubLogin(c: Context<{ Bindings: Env }>) {
@@ -34,7 +37,7 @@ export async function handleGithubCallback(c: Context<{ Bindings: Env }>) {
 
   const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
-    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify({
       client_id: c.env.GITHUB_CLIENT_ID,
       client_secret: c.env.GITHUB_CLIENT_SECRET,
@@ -42,47 +45,51 @@ export async function handleGithubCallback(c: Context<{ Bindings: Env }>) {
     }),
   });
 
-  const tokenData = await tokenRes.json() as { access_token?: string };
+  const tokenData = (await tokenRes.json()) as { access_token?: string };
   if (!tokenData.access_token) return c.redirect('/unauthorized');
 
   const emailRes = await fetch('https://api.github.com/user/emails', {
     headers: {
-      'Authorization': `Bearer ${tokenData.access_token}`,
-      'Accept': 'application/vnd.github+json',
+      Authorization: `Bearer ${tokenData.access_token}`,
+      Accept: 'application/vnd.github+json',
       'User-Agent': 'FinPlan-App',
     },
   });
 
-  const emails = await emailRes.json() as Array<{ email: string; primary: boolean; verified: boolean }>;
-  const primary = emails.find(e => e.primary && e.verified);
+  const emails = (await emailRes.json()) as Array<{
+    email: string;
+    primary: boolean;
+    verified: boolean;
+  }>;
+  const primary = emails.find((e) => e.primary && e.verified);
   if (!primary || primary.email !== c.env.ALLOWED_EMAIL) return c.redirect('/unauthorized');
 
   const userRes = await fetch('https://api.github.com/user', {
     headers: {
-      'Authorization': `Bearer ${tokenData.access_token}`,
-      'Accept': 'application/vnd.github+json',
+      Authorization: `Bearer ${tokenData.access_token}`,
+      Accept: 'application/vnd.github+json',
       'User-Agent': 'FinPlan-App',
     },
   });
-  const user = await userRes.json() as { name?: string; login: string };
+  const user = (await userRes.json()) as { name?: string; login: string };
 
-  const db = drizzle(c.env.DB);
+  const db = getDb(c.env.DB);
   const token = generateToken();
-  const now = Math.floor(Date.now() / 1000);
-  const expires = now + 60 * 60 * 24 * 30;
+  const ts = now();
+  const expires = ts + 60 * 60 * 24 * 30;
 
   await db.insert(sessions).values({
     token,
     githubEmail: primary.email,
     githubName: user.name || user.login,
     expiresAt: expires,
-    createdAt: now,
+    createdAt: ts,
   });
 
   return new Response(null, {
     status: 302,
     headers: {
-      'Location': '/',
+      Location: '/',
       'Set-Cookie': `fp_session=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 30}`,
     },
   });
@@ -92,13 +99,13 @@ export async function handleLogout(c: Context<{ Bindings: Env }>) {
   const cookie = c.req.header('Cookie') || '';
   const match = cookie.match(/fp_session=([^;]+)/);
   if (match) {
-    const db = drizzle(c.env.DB);
+    const db = getDb(c.env.DB);
     await db.delete(sessions).where(eq(sessions.token, match[1]));
   }
   return new Response(null, {
     status: 302,
     headers: {
-      'Location': '/login',
+      Location: '/login',
       'Set-Cookie': 'fp_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0',
     },
   });
@@ -108,14 +115,10 @@ export async function getSession(db: D1Database, cookie: string) {
   const match = cookie.match(/fp_session=([^;]+)/);
   if (!match) return null;
 
-  const drizzleDb = drizzle(db);
-  const now = Math.floor(Date.now() / 1000);
-  const result = await drizzleDb
-    .select()
-    .from(sessions)
-    .where(eq(sessions.token, match[1]))
-    .get();
+  const drizzleDb = getDb(db);
+  const ts = now();
+  const result = await drizzleDb.select().from(sessions).where(eq(sessions.token, match[1])).get();
 
-  if (!result || result.expiresAt < now) return null;
+  if (!result || result.expiresAt < ts) return null;
   return result;
 }

@@ -25,7 +25,7 @@
       "binding": "DB",
       "database_name": "finplan",
       "database_id": "6d744fba-5b9c-41a1-902c-af36b4f4d163",
-      "migrations_dir": "drizzle/migrations"
+      "migrations_dir": "migrations"
     }
   ]
 }

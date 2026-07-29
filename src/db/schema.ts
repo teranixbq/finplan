@@ -26,7 +26,9 @@ export const assets = sqliteTable('assets', {
 
 export const investments = sqliteTable('investments', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  monthId: integer('month_id').notNull().references(() => months.id, { onDelete: 'cascade' }),
+  monthId: integer('month_id')
+    .notNull()
+    .references(() => months.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   type: text('type', { enum: ['reksadana', 'saham', 'obligasi'] }).notNull(),
   amount: real('amount').notNull().default(0),
@@ -34,7 +36,9 @@ export const investments = sqliteTable('investments', {
 
 export const expenses = sqliteTable('expenses', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  monthId: integer('month_id').notNull().references(() => months.id, { onDelete: 'cascade' }),
+  monthId: integer('month_id')
+    .notNull()
+    .references(() => months.id, { onDelete: 'cascade' }),
   assetId: integer('asset_id'),
   name: text('name').notNull(),
   category: text('category', { enum: ['fixed', 'variable', 'periodic', 'tabungan'] }).notNull(),
@@ -46,7 +50,9 @@ export const expenses = sqliteTable('expenses', {
 
 export const incomes = sqliteTable('incomes', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  monthId: integer('month_id').notNull().references(() => months.id, { onDelete: 'cascade' }),
+  monthId: integer('month_id')
+    .notNull()
+    .references(() => months.id, { onDelete: 'cascade' }),
   assetId: integer('asset_id'),
   name: text('name').notNull(),
   amount: real('amount').notNull().default(0),
@@ -55,7 +61,9 @@ export const incomes = sqliteTable('incomes', {
 
 export const dailyExpenses = sqliteTable('daily_expenses', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  monthId: integer('month_id').notNull().references(() => months.id, { onDelete: 'cascade' }),
+  monthId: integer('month_id')
+    .notNull()
+    .references(() => months.id, { onDelete: 'cascade' }),
   expenseId: integer('expense_id'),
   date: text('date').notNull(),
   name: text('name').notNull(),
@@ -66,7 +74,9 @@ export const dailyExpenses = sqliteTable('daily_expenses', {
 
 export const assetHistory = sqliteTable('asset_history', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  assetId: integer('asset_id').notNull().references(() => assets.id, { onDelete: 'cascade' }),
+  assetId: integer('asset_id')
+    .notNull()
+    .references(() => assets.id, { onDelete: 'cascade' }),
   monthId: integer('month_id'),
   type: text('type').notNull(),
   name: text('name').notNull(),
