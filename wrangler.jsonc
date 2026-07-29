@@ -5,6 +5,11 @@
   "compatibility_date": "2025-04-18",
   "workers_dev": false,
   "preview_urls": false,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/auth/*", "/login", "/unauthorized"]
+  },
   "routes": [
     {
       "pattern": "finplan.apicode.my.id",

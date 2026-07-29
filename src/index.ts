@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { serveStatic } from 'hono/cloudflare-workers';
 import type { Env } from './auth';
 import { handleGithubLogin, handleGithubCallback, handleLogout, getSession } from './auth';
 import { authMiddleware } from './middleware';
@@ -8,14 +7,23 @@ import assetsRoute from './routes/assets';
 import investmentsRoute from './routes/investments';
 import expensesRoute from './routes/expenses';
 
-const app = new Hono<{ Bindings: Env }>();
+interface AppEnv extends Env {
+  ASSETS: Fetcher;
+}
+
+const app = new Hono<{ Bindings: AppEnv }>();
 
 app.get('/auth/github', handleGithubLogin);
 app.get('/auth/github/callback', handleGithubCallback);
 app.post('/auth/logout', handleLogout);
 
-app.get('/login', serveStatic({ path: './public/login.html' }));
-app.get('/unauthorized', serveStatic({ path: './public/unauthorized.html' }));
+app.get('/login', async (c) => {
+  return c.env.ASSETS.fetch(new Request(new URL('/login.html', c.req.url).toString()));
+});
+
+app.get('/unauthorized', async (c) => {
+  return c.env.ASSETS.fetch(new Request(new URL('/unauthorized.html', c.req.url).toString()));
+});
 
 app.use('/api/*', authMiddleware);
 app.route('/api/months', monthsRoute);
@@ -30,7 +38,13 @@ app.get('/api/me', authMiddleware, async (c) => {
 });
 
 app.use('/*', authMiddleware);
-app.get('/', serveStatic({ path: './public/index.html' }));
-app.get('/*', serveStatic({ root: './public' }));
+
+app.get('/', async (c) => {
+  return c.env.ASSETS.fetch(new Request(new URL('/index.html', c.req.url).toString()));
+});
+
+app.get('/*', async (c) => {
+  return c.env.ASSETS.fetch(c.req.raw);
+});
 
 export default app;
