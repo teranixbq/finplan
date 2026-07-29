@@ -266,7 +266,7 @@ async function submitNewMonth() {
   const year = parseInt(document.getElementById('nm-year').value);
   const salary = parseFloat(document.getElementById('nm-salary').value);
   const salaryDate = parseInt(document.getElementById('nm-salarydate').value);
-  if (!month || !year || !salary) return;
+  if (!month || !year) return;
   try {
     const result = await API.post('/api/months', { month, year, salary, salaryDate });
     state.months.push(result);
