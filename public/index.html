@@ -6,163 +6,289 @@
 <title>FinPlan</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <div class="app">
 
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <img src="/logo.jpeg" alt="FinPlan" style="height:32px;border-radius:6px;"> 
-      <div class="month-selector">
-        <select id="month-select" class="form-select" style="width:auto;padding:5px 10px;font-size:13px;"></select>
-        <button class="btn btn-ghost btn-sm" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
+  <!-- SIDEBAR (desktop) -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="/logo.jpeg" alt="FinPlan">
+      <span class="sidebar-logo-text">FinPlan</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="home" onclick="navigate('home')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        <span data-i18n="home">Beranda</span>
+      </button>
+      <button class="nav-item" data-page="setup" onclick="navigate('setup')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+        <span data-i18n="setup">Setup</span>
+      </button>
+      <button class="nav-item" data-page="daily" onclick="navigate('daily')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span data-i18n="daily">Harian</span>
+      </button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <span id="user-name">-</span>
+        <span id="user-email" style="font-size:11px;"></span>
       </div>
+      <button class="nav-item" onclick="logout()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span data-i18n="logout">Keluar</span>
+      </button>
     </div>
-    <div class="topbar-right">
-      <span id="user-name" class="user-name"></span>
-      <button id="lang-toggle" class="lang-btn">ID</button>
-      <button class="btn btn-ghost btn-sm" onclick="logout()" data-i18n="logout">Keluar</button>
-    </div>
-  </header>
+  </aside>
 
-  <main class="main">
+  <!-- MAIN WRAP -->
+  <div class="main-wrap">
 
-    <!-- NO MONTH STATE -->
-    <div id="no-month" class="no-month hidden">
-      <h2 data-i18n="setupMonth">Setup Bulan</h2>
-      <p data-i18n="selectMonth">Pilih bulan yang ingin dilihat</p>
-      <button class="btn btn-primary" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="hidden">
-
-      <!-- CASHFLOW BAR -->
-      <div id="cashflow-bar" class="cashflow-bar">
-        <span id="salary-info" class="info"></span>
-        <span id="cashflow-status" class="status"></span>
-      </div>
-
-      <!-- SUMMARY CARDS -->
-      <div class="summary-grid">
-        <div class="summary-card blue">
-          <div class="label" data-i18n="totalCash">Total Dana Cair</div>
-          <div class="value" id="val-total-cash">Rp0</div>
-        </div>
-        <div class="summary-card purple">
-          <div class="label" data-i18n="totalInvestment">Total Investasi</div>
-          <div class="value" id="val-total-investment">Rp0</div>
-        </div>
-        <div class="summary-card yellow">
-          <div class="label" data-i18n="totalOut">Total Pengeluaran</div>
-          <div class="value" id="val-total-out">Rp0</div>
-        </div>
-        <div class="summary-card green">
-          <div class="label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
-          <div class="value" id="val-remaining-before">Rp0</div>
-        </div>
-        <div class="summary-card green">
-          <div class="label" data-i18n="remaining">Sisa Akhir Bulan</div>
-          <div class="value" id="val-remaining">Rp0</div>
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="page-title" id="page-title">Beranda</span>
+        <div class="month-select-wrap">
+          <select id="month-select" class="form-select" style="width:auto;padding:5px 10px;font-size:13px;"></select>
+          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
         </div>
       </div>
+      <div class="topbar-right">
+        <button id="lang-toggle" class="lang-btn">ID</button>
+      </div>
+    </header>
 
-      <!-- ASSETS -->
-      <div class="section">
-        <div class="section-header">
-          <span class="section-title" data-i18n="assets">Aset Cair</span>
-          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-asset')" data-i18n="addAsset">Tambah Aset</button>
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <!-- NO MONTH STATE -->
+      <div id="no-month" class="no-month hidden">
+        <h2 data-i18n="setupMonth">Mulai Setup Bulan</h2>
+        <p data-i18n="selectMonth">Buat bulan pertama untuk memulai</p>
+        <button class="btn btn-primary" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
+      </div>
+
+      <!-- PAGE: HOME -->
+      <div id="page-home" class="page active">
+
+        <!-- CASHFLOW BAR -->
+        <div id="cashflow-bar" class="cashflow-bar">
+          <span id="salary-info" class="info"></span>
+          <span id="cashflow-status" class="status"></span>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
+
+        <!-- UPCOMING SALARY -->
+        <div class="salary-card">
+          <div>
+            <div class="label" data-i18n="incomingIncome">Pemasukan Mendatang</div>
+            <div class="value" id="val-salary">Rp0</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;color:var(--blue);margin-bottom:4px;" data-i18n="salaryDate">Tanggal Gaji</div>
+            <div id="val-salary-date" style="font-size:20px;font-weight:700;color:var(--blue);">-</div>
+          </div>
+        </div>
+
+        <!-- SUMMARY GRID -->
+        <div class="summary-grid">
+          <div class="stat-card blue">
+            <div class="stat-label" data-i18n="totalCash">Dana Cair</div>
+            <div class="stat-value" id="val-total-cash">Rp0</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-label" data-i18n="totalInvestment">Investasi</div>
+            <div class="stat-value" id="val-total-investment">Rp0</div>
+          </div>
+          <div class="stat-card yellow">
+            <div class="stat-label" data-i18n="totalOut">Total Keluar</div>
+            <div class="stat-value" id="val-total-out">Rp0</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
+            <div class="stat-value" id="val-remaining-before">Rp0</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label" data-i18n="remaining">Sisa Akhir Bulan</div>
+            <div class="stat-value" id="val-remaining">Rp0</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-label" data-i18n="avgDaily">Rata-rata Harian</div>
+            <div class="stat-value" id="val-avg-daily">Rp0</div>
+          </div>
+        </div>
+
+        <!-- BREAKDOWN -->
+        <div class="card section">
+          <div class="card-title" data-i18n="breakdown">Rincian Pengeluaran</div>
+          <div id="breakdown-content"></div>
+        </div>
+
+        <!-- INCOMES -->
+        <div class="section">
+          <div class="section-header">
+            <span class="section-title" data-i18n="incomes">Pemasukan Tambahan</span>
+            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-income')" data-i18n="addIncome">Tambah Pemasukan</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="name">Nama</th>
+                <th data-i18n="source">Sumber Dana</th>
+                <th style="text-align:right" data-i18n="amount">Nominal</th>
+                <th></th>
+              </tr></thead>
+              <tbody id="incomes-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: SETUP -->
+      <div id="page-setup" class="page">
+        <div class="setup-tabs">
+          <button class="tab-btn active" data-tab="assets" onclick="switchTab('assets')" data-i18n="assets">Dana Cair</button>
+          <button class="tab-btn" data-tab="investments" onclick="switchTab('investments')" data-i18n="investments">Investasi</button>
+          <button class="tab-btn" data-tab="expenses" onclick="switchTab('expenses')" data-i18n="expenses">Pengeluaran</button>
+        </div>
+
+        <!-- TAB: ASSETS -->
+        <div id="tab-assets" class="tab-panel active">
+          <div class="section-note" data-i18n="setupAssetNote">Dana cair dikonfigurasi sekali. Saldo otomatis carryover ke bulan berikutnya.</div>
+          <div class="section-header">
+            <span class="section-title" data-i18n="assets">Dana Cair</span>
+            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-asset')" data-i18n="addAsset">Tambah Dana</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
                 <th data-i18n="name">Nama</th>
                 <th style="text-align:right" data-i18n="amount">Nominal</th>
                 <th></th>
-              </tr>
-            </thead>
-            <tbody id="assets-body"></tbody>
-          </table>
+              </tr></thead>
+              <tbody id="assets-body"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <!-- INVESTMENTS -->
-      <div class="section">
-        <div class="section-header">
-          <span class="section-title" data-i18n="investments">Investasi</span>
-          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-investment')" data-i18n="addInvestment">Tambah Investasi</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
+        <!-- TAB: INVESTMENTS -->
+        <div id="tab-investments" class="tab-panel">
+          <div class="section-header">
+            <span class="section-title" data-i18n="investments">Investasi</span>
+            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-investment')" data-i18n="addInvestment">Tambah Investasi</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
                 <th data-i18n="name">Nama</th>
                 <th data-i18n="type">Tipe</th>
                 <th style="text-align:right" data-i18n="amount">Nominal</th>
                 <th></th>
-              </tr>
-            </thead>
-            <tbody id="investments-body"></tbody>
-          </table>
+              </tr></thead>
+              <tbody id="investments-body"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <!-- EXPENSES -->
-      <div class="section">
-        <div class="section-header">
-          <span class="section-title" data-i18n="expenses">Pengeluaran</span>
-          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-expense')" data-i18n="addExpense">Tambah Pengeluaran</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
+        <!-- TAB: EXPENSES -->
+        <div id="tab-expenses" class="tab-panel">
+          <div class="section-header">
+            <span class="section-title" data-i18n="expenses">Pengeluaran</span>
+            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-expense')" data-i18n="addExpense">Tambah Pengeluaran</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
                 <th data-i18n="name">Nama</th>
                 <th data-i18n="category">Kategori</th>
+                <th data-i18n="source">Sumber</th>
                 <th style="text-align:right" data-i18n="amount">Nominal</th>
                 <th data-i18n="active">Aktif</th>
                 <th></th>
-              </tr>
-            </thead>
-            <tbody id="expenses-body"></tbody>
-          </table>
+              </tr></thead>
+              <tbody id="expenses-body"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
+      <!-- PAGE: DAILY -->
+      <div id="page-daily" class="page">
+        <div class="section-header" style="margin-bottom:16px;">
+          <span class="section-title" data-i18n="dailyExpenses">Pengeluaran Harian</span>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-daily')" data-i18n="addDaily">Catat Harian</button>
+        </div>
+        <div class="summary-grid" style="margin-bottom:20px;">
+          <div class="stat-card yellow">
+            <div class="stat-label" data-i18n="totalDaily">Total Harian</div>
+            <div class="stat-value" id="val-total-daily">Rp0</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-label" data-i18n="avgDaily">Rata-rata Harian</div>
+            <div class="stat-value" id="val-avg-daily-2">Rp0</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-label" data-i18n="busiestDay">Hari Terboros</div>
+            <div class="stat-value" style="font-size:14px;" id="val-busiest-day">-</div>
+          </div>
+        </div>
+        <div id="daily-list"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <button class="bottom-nav-item active" data-page="home" onclick="navigate('home')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        <span data-i18n="home">Beranda</span>
+      </button>
+      <button class="bottom-nav-item" data-page="setup" onclick="navigate('setup')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+        <span data-i18n="setup">Setup</span>
+      </button>
+      <button class="bottom-nav-item" data-page="daily" onclick="navigate('daily')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span data-i18n="daily">Harian</span>
+      </button>
     </div>
-  </main>
+  </nav>
 </div>
 
 <!-- MODAL: NEW MONTH -->
 <div id="modal-newmonth" class="modal-overlay hidden">
   <div class="modal">
     <div class="modal-title" data-i18n="newMonth">Bulan Baru</div>
-    <div class="form-group">
-      <label class="form-label" data-i18n="month">Bulan</label>
-      <select id="nm-month" class="form-select">
-        <option value="1">Januari</option><option value="2">Februari</option>
-        <option value="3">Maret</option><option value="4">April</option>
-        <option value="5">Mei</option><option value="6">Juni</option>
-        <option value="7">Juli</option><option value="8">Agustus</option>
-        <option value="9">September</option><option value="10">Oktober</option>
-        <option value="11">November</option><option value="12">Desember</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" data-i18n="month">Bulan</label>
+        <select id="nm-month" class="form-select">
+          <option value="1">Januari</option><option value="2">Februari</option>
+          <option value="3">Maret</option><option value="4">April</option>
+          <option value="5">Mei</option><option value="6">Juni</option>
+          <option value="7">Juli</option><option value="8">Agustus</option>
+          <option value="9">September</option><option value="10">Oktober</option>
+          <option value="11">November</option><option value="12">Desember</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="year">Tahun</label>
+        <input id="nm-year" type="number" class="form-input" placeholder="2026">
+      </div>
     </div>
-    <div class="form-group">
-      <label class="form-label" data-i18n="year">Tahun</label>
-      <input id="nm-year" type="number" class="form-input" placeholder="2026">
-    </div>
-    <div class="form-group">
-      <label class="form-label" data-i18n="salary">Gaji</label>
-      <input id="nm-salary" type="text" inputmode="numeric" class="form-input amount-input" placeholder="">
-    </div>
-    <div class="form-group">
-      <label class="form-label" data-i18n="salaryDate">Tanggal Gaji</label>
-      <input id="nm-salarydate" type="number" class="form-input" value="28" min="1" max="31">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" data-i18n="salary">Gaji</label>
+        <input id="nm-salary" type="text" inputmode="numeric" class="form-input amount-input" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="salaryDate">Tgl Gaji</label>
+        <input id="nm-salarydate" type="number" class="form-input" value="28" min="1" max="31">
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-newmonth')" data-i18n="cancel">Batal</button>
@@ -174,10 +300,10 @@
 <!-- MODAL: ADD ASSET -->
 <div id="modal-asset" class="modal-overlay hidden">
   <div class="modal">
-    <div class="modal-title" data-i18n="addAsset">Tambah Aset</div>
+    <div class="modal-title" data-i18n="addAsset">Tambah Dana Cair</div>
     <div class="form-group">
       <label class="form-label" data-i18n="name">Nama</label>
-      <input id="asset-name" type="text" class="form-input" data-i18n-placeholder="name" placeholder="Nama">
+      <input id="asset-name" type="text" class="form-input" placeholder="Bank Jago, Dompet, ...">
     </div>
     <div class="form-group">
       <label class="form-label" data-i18n="amount">Nominal</label>
@@ -196,14 +322,14 @@
     <div class="modal-title" data-i18n="addInvestment">Tambah Investasi</div>
     <div class="form-group">
       <label class="form-label" data-i18n="name">Nama</label>
-      <input id="inv-name" type="text" class="form-input" data-i18n-placeholder="name" placeholder="Nama">
+      <input id="inv-name" type="text" class="form-input" placeholder="Nama investasi">
     </div>
     <div class="form-group">
       <label class="form-label" data-i18n="type">Tipe</label>
       <select id="inv-type" class="form-select">
-        <option value="reksadana" data-i18n="reksadana">Reksadana</option>
-        <option value="saham" data-i18n="saham">Saham</option>
-        <option value="obligasi" data-i18n="obligasi">Obligasi</option>
+        <option value="reksadana">Reksadana</option>
+        <option value="saham">Saham</option>
+        <option value="obligasi">Obligasi</option>
       </select>
     </div>
     <div class="form-group">
@@ -223,24 +349,105 @@
     <div class="modal-title" data-i18n="addExpense">Tambah Pengeluaran</div>
     <div class="form-group">
       <label class="form-label" data-i18n="name">Nama</label>
-      <input id="exp-name" type="text" class="form-input" data-i18n-placeholder="name" placeholder="Nama">
+      <input id="exp-name" type="text" class="form-input" placeholder="Nama pengeluaran">
     </div>
-    <div class="form-group">
-      <label class="form-label" data-i18n="category">Kategori</label>
-      <select id="exp-category" class="form-select">
-        <option value="fixed" data-i18n="fixed">Tetap</option>
-        <option value="variable" data-i18n="variable">Variabel</option>
-        <option value="periodic" data-i18n="periodic">Periodik</option>
-        <option value="tabungan" data-i18n="tabungan">Tabungan</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" data-i18n="category">Kategori</label>
+        <select id="exp-category" class="form-select" onchange="onExpenseCategoryChange()">
+          <option value="fixed">Tetap</option>
+          <option value="variable">Variabel</option>
+          <option value="periodic">Periodik</option>
+          <option value="tabungan">Tabungan</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="source">Sumber Dana</label>
+        <select id="exp-asset" class="form-select">
+          <option value="">- Pilih -</option>
+        </select>
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label" data-i18n="amount">Nominal</label>
       <input id="exp-amount" type="text" inputmode="numeric" class="form-input amount-input" placeholder="0">
     </div>
+    <div id="periodic-fields" class="hidden">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="periodEvery">Setiap</label>
+          <input id="exp-period-value" type="number" class="form-input" value="1" min="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="type">Tipe</label>
+          <select id="exp-period-type" class="form-select">
+            <option value="month">Bulan</option>
+            <option value="year">Tahun</option>
+          </select>
+        </div>
+      </div>
+    </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-expense')" data-i18n="cancel">Batal</button>
       <button class="btn btn-primary" onclick="submitAddExpense()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD INCOME -->
+<div id="modal-income" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" data-i18n="addIncome">Tambah Pemasukan</div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="name">Nama</label>
+      <input id="inc-name" type="text" class="form-input" placeholder="Bonus, Hadiah, Freelance...">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="amount">Nominal</label>
+      <input id="inc-amount" type="text" inputmode="numeric" class="form-input amount-input" placeholder="0">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="source">Masuk ke Dana Cair</label>
+      <select id="inc-asset" class="form-select">
+        <option value="">- Pilih Sumber -</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-income')" data-i18n="cancel">Batal</button>
+      <button class="btn btn-primary" onclick="submitAddIncome()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD DAILY -->
+<div id="modal-daily" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" data-i18n="addDaily">Catat Pengeluaran Harian</div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="date">Tanggal</label>
+      <input id="daily-date" type="date" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="selectExpense">Pilih Pengeluaran</label>
+      <select id="daily-expense-ref" class="form-select" onchange="onDailyExpenseRefChange()">
+        <option value="">Manual</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="name">Nama</label>
+      <input id="daily-name" type="text" class="form-input" placeholder="Nama pengeluaran">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="amount">Nominal</label>
+      <input id="daily-amount" type="text" inputmode="numeric" class="form-input amount-input" placeholder="0">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="note">Catatan (opsional)</label>
+      <input id="daily-note" type="text" class="form-input" placeholder="Catatan...">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-daily')" data-i18n="cancel">Batal</button>
+      <button class="btn btn-primary" onclick="submitAddDaily()" data-i18n="save">Simpan</button>
     </div>
   </div>
 </div>

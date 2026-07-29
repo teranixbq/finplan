@@ -20,7 +20,6 @@ export const months = sqliteTable('months', {
 
 export const assets = sqliteTable('assets', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  monthId: integer('month_id').notNull().references(() => months.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   amount: real('amount').notNull().default(0),
 });
@@ -36,8 +35,31 @@ export const investments = sqliteTable('investments', {
 export const expenses = sqliteTable('expenses', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   monthId: integer('month_id').notNull().references(() => months.id, { onDelete: 'cascade' }),
+  assetId: integer('asset_id'),
   name: text('name').notNull(),
   category: text('category', { enum: ['fixed', 'variable', 'periodic', 'tabungan'] }).notNull(),
   amount: real('amount').notNull().default(0),
+  periodMonths: integer('period_months'),
+  periodType: text('period_type', { enum: ['month', 'year'] }),
   isActive: integer('is_active').notNull().default(1),
+});
+
+export const incomes = sqliteTable('incomes', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  monthId: integer('month_id').notNull().references(() => months.id, { onDelete: 'cascade' }),
+  assetId: integer('asset_id'),
+  name: text('name').notNull(),
+  amount: real('amount').notNull().default(0),
+  createdAt: integer('created_at').notNull(),
+});
+
+export const dailyExpenses = sqliteTable('daily_expenses', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  monthId: integer('month_id').notNull().references(() => months.id, { onDelete: 'cascade' }),
+  expenseId: integer('expense_id'),
+  date: text('date').notNull(),
+  name: text('name').notNull(),
+  amount: real('amount').notNull().default(0),
+  note: text('note'),
+  createdAt: integer('created_at').notNull(),
 });

@@ -6,6 +6,8 @@ import monthsRoute from './routes/months';
 import assetsRoute from './routes/assets';
 import investmentsRoute from './routes/investments';
 import expensesRoute from './routes/expenses';
+import incomesRoute from './routes/incomes';
+import dailyRoute from './routes/daily';
 
 interface AppEnv extends Env {
   ASSETS: Fetcher;
@@ -30,6 +32,8 @@ app.route('/api/months', monthsRoute);
 app.route('/api/assets', assetsRoute);
 app.route('/api/investments', investmentsRoute);
 app.route('/api/expenses', expensesRoute);
+app.route('/api/incomes', incomesRoute);
+app.route('/api/daily', dailyRoute);
 
 app.get('/api/me', authMiddleware, async (c) => {
   const cookie = c.req.header('Cookie') || '';
