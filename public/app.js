@@ -137,6 +137,87 @@ function closeModal(id) {
   el(id).classList.add('hidden');
 }
 
+function closeBreakdownModal(e) {
+  if (e.target === el('modal-breakdown')) closeModal('modal-breakdown');
+}
+
+function showBreakdownModal(type) {
+  const s = S.summary;
+  if (!s) return;
+  const titleEl = el('breakdown-modal-title');
+  const bodyEl = el('breakdown-modal-body');
+
+  // aggregate actual per kategori dari daily expenses
+  const actualByExpenseId = {};
+  (S.daily || []).forEach(d => {
+    if (d.expenseId) actualByExpenseId[d.expenseId] = (actualByExpenseId[d.expenseId] || 0) + d.amount;
+  });
+  const linkedActual = Object.values(actualByExpenseId).reduce((a, b) => a + b, 0);
+  const manualActual = (S.daily || []).filter(d => !d.expenseId).reduce((a, d) => a + d.amount, 0);
+
+  if (type === 'sisaSebelumGajian') {
+    titleEl.textContent = 'Detail: Sisa Sebelum Gajian';
+    bodyEl.innerHTML = `
+      <div class="bd-calc-rows">
+        <div class="bd-calc-row">
+          <span class="bd-calc-label">Dana Cair</span>
+          <span class="bd-calc-value">${rp(s.totalCash)}</span>
+        </div>
+        <div class="bd-calc-row">
+          <span class="bd-calc-label">+ Investasi</span>
+          <span class="bd-calc-value">${rp(s.totalInvestment)}</span>
+        </div>
+        <div class="bd-calc-divider"></div>
+        <div class="bd-calc-row subtotal">
+          <span class="bd-calc-label">Total Dana</span>
+          <span class="bd-calc-value">${rp(s.totalCash + s.totalInvestment)}</span>
+        </div>
+        <div class="bd-calc-spacer"></div>
+        <div class="bd-calc-row section-label">
+          <span class="bd-calc-label">Pengeluaran Aktual (Daily)</span>
+        </div>
+        <div class="bd-calc-row indent">
+          <span class="bd-calc-label">Linked ke Budget</span>
+          <span class="bd-calc-value neg">${rp(linkedActual)}</span>
+        </div>
+        <div class="bd-calc-row indent">
+          <span class="bd-calc-label">Manual (tanpa kategori)</span>
+          <span class="bd-calc-value neg">${rp(manualActual)}</span>
+        </div>
+        <div class="bd-calc-divider"></div>
+        <div class="bd-calc-row subtotal">
+          <span class="bd-calc-label">- Total Pengeluaran Aktual</span>
+          <span class="bd-calc-value neg">${rp(s.totalDaily)}</span>
+        </div>
+        <div class="bd-calc-divider thick"></div>
+        <div class="bd-calc-row result">
+          <span class="bd-calc-label">= Sisa Sebelum Gajian</span>
+          <span class="bd-calc-value highlight">${rp(s.sisaSebelumGajian)}</span>
+        </div>
+      </div>`;
+  } else if (type === 'sisaAkhirBulan') {
+    titleEl.textContent = 'Detail: Estimasi Sisa Akhir Bulan';
+    bodyEl.innerHTML = `
+      <div class="bd-calc-rows">
+        <div class="bd-calc-row">
+          <span class="bd-calc-label">Sisa Sebelum Gajian</span>
+          <span class="bd-calc-value">${rp(s.sisaSebelumGajian)}</span>
+        </div>
+        <div class="bd-calc-row">
+          <span class="bd-calc-label">+ Gaji</span>
+          <span class="bd-calc-value">${rp(s.month.salary)}</span>
+        </div>
+        <div class="bd-calc-divider thick"></div>
+        <div class="bd-calc-row result">
+          <span class="bd-calc-label">= Estimasi Sisa Akhir Bulan</span>
+          <span class="bd-calc-value highlight">${rp(s.sisaAkhirBulan)}</span>
+        </div>
+      </div>`;
+  }
+
+  openModal('modal-breakdown');
+}
+
 // ---- ASSET HISTORY (dana cair change log) ------------------
 async function openAssetHistory() {
   const listEl = el('asset-history-list');
@@ -409,6 +490,11 @@ function renderCharts(s) {
 
     const footerEl = el('bva-total-footer');
     if (footerEl) {
+      const selisih = totalBudget - totalActual;
+      const selisihPct = totalBudget > 0 ? Math.round(Math.abs(selisih) / totalBudget * 100) : 0;
+      const overBudget = selisih < 0;
+      const selisihColor = overBudget ? '#d98a7f' : '#8fb88f';
+      const selisihLabel = overBudget ? 'Over Budget' : 'Sisa Budget';
       footerEl.innerHTML = `
         <div class="bva-total-row">
           <div class="bva-total-item">
@@ -420,6 +506,10 @@ function renderCharts(s) {
             <span class="bva-total-label">${t('totalBudget') || 'Total Budget'}</span>
             <span class="bva-total-value budget">${rp(totalBudget)}</span>
           </div>
+        </div>
+        <div class="bva-selisih-row">
+          <span class="bva-selisih-label">${selisihLabel}</span>
+          <span class="bva-selisih-value" style="color:${selisihColor}">${overBudget ? '-' : '+'}${rp(Math.abs(selisih))} <span class="bva-selisih-pct">(${selisihPct}%)</span></span>
         </div>`;
     }
   }

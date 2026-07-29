@@ -103,11 +103,17 @@
               </div>
               <div class="stat-card">
                 <div class="stat-label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
-                <div class="stat-value" id="val-remaining-before">Rp0</div>
+                <div class="stat-value-row">
+                  <span id="val-remaining-before">Rp0</span>
+                  <button class="info-icon-btn" onclick="showBreakdownModal('sisaSebelumGajian')" title="Lihat detail perhitungan"><i class="fa-solid fa-circle-info"></i></button>
+                </div>
               </div>
               <div class="stat-card yellow">
                 <div class="stat-label" data-i18n="remaining">Sisa Akhir Bulan</div>
-                <div class="stat-value" id="val-remaining">Rp0</div>
+                <div class="stat-value-row">
+                  <span id="val-remaining">Rp0</span>
+                  <button class="info-icon-btn" onclick="showBreakdownModal('sisaAkhirBulan')" title="Lihat detail perhitungan"><i class="fa-solid fa-circle-info"></i></button>
+                </div>
               </div>
             </div>
           </div>
@@ -602,6 +608,17 @@
       <button class="btn btn-ghost" onclick="closeModal('modal-daily')" data-i18n="cancel">Batal</button>
       <button class="btn btn-primary" onclick="submitAddDaily()" data-i18n="save">Simpan</button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL: Breakdown Perhitungan -->
+<div id="modal-breakdown" class="modal-overlay hidden" onclick="closeBreakdownModal(event)">
+  <div class="modal-box breakdown-modal">
+    <div class="modal-header">
+      <span id="breakdown-modal-title" class="modal-title"></span>
+      <button class="modal-close" onclick="closeModal('modal-breakdown')">&times;</button>
+    </div>
+    <div id="breakdown-modal-body" class="breakdown-modal-body"></div>
   </div>
 </div>
 

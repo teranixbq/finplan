@@ -106,9 +106,9 @@ app.get('/:id/summary', async (c) => {
   const totalExpenses = totalBudget; // alias, kept for compatibility
   const totalOut = totalBudget + totalDaily; // budget + aktual harian
 
-  // sisaSebelumGajian pakai totalDaily saja (pengeluaran aktual nyata)
-  // bukan totalOut karena budget adalah rencana, bukan pengeluaran aktual
-  const sisaSebelumGajian = totalCash - totalDaily;
+  // sisaSebelumGajian = (Dana Cair + Investasi) - Pengeluaran Aktual (daily)
+  // budget (totalExpenses) hanya untuk BVA comparison, bukan pengeluaran nyata
+  const sisaSebelumGajian = (totalCash + totalInvestment) - totalDaily;
   const sisaAkhirBulan = sisaSebelumGajian + month.salary;
 
   const dailyByDate: Record<string, number> = {};

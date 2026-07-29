@@ -438,6 +438,123 @@ body::after {
   height: 32px;
   background: rgba(255,255,255,0.1);
 }
+.bva-selisih-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px 4px;
+  border-top: 1px dashed rgba(255,255,255,0.08);
+  margin-top: 8px;
+}
+.bva-selisih-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.bva-selisih-value {
+  font-size: 14px;
+  font-weight: 700;
+}
+.bva-selisih-pct {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* ============================================
+   INFO ICON BUTTON
+   ============================================ */
+.stat-value-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stat-value-row .stat-value,
+.stat-value-row span[id] {
+  font-size: clamp(15px, 3.5vw, 22px);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+.info-icon-btn {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.35);
+  font-size: 13px;
+  line-height: 1;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+.info-icon-btn:hover { color: rgba(255,255,255,0.75); }
+
+/* ============================================
+   BREAKDOWN MODAL
+   ============================================ */
+.breakdown-modal {
+  max-width: 380px;
+  width: 92vw;
+}
+.breakdown-modal-body {
+  padding: 4px 0 8px;
+}
+.bd-calc-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bd-calc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+.bd-calc-row.indent { padding-left: 16px; }
+.bd-calc-row.subtotal .bd-calc-label,
+.bd-calc-row.subtotal .bd-calc-value {
+  font-weight: 600;
+  color: var(--text);
+}
+.bd-calc-row.result .bd-calc-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.bd-calc-row.section-label .bd-calc-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.bd-calc-label {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.bd-calc-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.bd-calc-value.neg { color: #d98a7f; }
+.bd-calc-value.highlight {
+  font-size: 16px;
+  font-weight: 800;
+  color: #8fb88f;
+}
+.bd-calc-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 2px 0;
+}
+.bd-calc-divider.thick {
+  height: 1px;
+  background: rgba(255,255,255,0.18);
+  margin: 4px 0;
+}
+.bd-calc-spacer { height: 6px; }
 
 /* ============================================
    BREAKDOWN ROW
