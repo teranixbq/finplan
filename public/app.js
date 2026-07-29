@@ -234,30 +234,33 @@ function renderHome() {
   if (!s) return;
 
   const m = s.month;
-  const today_day = new Date().getDate();
-  const days_left = m.salaryDate > today_day ? m.salaryDate - today_day : (31 - today_day + m.salaryDate);
+  const now = new Date();
+  const today_day = now.getDate();
+  const days_left = m.salaryDate > today_day ? m.salaryDate - today_day : (daysInMonth(now) - today_day + m.salaryDate);
 
-  // cashflow bar
+  // cashflow status (safe/warning/danger) — shown inside income card
   const pct = s.totalOut && s.totalCash ? Math.min(100, Math.round((s.totalOut / s.totalCash) * 100)) : 0;
   let status = 'safe', statusLabel = t('safe');
   if (pct >= 80) { status = 'danger'; statusLabel = t('danger'); }
   else if (pct >= 60) { status = 'warning'; statusLabel = t('warning'); }
 
-  el('cashflow-bar').className = 'cashflow-bar ' + status;
-  el('salary-info').textContent = `${t('salaryInfo')} ${m.salaryDate} (${days_left} hari lagi)`;
-  el('cashflow-status').textContent = `${statusLabel} ${pct}%`;
-
+  // ----- INCOME CARD -----
   el('val-salary').textContent = rp(m.salary);
-  el('val-salary-date').textContent = m.salaryDate;
+  el('income-sub').textContent = `${t('salaryInfo')} ${m.salaryDate} (${days_left} ${t('daysLeft')})`;
+  const dot = el('income-status-dot');
+  if (dot) dot.className = 'status-dot ' + status;
+  el('income-status-text').textContent = `${statusLabel} ${pct}%`;
+
+  // ----- SALARY SCHEDULE CARD -----
+  renderSchedule(m, now, today_day, days_left);
+
   // setup manage bar
   const sSal = el('setup-salary-value'); if (sSal) sSal.textContent = rp(m.salary);
   const sDate = el('setup-salarydate-value'); if (sDate) sDate.textContent = m.salaryDate;
   el('val-total-cash').textContent = rp(s.totalCash);
   el('val-total-investment').textContent = rp(s.totalInvestment);
-  el('val-total-out').textContent = rp(s.totalExpenses);
   el('val-remaining-before').textContent = rp(s.sisaSebelumGajian);
   el('val-remaining').textContent = rp(s.sisaAkhirBulan);
-  el('val-avg-daily').textContent = rp(s.avgDailyExpense);
 
   // breakdown — icons represent categories (no explicit category names beyond label)
   const bEl = el('breakdown-content');
@@ -279,59 +282,52 @@ function renderHome() {
 
   // incomes
   renderIncomes();
-
-  // next month projection
-  renderHomeProjection();
 }
 
-// ---- HOME PROJECTION (this month vs next month) ------------
-function renderHomeProjection() {
-  const wrap = el('home-projection');
-  if (!wrap) return;
+// days in a given month (from a Date object)
+function daysInMonth(d) {
+  return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+}
 
-  const proj = S.projection;
-  const projItems = proj?.items || [];
+const DAY_NAMES = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const FULL_MONTH = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
-  // Current month plan = active expenses excluding periodic (same basis as projection)
-  const curItems = (S.expenses || []).filter(e => e.isActive && e.category !== 'periodic');
-  const curTotal = curItems.reduce((sum, e) => sum + e.amount, 0);
-  const nextTotal = projItems.reduce((sum, e) => sum + e.amount, 0);
-  const diff = nextTotal - curTotal;
+function fmtFullDate(d) {
+  return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${FULL_MONTH[d.getMonth()]} ${d.getFullYear()}`;
+}
 
-  const tgt = proj?.target;
-  const tgtLabel = tgt ? `${MONTH_NAMES[tgt.month - 1]} ${tgt.year}` : '-';
+// ---- SALARY SCHEDULE & PROJECTION (top-right card) --------
+function renderSchedule(m, now, today_day, days_left) {
+  // today number + full date
+  el('sched-today-num').textContent = today_day;
+  el('sched-today-full').textContent = fmtFullDate(now);
 
-  if (!projItems.length) {
-    wrap.innerHTML = `<div class="empty">${t('noProjection')}</div>`;
-    return;
+  // salary date: this month if not passed, else next month
+  let salDate;
+  if (m.salaryDate >= today_day) {
+    salDate = new Date(now.getFullYear(), now.getMonth(), m.salaryDate);
+  } else {
+    salDate = new Date(now.getFullYear(), now.getMonth() + 1, m.salaryDate);
   }
+  el('sched-salary-num').textContent = m.salaryDate;
+  el('sched-salary-full').textContent = fmtFullDate(salDate);
 
-  const diffCls = diff > 0 ? 'up' : diff < 0 ? 'down' : '';
-  const diffSign = diff > 0 ? '+' : '';
+  // countdown
+  el('sched-countdown').textContent = `${days_left} ${t('daysLeft')}`;
 
-  wrap.innerHTML = `
-    <div class="proj-compare">
-      <div class="proj-compare-item">
-        <div class="proj-compare-label">${t('projectionCurrentMonth')}</div>
-        <div class="proj-compare-value">${rp(curTotal)}</div>
-      </div>
-      <div class="proj-compare-arrow">&rarr;</div>
-      <div class="proj-compare-item">
-        <div class="proj-compare-label">${t('projectionNextMonth')} · ${tgtLabel}</div>
-        <div class="proj-compare-value accent">${rp(nextTotal)}</div>
-      </div>
-      <div class="proj-compare-item">
-        <div class="proj-compare-label">${t('projectionDiff')}</div>
-        <div class="proj-compare-value diff ${diffCls}">${diffSign}${rp(diff)}</div>
-      </div>
+  // upcoming cashflow projection: salary in (gaji pokok) → total
+  const list = el('schedule-proj-list');
+  const dLabel = `${salDate.getDate()} ${MONTH_NAMES[salDate.getMonth()]}`;
+  list.innerHTML = `
+    <div class="sched-proj-row">
+      <span>${dLabel}</span>
+      <span data-i18n="basicSalary">Gaji Pokok</span>
+      <span class="sched-proj-amt">${rp(m.salary)}</span>
     </div>
-    <div class="proj-list">
-      ${projItems.map(it => `
-        <div class="proj-list-row">
-          <span class="bd-left"><span class="bd-icon">${CAT_ICON[it.category] || ''}</span><span>${it.name}</span></span>
-          <span>${rp(it.amount)}</span>
-        </div>
-      `).join('')}
+    <div class="sched-proj-row total">
+      <span>${dLabel}</span>
+      <span data-i18n="total">Total</span>
+      <span class="sched-proj-amt">${rp(m.salary)}</span>
     </div>
   `;
 }

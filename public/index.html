@@ -73,23 +73,44 @@
       <!-- PAGE: HOME -->
       <div id="page-home" class="page active">
 
-        <!-- CASHFLOW BAR -->
-        <div id="cashflow-bar" class="cashflow-bar">
-          <span id="salary-info" class="info"></span>
-          <span id="cashflow-status" class="status"></span>
-        </div>
+        <!-- ROW 1: UPCOMING INCOME + SALARY SCHEDULE -->
+        <div class="home-top-grid">
 
-        <!-- UPCOMING SALARY (with edit) -->
-        <div class="salary-card" style="margin-bottom:16px;">
-          <div>
-            <div class="label">
-              <span data-i18n="incomingIncome">Pemasukan Mendatang</span>
+          <!-- UPCOMING INCOME -->
+          <div class="card income-card">
+            <div class="card-title" data-i18n="incomingIncome">Pemasukan Mendatang</div>
+            <div class="income-amount" id="val-salary">Rp0</div>
+            <div class="income-sub" id="income-sub">-</div>
+            <div class="income-status">
+              <span class="status-dot" id="income-status-dot"></span>
+              <span id="income-status-text">-</span>
             </div>
-            <div class="value" id="val-salary">Rp0</div>
           </div>
-          <div style="text-align:right">
-            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;" data-i18n="salaryDate">Tanggal Gaji</div>
-            <div id="val-salary-date" class="salary-date-num">-</div>
+
+          <!-- SALARY SCHEDULE & PROJECTION -->
+          <div class="card schedule-card">
+            <div class="card-title" data-i18n="scheduleProjection">Jadwal Gaji &amp; Proyeksi</div>
+            <div class="schedule-dates">
+              <div class="schedule-date">
+                <div class="schedule-date-num" id="sched-today-num">-</div>
+                <div class="schedule-date-label" data-i18n="today">Hari Ini</div>
+                <div class="schedule-date-full" id="sched-today-full">-</div>
+              </div>
+              <div class="schedule-date-sep">&rarr;</div>
+              <div class="schedule-date">
+                <div class="schedule-date-num" id="sched-salary-num">-</div>
+                <div class="schedule-date-label" data-i18n="salaryDate">Tanggal Gaji</div>
+                <div class="schedule-date-full" id="sched-salary-full">-</div>
+              </div>
+            </div>
+            <div class="schedule-countdown">
+              <span data-i18n="estTimeLeft">Estimasi Sisa Waktu</span>:
+              <strong id="sched-countdown">-</strong>
+            </div>
+            <div class="schedule-proj">
+              <div class="schedule-proj-title" data-i18n="upcomingCashflow">Proyeksi Arus Kas Mendatang</div>
+              <div id="schedule-proj-list"></div>
+            </div>
           </div>
         </div>
 
@@ -103,21 +124,13 @@
             <div class="stat-label" data-i18n="totalInvestment">Investasi</div>
             <div class="stat-value" id="val-total-investment">Rp0</div>
           </div>
-          <div class="stat-card yellow">
-            <div class="stat-label" data-i18n="totalOut">Total Keluar</div>
-            <div class="stat-value" id="val-total-out">Rp0</div>
-          </div>
           <div class="stat-card">
             <div class="stat-label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
             <div class="stat-value" id="val-remaining-before">Rp0</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card yellow">
             <div class="stat-label" data-i18n="remaining">Sisa Akhir Bulan</div>
             <div class="stat-value" id="val-remaining">Rp0</div>
-          </div>
-          <div class="stat-card yellow">
-            <div class="stat-label" data-i18n="avgDaily">Rata-rata Harian</div>
-            <div class="stat-value" id="val-avg-daily">Rp0</div>
           </div>
         </div>
 
@@ -143,21 +156,7 @@
           </div>
         </div>
 
-        <!-- ASSET vs INVEST BAR CHART -->
-        <div class="card section">
-          <div class="card-title" data-i18n="assetChart">Aset & Arus Kas</div>
-          <div class="chart-wrap" style="height:180px;">
-            <canvas id="chart-assets"></canvas>
-          </div>
-        </div>
-
-        <!-- NEXT MONTH PROJECTION -->
-        <div class="card section">
-          <div class="card-title" data-i18n="projectionHome">Proyeksi Bulan Depan</div>
-          <div id="home-projection"></div>
-        </div>
-
-        <!-- INCOMES -->
+        <!-- PEMASUKAN TAMBAHAN -->
         <div class="section">
           <div class="section-header">
             <span class="section-title" data-i18n="incomes">Pemasukan Tambahan</span>
@@ -178,6 +177,14 @@
                 </td>
               </tr></tfoot>
             </table>
+          </div>
+        </div>
+
+        <!-- ASSET vs INVEST BAR CHART -->
+        <div class="card section">
+          <div class="card-title" data-i18n="assetChart">Aset &amp; Arus Kas</div>
+          <div class="chart-wrap" style="height:180px;">
+            <canvas id="chart-assets"></canvas>
           </div>
         </div>
       </div>

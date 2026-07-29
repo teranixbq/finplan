@@ -872,56 +872,101 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 }
 
 /* ============================================
-   NEXT MONTH PROJECTION (home)
+   HOME TOP GRID (2-col: income + schedule)
    ============================================ */
-.proj-compare {
-  display: flex;
-  align-items: stretch;
-  gap: 10px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+.home-top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 16px;
+  margin-bottom: 20px;
 }
-.proj-compare-item {
-  flex: 1;
-  min-width: 120px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  padding: 12px 14px;
+@media (max-width: 768px) {
+  .home-top-grid { grid-template-columns: 1fr; }
 }
-.proj-compare-label {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-.proj-compare-value {
-  font-size: 17px;
+
+/* INCOME CARD */
+.income-card { display: flex; flex-direction: column; gap: 8px; }
+.income-amount {
+  font-size: 28px;
   font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-.proj-compare-value.accent { color: var(--canopy-bright); }
-.proj-compare-value.diff.up { color: var(--bad); }
-.proj-compare-value.diff.down { color: var(--good); }
-.proj-compare-arrow {
-  display: flex; align-items: center;
-  color: var(--text-dim);
-  font-size: 18px;
-}
-.proj-list { display: flex; flex-direction: column; }
-.proj-list-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 9px 0;
-  border-bottom: 1px solid rgba(180,196,180,0.08);
-  font-size: 13px;
+.income-sub {
+  font-size: 12px;
   color: var(--text-muted);
 }
-.proj-list-row:last-child { border-bottom: none; }
-.proj-list-row span:last-child {
+.income-status {
+  display: flex; align-items: center; gap: 7px;
+  margin-top: auto;
+}
+.status-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--good);
+}
+.status-dot.safe { background: var(--good); }
+.status-dot.warning { background: var(--warn); }
+.status-dot.danger { background: var(--bad); }
+
+/* SCHEDULE CARD */
+.schedule-card { display: flex; flex-direction: column; gap: 12px; }
+.schedule-dates {
+  display: flex; align-items: center; gap: 16px;
+}
+.schedule-date { text-align: center; }
+.schedule-date-num {
+  font-size: 34px; font-weight: 800;
+  color: var(--canopy-bright);
+  line-height: 1.1;
+}
+.schedule-date-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.schedule-date-full {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+.schedule-date-sep {
+  font-size: 20px;
+  color: var(--text-dim);
+}
+.schedule-countdown {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.schedule-countdown strong {
+  color: var(--canopy-bright);
+}
+.schedule-proj { margin-top: auto; }
+.schedule-proj-title {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.sched-proj-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(180,196,180,0.08);
+}
+.sched-proj-row:last-child { border-bottom: none; }
+.sched-proj-row.total {
+  font-weight: 700;
+  color: var(--text);
+  border-top: 1px solid rgba(180,196,180,0.18);
+}
+.sched-proj-amt {
+  text-align: right;
   font-variant-numeric: tabular-nums;
   color: var(--text);
   font-weight: 500;
