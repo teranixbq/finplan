@@ -19,13 +19,22 @@ const S = {
   charts: {},          // chart instances
 };
 
-// emoji icons per expense category
+// FontAwesome icon markup per expense category
 const CAT_ICON = {
-  fixed:     '\u{1F4C4}', // page (tetap)
-  variable:  '\u{1F6D2}', // trolley (variabel)
-  periodic:  '\u{1F4C5}', // calendar (periodik)
-  tabungan:  '\u{1F4B0}', // money bag (tabungan)
-  daily:     '\u{1F5D3}', // spiral calendar (harian)
+  fixed:     '<i class="fa-solid fa-file-lines"></i>',
+  variable:  '<i class="fa-solid fa-cart-shopping"></i>',
+  periodic:  '<i class="fa-solid fa-calendar-days"></i>',
+  tabungan:  '<i class="fa-solid fa-sack-dollar"></i>',
+  daily:     '<i class="fa-solid fa-calendar-day"></i>',
+};
+
+// distinct color per category icon (matches reference)
+const CAT_ICON_COLOR = {
+  fixed:     '#8fb88f',
+  variable:  '#c2d4b0',
+  periodic:  '#d98a7f',
+  tabungan:  '#d9b877',
+  daily:     '#6b9fd9',
 };
 
 // forest palette for charts (single palette)
@@ -126,6 +135,44 @@ function openModal(id) {
 }
 function closeModal(id) {
   el(id).classList.add('hidden');
+}
+
+// ---- ASSET HISTORY (dana cair change log) ------------------
+async function openAssetHistory() {
+  const listEl = el('asset-history-list');
+  listEl.innerHTML = `<div class="empty">...</div>`;
+  openModal('modal-asset-history');
+  try {
+    const rows = await api('GET', '/incomes/history/all');
+    if (!rows.length) {
+      listEl.innerHTML = `<div class="empty">${t('noHistory')}</div>`;
+      return;
+    }
+    listEl.innerHTML = rows.map(h => {
+      const asset = S.assets.find(a => a.id === h.assetId);
+      const assetName = asset ? asset.name : '-';
+      const isAdd = h.amount >= 0;
+      const d = new Date(h.createdAt * 1000);
+      const dateStr = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+      return `<div class="history-row">
+        <div class="history-left">
+          <span class="history-icon ${isAdd ? 'add' : 'sub'}">
+            <i class="fa-solid ${isAdd ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
+          </span>
+          <div>
+            <div class="history-name">${h.name}</div>
+            <div class="history-meta">${assetName} · ${dateStr}</div>
+          </div>
+        </div>
+        <div class="history-right">
+          <div class="history-amount ${isAdd ? 'add' : 'sub'}">${isAdd ? '+' : ''}${rp(h.amount)}</div>
+          <div class="history-balance">${rp(h.balanceAfter)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    listEl.innerHTML = `<div class="empty">${e.message}</div>`;
+  }
 }
 
 // ---- MONTH SELECT ------------------------------------------
@@ -262,19 +309,19 @@ function renderHome() {
   el('val-remaining-before').textContent = rp(s.sisaSebelumGajian);
   el('val-remaining').textContent = rp(s.sisaAkhirBulan);
 
-  // breakdown — icons represent categories (no explicit category names beyond label)
+  // breakdown — FontAwesome category icons (colored)
   const bEl = el('breakdown-content');
-  const brow = (icon, label, val) => `
+  const brow = (cat, label, val) => `
     <div class="breakdown-row">
-      <span class="bd-left"><span class="bd-icon">${icon}</span><span>${label}</span></span>
+      <span class="bd-left"><span class="bd-icon" style="color:${CAT_ICON_COLOR[cat]}">${CAT_ICON[cat]}</span><span>${label}</span></span>
       <span>${rp(val)}</span>
     </div>`;
   bEl.innerHTML =
-    brow(CAT_ICON.fixed,    t('totalFixed'),    s.totalFixed) +
-    brow(CAT_ICON.variable, t('totalVariable'), s.totalVariable) +
-    brow(CAT_ICON.periodic, t('totalPeriodic'), s.totalPeriodic) +
-    brow(CAT_ICON.tabungan, t('totalTabungan'), s.totalTabungan) +
-    brow(CAT_ICON.daily,    t('totalDaily'),    s.totalDaily) +
+    brow('fixed',    t('totalFixed'),    s.totalFixed) +
+    brow('variable', t('totalVariable'), s.totalVariable) +
+    brow('periodic', t('totalPeriodic'), s.totalPeriodic) +
+    brow('tabungan', t('totalTabungan'), s.totalTabungan) +
+    brow('daily',    t('totalDaily'),    s.totalDaily) +
     `<div class="breakdown-row total"><span>${t('totalOut')}</span><span>${rp(s.totalOut)}</span></div>`;
 
   // charts
@@ -338,11 +385,11 @@ function renderCharts(s) {
 
   // ----- DONUT: expense composition -----
   const segs = [
-    { key: 'totalFixed',    label: t('totalFixed'),    val: s.totalFixed,    color: CHART_COLORS.fixed },
-    { key: 'totalVariable', label: t('totalVariable'), val: s.totalVariable, color: CHART_COLORS.variable },
-    { key: 'totalPeriodic', label: t('totalPeriodic'), val: s.totalPeriodic, color: CHART_COLORS.periodic },
-    { key: 'totalTabungan', label: t('totalTabungan'), val: s.totalTabungan, color: CHART_COLORS.tabungan },
-    { key: 'totalDaily',    label: t('totalDaily'),    val: s.totalDaily,    color: CHART_COLORS.daily },
+    { cat: 'fixed',    label: t('totalFixed'),    val: s.totalFixed,    color: CHART_COLORS.fixed },
+    { cat: 'variable', label: t('totalVariable'), val: s.totalVariable, color: CHART_COLORS.variable },
+    { cat: 'periodic', label: t('totalPeriodic'), val: s.totalPeriodic, color: CHART_COLORS.periodic },
+    { cat: 'tabungan', label: t('totalTabungan'), val: s.totalTabungan, color: CHART_COLORS.tabungan },
+    { cat: 'daily',    label: t('totalDaily'),    val: s.totalDaily,    color: CHART_COLORS.daily },
   ].filter(x => x.val > 0);
 
   el('chart-center-total').textContent = rp(s.totalOut);
@@ -385,11 +432,11 @@ function renderCharts(s) {
     },
   });
 
-  // legend
+  // legend — FA category icon (colored) + label + value
   const legendEl = el('chart-legend');
   legendEl.innerHTML = hasData ? segs.map(x =>
     `<div class="legend-item">
-      <span class="legend-dot" style="background:${x.color}"></span>
+      <span class="legend-icon" style="color:${CAT_ICON_COLOR[x.cat] || x.color}">${CAT_ICON[x.cat] || ''}</span>
       <span>${x.label}</span>
       <span class="legend-val">${rp(x.val)}</span>
     </div>`
@@ -511,7 +558,7 @@ function renderProjection() {
   tbody.innerHTML = items.map(it => {
     const assetName = S.assets.find(a => a.id === it.assetId)?.name || '-';
     return `<tr>
-      <td><span class="bd-left"><span class="bd-icon">${CAT_ICON[it.category] || ''}</span><span>${it.name}</span></span></td>
+      <td><span class="bd-left"><span class="bd-icon" style="color:${CAT_ICON_COLOR[it.category] || ''}">${CAT_ICON[it.category] || ''}</span><span>${it.name}</span></span></td>
       <td>${t(it.category)}</td>
       <td>${assetName}</td>
       <td style="text-align:right">${rp(it.amount)}</td>
@@ -658,17 +705,10 @@ function onExpenseCategoryChange() {
 }
 
 // ---- DAILY EXPENSE REF CHANGE ------------------------------
+// Selecting an expense only links its category — it does NOT auto-fill
+// name or amount. User types name & nominal manually.
 function onDailyExpenseRefChange() {
-  const sel = el('daily-expense-ref');
-  const opt = sel.options[sel.selectedIndex];
-  if (opt && opt.value) {
-    el('daily-name').value = opt.textContent;
-    const amt = opt.dataset.amount || '';
-    el('daily-amount').value = amt ? parseInt(amt).toLocaleString('id-ID') : '';
-  } else {
-    el('daily-name').value = '';
-    el('daily-amount').value = '';
-  }
+  // intentionally no auto-fill
 }
 
 // ---- SUBMIT: NEW MONTH -------------------------------------

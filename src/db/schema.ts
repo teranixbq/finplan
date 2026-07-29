@@ -64,6 +64,17 @@ export const dailyExpenses = sqliteTable('daily_expenses', {
   createdAt: integer('created_at').notNull(),
 });
 
+export const assetHistory = sqliteTable('asset_history', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  assetId: integer('asset_id').notNull().references(() => assets.id, { onDelete: 'cascade' }),
+  monthId: integer('month_id'),
+  type: text('type').notNull(),
+  name: text('name').notNull(),
+  amount: real('amount').notNull(),
+  balanceAfter: real('balance_after').notNull(),
+  createdAt: integer('created_at').notNull(),
+});
+
 export const expenseProjections = sqliteTable('expense_projections', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   userEmail: text('user_email').notNull(),

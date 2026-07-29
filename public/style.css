@@ -230,6 +230,23 @@ body::after {
 .stat-card.yellow .stat-value { color: var(--warn); }
 .stat-card.red { border-left-color: var(--bad); }
 .stat-card.red .stat-value { color: var(--bad); }
+/* wide card spans full width of the 3-col grid */
+.stat-card-wide { grid-column: 1 / -1; }
+/* value row with history icon */
+.stat-value-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.stat-history-btn {
+  background: rgba(20,32,20,0.5);
+  border: 1px solid rgba(180,196,180,0.14);
+  color: var(--text-muted);
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.stat-history-btn:hover { color: var(--canopy-bright); border-color: var(--glass-border-hover); }
 
 /* ============================================
    CASHFLOW BAR
@@ -859,15 +876,24 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 /* ============================================
    BREAKDOWN ICONS (category logos)
    ============================================ */
-.bd-left { display: inline-flex; align-items: center; gap: 9px; }
+.bd-left { display: inline-flex; align-items: center; gap: 10px; }
 .bd-icon {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px;
-  border-radius: 8px;
-  background: rgba(107,143,107,0.16);
-  border: 1px solid rgba(107,143,107,0.22);
-  font-size: 14px;
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: rgba(20,32,20,0.55);
+  border: 1px solid rgba(180,196,180,0.12);
+  font-size: 13px;
   line-height: 1;
+  flex-shrink: 0;
+}
+.legend-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  background: rgba(20,32,20,0.55);
+  border: 1px solid rgba(180,196,180,0.1);
+  font-size: 11px;
   flex-shrink: 0;
 }
 
@@ -971,6 +997,41 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   color: var(--text);
   font-weight: 500;
 }
+
+/* ============================================
+   ASSET HISTORY MODAL
+   ============================================ */
+.asset-history-list {
+  max-height: 340px;
+  overflow-y: auto;
+  margin: 4px 0 8px;
+}
+.history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 2px;
+  border-bottom: 1px solid rgba(180,196,180,0.08);
+}
+.history-row:last-child { border-bottom: none; }
+.history-left { display: flex; align-items: center; gap: 11px; }
+.history-icon {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.history-icon.add { background: rgba(127,191,127,0.16); color: var(--good); }
+.history-icon.sub { background: rgba(217,138,127,0.16); color: var(--bad); }
+.history-name { font-size: 13px; color: var(--text); font-weight: 500; }
+.history-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.history-right { text-align: right; }
+.history-amount { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.history-amount.add { color: var(--good); }
+.history-amount.sub { color: var(--bad); }
+.history-balance { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-top: 1px; }
 
 /* projection tab (setup) */
 .proj-target {

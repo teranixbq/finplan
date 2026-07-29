@@ -7,6 +7,7 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -118,7 +119,12 @@
         <div class="summary-grid">
           <div class="stat-card">
             <div class="stat-label" data-i18n="totalCash">Dana Cair</div>
-            <div class="stat-value" id="val-total-cash">Rp0</div>
+            <div class="stat-value-row">
+              <span class="stat-value" id="val-total-cash">Rp0</span>
+              <button class="stat-history-btn" onclick="openAssetHistory()" title="Riwayat Dana Cair">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </button>
+            </div>
           </div>
           <div class="stat-card">
             <div class="stat-label" data-i18n="totalInvestment">Investasi</div>
@@ -128,7 +134,7 @@
             <div class="stat-label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
             <div class="stat-value" id="val-remaining-before">Rp0</div>
           </div>
-          <div class="stat-card yellow">
+          <div class="stat-card yellow stat-card-wide">
             <div class="stat-label" data-i18n="remaining">Sisa Akhir Bulan</div>
             <div class="stat-value" id="val-remaining">Rp0</div>
           </div>
@@ -527,6 +533,20 @@
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-income')" data-i18n="cancel">Batal</button>
       <button class="btn btn-primary" onclick="submitAddIncome()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ASSET HISTORY -->
+<div id="modal-asset-history" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title">
+      <i class="fa-solid fa-clock-rotate-left" style="margin-right:8px;"></i>
+      <span data-i18n="assetHistory">Riwayat Dana Cair</span>
+    </div>
+    <div id="asset-history-list" class="asset-history-list"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-asset-history')" data-i18n="close">Tutup</button>
     </div>
   </div>
 </div>
