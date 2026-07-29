@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinPlan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="logo">FinPlan</span>
+      <div class="month-selector">
+        <select id="month-select" class="form-select" style="width:auto;padding:5px 10px;font-size:13px;"></select>
+        <button class="btn btn-ghost btn-sm" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="user-name" class="user-name"></span>
+      <button id="lang-toggle" class="lang-btn">ID</button>
+      <button class="btn btn-ghost btn-sm" onclick="logout()" data-i18n="logout">Keluar</button>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- NO MONTH STATE -->
+    <div id="no-month" class="no-month hidden">
+      <h2 data-i18n="setupMonth">Setup Bulan</h2>
+      <p data-i18n="selectMonth">Pilih bulan yang ingin dilihat</p>
+      <button class="btn btn-primary" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="hidden">
+
+      <!-- CASHFLOW BAR -->
+      <div id="cashflow-bar" class="cashflow-bar">
+        <span id="salary-info" class="info"></span>
+        <span id="cashflow-status" class="status"></span>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+      <div class="summary-grid">
+        <div class="summary-card blue">
+          <div class="label" data-i18n="totalCash">Total Dana Cair</div>
+          <div class="value" id="val-total-cash">Rp0</div>
+        </div>
+        <div class="summary-card purple">
+          <div class="label" data-i18n="totalInvestment">Total Investasi</div>
+          <div class="value" id="val-total-investment">Rp0</div>
+        </div>
+        <div class="summary-card yellow">
+          <div class="label" data-i18n="totalOut">Total Pengeluaran</div>
+          <div class="value" id="val-total-out">Rp0</div>
+        </div>
+        <div class="summary-card green">
+          <div class="label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
+          <div class="value" id="val-remaining-before">Rp0</div>
+        </div>
+        <div class="summary-card green">
+          <div class="label" data-i18n="remaining">Sisa Akhir Bulan</div>
+          <div class="value" id="val-remaining">Rp0</div>
+        </div>
+      </div>
+
+      <!-- ASSETS -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title" data-i18n="assets">Aset Cair</span>
+          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-asset')" data-i18n="addAsset">Tambah Aset</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="name">Nama</th>
+                <th style="text-align:right" data-i18n="amount">Nominal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="assets-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- INVESTMENTS -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title" data-i18n="investments">Investasi</span>
+          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-investment')" data-i18n="addInvestment">Tambah Investasi</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="name">Nama</th>
+                <th data-i18n="type">Tipe</th>
+                <th style="text-align:right" data-i18n="amount">Nominal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="investments-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EXPENSES -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title" data-i18n="expenses">Pengeluaran</span>
+          <button class="btn btn-ghost btn-sm" onclick="openModal('modal-expense')" data-i18n="addExpense">Tambah Pengeluaran</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="name">Nama</th>
+                <th data-i18n="category">Kategori</th>
+                <th style="text-align:right" data-i18n="amount">Nominal</th>
+                <th data-i18n="active">Aktif</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="expenses-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: NEW MONTH -->
+<div id="modal-newmonth" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" data-i18n="newMonth">Bulan Baru</div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="month">Bulan</label>
+      <select id="nm-month" class="form-select">
+        <option value="1">Januari</option><option value="2">Februari</option>
+        <option value="3">Maret</option><option value="4">April</option>
+        <option value="5">Mei</option><option value="6">Juni</option>
+        <option value="7">Juli</option><option value="8">Agustus</option>
+        <option value="9">September</option><option value="10">Oktober</option>
+        <option value="11">November</option><option value="12">Desember</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="year">Tahun</label>
+      <input id="nm-year" type="number" class="form-input" placeholder="2026">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="salary">Gaji</label>
+      <input id="nm-salary" type="number" class="form-input" placeholder="6500000">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="salaryDate">Tanggal Gaji</label>
+      <input id="nm-salarydate" type="number" class="form-input" value="28" min="1" max="31">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-newmonth')" data-i18n="cancel">Batal</button>
+      <button class="btn btn-primary" onclick="submitNewMonth()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD ASSET -->
+<div id="modal-asset" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" data-i18n="addAsset">Tambah Aset</div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="name">Nama</label>
+      <input id="asset-name" type="text" class="form-input" data-i18n-placeholder="name" placeholder="Nama">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="amount">Nominal</label>
+      <input id="asset-amount" type="number" class="form-input" placeholder="0">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-asset')" data-i18n="cancel">Batal</button>
+      <button class="btn btn-primary" onclick="submitAddAsset()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD INVESTMENT -->
+<div id="modal-investment" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" data-i18n="addInvestment">Tambah Investasi</div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="name">Nama</label>
+      <input id="inv-name" type="text" class="form-input" data-i18n-placeholder="name" placeholder="Nama">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="type">Tipe</label>
+      <select id="inv-type" class="form-select">
+        <option value="reksadana" data-i18n="reksadana">Reksadana</option>
+        <option value="saham" data-i18n="saham">Saham</option>
+        <option value="obligasi" data-i18n="obligasi">Obligasi</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="amount">Nominal</label>
+      <input id="inv-amount" type="number" class="form-input" placeholder="0">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-investment')" data-i18n="cancel">Batal</button>
+      <button class="btn btn-primary" onclick="submitAddInvestment()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD EXPENSE -->
+<div id="modal-expense" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" data-i18n="addExpense">Tambah Pengeluaran</div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="name">Nama</label>
+      <input id="exp-name" type="text" class="form-input" data-i18n-placeholder="name" placeholder="Nama">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="category">Kategori</label>
+      <select id="exp-category" class="form-select">
+        <option value="fixed" data-i18n="fixed">Tetap</option>
+        <option value="variable" data-i18n="variable">Variabel</option>
+        <option value="periodic" data-i18n="periodic">Periodik</option>
+        <option value="tabungan" data-i18n="tabungan">Tabungan</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="amount">Nominal</label>
+      <input id="exp-amount" type="number" class="form-input" placeholder="0">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-expense')" data-i18n="cancel">Batal</button>
+      <button class="btn btn-primary" onclick="submitAddExpense()" data-i18n="save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script src="/i18n.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

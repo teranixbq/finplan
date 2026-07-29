@@ -1,0 +1,117 @@
+const translations = {
+  id: {
+    appName: 'FinPlan',
+    month: 'Bulan',
+    year: 'Tahun',
+    salary: 'Gaji',
+    salaryDate: 'Tanggal Gaji',
+    totalCash: 'Total Dana Cair',
+    totalInvestment: 'Total Investasi',
+    totalOut: 'Total Pengeluaran',
+    remaining: 'Sisa Akhir Bulan',
+    remainingBeforeSalary: 'Sisa Sebelum Gajian',
+    assets: 'Aset Cair',
+    investments: 'Investasi',
+    expenses: 'Pengeluaran',
+    addAsset: 'Tambah Aset',
+    addInvestment: 'Tambah Investasi',
+    addExpense: 'Tambah Pengeluaran',
+    name: 'Nama',
+    amount: 'Nominal',
+    type: 'Tipe',
+    category: 'Kategori',
+    fixed: 'Tetap',
+    variable: 'Variabel',
+    periodic: 'Periodik',
+    tabungan: 'Tabungan',
+    reksadana: 'Reksadana',
+    saham: 'Saham',
+    obligasi: 'Obligasi',
+    save: 'Simpan',
+    cancel: 'Batal',
+    delete: 'Hapus',
+    edit: 'Edit',
+    newMonth: 'Bulan Baru',
+    logout: 'Keluar',
+    active: 'Aktif',
+    inactive: 'Nonaktif',
+    noData: 'Belum ada data',
+    confirmDelete: 'Yakin hapus item ini?',
+    cashflow: 'Cashflow',
+    safe: 'Aman',
+    warning: 'Perhatian',
+    danger: 'Kritis',
+    grandTotal: 'Total Aset',
+    carryoverNote: 'Pengeluaran dari bulan sebelumnya sudah disalin otomatis.',
+    monthExists: 'Bulan ini sudah ada.',
+    salaryInfo: 'Gaji masuk tanggal',
+    setupMonth: 'Setup Bulan',
+    selectMonth: 'Pilih bulan yang ingin dilihat',
+  },
+  en: {
+    appName: 'FinPlan',
+    month: 'Month',
+    year: 'Year',
+    salary: 'Salary',
+    salaryDate: 'Salary Date',
+    totalCash: 'Total Liquid Cash',
+    totalInvestment: 'Total Investment',
+    totalOut: 'Total Expenses',
+    remaining: 'End of Month Balance',
+    remainingBeforeSalary: 'Balance Before Salary',
+    assets: 'Liquid Assets',
+    investments: 'Investments',
+    expenses: 'Expenses',
+    addAsset: 'Add Asset',
+    addInvestment: 'Add Investment',
+    addExpense: 'Add Expense',
+    name: 'Name',
+    amount: 'Amount',
+    type: 'Type',
+    category: 'Category',
+    fixed: 'Fixed',
+    variable: 'Variable',
+    periodic: 'Periodic',
+    tabungan: 'Savings',
+    reksadana: 'Mutual Fund',
+    saham: 'Stock',
+    obligasi: 'Bond',
+    save: 'Save',
+    cancel: 'Cancel',
+    delete: 'Delete',
+    edit: 'Edit',
+    newMonth: 'New Month',
+    logout: 'Logout',
+    active: 'Active',
+    inactive: 'Inactive',
+    noData: 'No data yet',
+    confirmDelete: 'Are you sure you want to delete this item?',
+    cashflow: 'Cashflow',
+    safe: 'Safe',
+    warning: 'Warning',
+    danger: 'Critical',
+    grandTotal: 'Total Assets',
+    carryoverNote: 'Expenses carried over from previous month.',
+    monthExists: 'This month already exists.',
+    salaryInfo: 'Salary arrives on day',
+    setupMonth: 'Setup Month',
+    selectMonth: 'Select a month to view',
+  }
+};
+
+let currentLang = localStorage.getItem('fp_lang') || 'id';
+
+function t(key) {
+  return translations[currentLang][key] || translations['id'][key] || key;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('fp_lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+}
