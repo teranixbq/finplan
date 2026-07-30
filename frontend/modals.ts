@@ -58,16 +58,17 @@ export function showBreakdownModal(type: 'sisaSebelumGajian' | 'sisaAkhirBulan')
         </div>
         <hr class="struk-divider">
         <div class="struk-row minus">
-          <span class="struk-label">Pengeluaran Harian</span>
-          <span class="struk-val">- ${rp(s.totalDaily)}</span>
+          <span class="struk-label">Pengeluaran Terencana</span>
+          <span class="struk-val">- ${rp(s.totalDaily - manualActual)}</span>
+        </div>
+        <div class="struk-row minus">
+          <span class="struk-label">Pengeluaran Manual</span>
+          <span class="struk-val">- ${rp(manualActual)}</span>
         </div>
         <hr class="struk-divider solid">
         <div class="struk-total-row">
           <span class="struk-total-label">SISA</span>
           <span class="struk-total-val ${s.sisaSebelumGajian >= 0 ? 'positive' : 'negative'}">${rp(s.sisaSebelumGajian)}</span>
-        </div>
-        <div class="struk-note">
-          Manual (tidak terhubung budget): ${rp(manualActual)}
         </div>
       </div>`;
   } else {

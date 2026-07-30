@@ -502,7 +502,8 @@ body::after {
   padding: 4px 0 8px;
 }
 .struk-wrap {
-  background: var(--glass-bg);
+  background: rgba(18, 28, 18, 0.92);
+  border: 1px solid rgba(180,196,180,0.18);
   border-radius: var(--radius);
   padding: 16px;
   display: flex;
