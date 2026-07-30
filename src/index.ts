@@ -39,4 +39,9 @@ app.get('/api/me', authMiddleware, async (c) => {
   return c.json({ name: session?.githubName, email: session?.githubEmail });
 });
 
+// Catch-all: serve static assets for all other routes
+app.all('*', async (c) => {
+  return c.env.ASSETS.fetch(new Request(c.req.url, c.req.raw));
+});
+
 export default app;
