@@ -10,21 +10,35 @@ declare const Chart: any;
 
 // ---- filter state ----
 let _filterCategory = 'all';
-let _filterDate = 'today';
+let _filterDateInput = '';
 
 export function applyDailyFilter(): void {
   _filterCategory = (el('daily-filter-category') as HTMLSelectElement).value;
-  _filterDate = (el('daily-filter-date') as HTMLSelectElement).value;
+  _filterDateInput = (el('daily-filter-date-input') as HTMLInputElement).value;
+  renderDailyList();
+}
+
+export function clearDailyFilter(): void {
+  _filterCategory = 'all';
+  _filterDateInput = '';
+  (el('daily-filter-category') as HTMLSelectElement).value = 'all';
+  (el('daily-filter-date-input') as HTMLInputElement).value = '';
   renderDailyList();
 }
 
 export function renderDaily(): void {
   const s = S.summary;
 
-  // stats
+  // Total Pengeluaran
   const totalDailyEl = el('val-total-daily');
   if (totalDailyEl) totalDailyEl.textContent = rp(s?.totalDaily || 0);
 
+  // Total Pemasukan
+  const totalIncomeEl = el('val-total-income-daily');
+  const totalIncome = S.incomes.reduce((sum, inc) => sum + inc.amount, 0);
+  if (totalIncomeEl) totalIncomeEl.textContent = rp(totalIncome);
+
+  // Rata-rata Harian
   const avgDailyEl = el('val-avg-daily-2');
   if (avgDailyEl) avgDailyEl.textContent = rp(s?.avgDailyExpense || 0);
 
@@ -32,11 +46,11 @@ export function renderDaily(): void {
   populateCategoryFilter();
 
   // set default date filter to today on first render
-  const dateFilterEl = el('daily-filter-date') as HTMLSelectElement;
-  if (dateFilterEl && !dateFilterEl.dataset['initialized']) {
-    dateFilterEl.value = 'today';
-    _filterDate = 'today';
-    dateFilterEl.dataset['initialized'] = '1';
+  const dateInputEl = el('daily-filter-date-input') as HTMLInputElement;
+  if (dateInputEl && !dateInputEl.dataset['initialized']) {
+    dateInputEl.value = today();
+    _filterDateInput = today();
+    dateInputEl.dataset['initialized'] = '1';
   }
 
   renderDailyList();
@@ -70,19 +84,9 @@ function getFilteredDaily() {
     items = items.filter((d) => d.expenseId === expId);
   }
 
-  // filter by date
-  const todayStr = today();
-  if (_filterDate === 'today') {
-    items = items.filter((d) => d.date === todayStr);
-  } else if (_filterDate === 'week') {
-    const now = new Date();
-    const monday = new Date(now);
-    monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-    const mondayStr = monday.toISOString().slice(0, 10);
-    items = items.filter((d) => d.date >= mondayStr && d.date <= todayStr);
-  } else if (_filterDate === 'month') {
-    const prefix = todayStr.slice(0, 7); // YYYY-MM
-    items = items.filter((d) => d.date.startsWith(prefix));
+  // filter by date input (specific date)
+  if (_filterDateInput) {
+    items = items.filter((d) => d.date === _filterDateInput);
   }
 
   return items;

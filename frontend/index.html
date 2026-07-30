@@ -153,30 +153,6 @@
           <div id="bva-total-footer"></div>
         </div>
 
-        <!-- PEMASUKAN TAMBAHAN -->
-        <div class="section">
-          <div class="section-header">
-            <span class="section-title" data-i18n="incomes">Pemasukan Tambahan</span>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr>
-                <th data-i18n="name">Nama</th>
-                <th style="text-align:right" data-i18n="amount">Nominal</th>
-                <th></th>
-              </tr></thead>
-              <tbody id="incomes-body"></tbody>
-              <tfoot><tr class="add-row">
-                <td colspan="3">
-                  <button class="btn btn-ghost btn-add-full" onclick="openModal('modal-income')">
-                    <span>+</span> <span data-i18n="addIncome">Tambah Pemasukan</span>
-                  </button>
-                </td>
-              </tr></tfoot>
-            </table>
-          </div>
-        </div>
-
         <!-- ASSET vs INVEST BAR CHART -->
         <div class="card section">
           <div class="card-title" data-i18n="assetChart">Aset &amp; Arus Kas</div>
@@ -304,54 +280,51 @@
 
       <!-- PAGE: DAILY -->
       <div id="page-daily" class="page">
-        <!-- FILTER BAR -->
-        <div class="daily-filter-bar">
-          <div class="daily-filter-left">
-            <select id="daily-filter-category" class="form-select sm" onchange="window.applyDailyFilter()">
-              <option value="all" data-i18n="all">Semua</option>
-            </select>
-            <select id="daily-filter-date" class="form-select sm" onchange="window.applyDailyFilter()">
-              <option value="all" data-i18n="allDate">Semua Tanggal</option>
-              <option value="today" data-i18n="today">Hari Ini</option>
-              <option value="week" data-i18n="thisWeek">Minggu Ini</option>
-              <option value="month" data-i18n="thisMonth">Bulan Ini</option>
-            </select>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-daily')" data-i18n="addDaily">Catat Harian</button>
-        </div>
-
-        <!-- 2-COL LAYOUT: LEFT (expenses) | RIGHT (chart + income) -->
+        <!-- 2-COL LAYOUT: LEFT (stats+chart+income) | RIGHT (filter+list) -->
         <div class="daily-two-col">
-          <!-- LEFT COL: Stats + Expense List -->
+
+          <!-- LEFT COL: Stats Cards + Chart + Income Table -->
           <div class="daily-left">
-            <div class="summary-grid" style="margin-bottom:20px;">
-              <div class="stat-card yellow">
-                <div class="stat-label" data-i18n="totalDaily">Total Harian</div>
-                <div class="stat-value" id="val-total-daily">Rp0</div>
+            <!-- STATS: Total Pengeluaran + Total Pemasukan -->
+            <div class="daily-stat-cards">
+              <div class="daily-stat-card daily-stat-expense">
+                <div class="daily-stat-card-top">
+                  <div class="daily-stat-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                  <div class="daily-stat-info">
+                    <div class="daily-stat-label" data-i18n="totalDaily">Total Pengeluaran</div>
+                    <div class="daily-stat-value" id="val-total-daily">Rp0</div>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="openModal('modal-daily')" data-i18n="addDaily">+ Catat Harian</button>
               </div>
-              <div class="stat-card orange">
-                <div class="stat-label" data-i18n="avgDaily">Rata-rata Harian</div>
-                <div class="stat-value" id="val-avg-daily-2">Rp0</div>
+              <div class="daily-stat-card daily-stat-income">
+                <div class="daily-stat-card-top">
+                  <div class="daily-stat-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                  <div class="daily-stat-info">
+                    <div class="daily-stat-label" data-i18n="totalIncome">Total Pemasukan</div>
+                    <div class="daily-stat-value" id="val-total-income-daily">Rp0</div>
+                  </div>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="openModal('modal-income')" data-i18n="addIncome">+ Tambah Pemasukan</button>
               </div>
             </div>
-            <div id="daily-list"></div>
-          </div>
 
-          <!-- RIGHT COL: Chart + Income Table -->
-          <div class="daily-right">
             <!-- CHART: Expense vs Income per date -->
-            <div class="card" style="margin-bottom:20px;">
-              <div class="card-title" data-i18n="dailyChart">Pengeluaran & Pemasukan</div>
-              <div class="chart-wrap" style="height:240px;">
+            <div class="daily-chart-card">
+              <div class="daily-chart-header">
+                <span class="card-title" data-i18n="dailyChart">Pengeluaran & Pemasukan</span>
+              </div>
+              <div class="chart-wrap" style="height:220px;">
                 <canvas id="chart-daily"></canvas>
+              </div>
+              <div class="daily-chart-footer">
+                <span data-i18n="avgDaily">Rata-rata Harian:</span>
+                <span id="val-avg-daily-2" class="daily-chart-footer-val">Rp0</span>
               </div>
             </div>
 
             <!-- INCOME TABLE -->
             <div class="section">
-              <div class="section-header">
-                <span class="section-title" data-i18n="incomes">Pemasukan Tambahan</span>
-              </div>
               <div class="table-wrap">
                 <table>
                   <thead><tr>
@@ -360,17 +333,26 @@
                     <th></th>
                   </tr></thead>
                   <tbody id="daily-incomes-body"></tbody>
-                  <tfoot><tr class="add-row">
-                    <td colspan="3">
-                      <button class="btn btn-ghost btn-add-full" onclick="openModal('modal-income')">
-                        <span>+</span> <span data-i18n="addIncome">Tambah Pemasukan</span>
-                      </button>
-                    </td>
-                  </tr></tfoot>
                 </table>
               </div>
             </div>
           </div>
+
+          <!-- RIGHT COL: Filter + Expense List -->
+          <div class="daily-right">
+            <!-- FILTER BAR -->
+            <div class="daily-filter-bar">
+              <div class="daily-filter-left">
+                <select id="daily-filter-category" class="form-select sm" onchange="window.applyDailyFilter()">
+                  <option value="all" data-i18n="all">Semua</option>
+                </select>
+                <input id="daily-filter-date-input" type="date" class="form-input sm" onchange="window.applyDailyFilter()">
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="window.clearDailyFilter()" data-i18n="allDate">Reset</button>
+            </div>
+            <div id="daily-list"></div>
+          </div>
+
         </div>
       </div>
 
