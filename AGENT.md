@@ -8,7 +8,7 @@
 
 **FinPlan** — Personal finance tracker, single-user, private.
 **Production:** `finplan.apicode.my.id`
-**Stack:** Cloudflare Workers + Hono + Drizzle ORM + D1 (SQLite) + Vanilla JS
+**Stack:** Cloudflare Workers + Hono + Drizzle ORM + D1 (SQLite) + Vite + TypeScript
 
 ---
 
@@ -21,10 +21,9 @@
 - Grep HTML element references before deleting: `grep -n "element-id" public/app.js`
 
 ### 2. Deploy
-```bash
-npx wrangler deploy          # deploy to production
-```
-Always deploy after changes are complete and verified.
+**NEVER run `npx wrangler deploy` or any manual deploy command.**
+Deploy dilakukan otomatis oleh Cloudflare Pages/Workers via git push ke `main`.
+Cukup `git push` — Cloudflare akan build dan deploy otomatis.
 
 ### 3. Database Migration
 ```bash
@@ -60,10 +59,10 @@ npm run db:migrate:local     # apply to local
 3. Criteria for "important": problem that breaks a core feature, or a bug pattern likely to recur
 4. Template: see `docs/problem-solution/001-blank-homepage-breakdown-element-en.md`
 
-### When frontend changes (HTML/CSS/JS)
-- If removing element from `index.html`: grep `app.js` first for all references
+### When frontend changes (HTML/CSS/TS)
+- If removing element from `index.html`: grep `frontend/` first for all references
 - If adding new feature: update `docs/tech-stack/overview-en.md` if relevant
-- Always deploy after changes
+- After changes: `npm run build` to verify, then `git push` — Cloudflare deploys automatically
 
 ---
 
