@@ -3,7 +3,7 @@
 // ============================================================
 
 import { S } from '../state';
-import { el, rp, fmtDate, today, CHART_COLORS } from '../utils';
+import { el, rp, fmtDate, fromUnix, CHART_COLORS } from '../utils';
 import { t } from '../i18n';
 
 declare const Chart: any;
@@ -147,10 +147,7 @@ function renderDailyChart(): void {
   });
   S.incomes.forEach((inc) => {
     // use inc.date if available, fallback to created_at (unix timestamp -> YYYY-MM-DD)
-    const dateKey = (inc as any).date || (() => {
-      if (!inc.createdAt) return null;
-      return new Date(inc.createdAt * 1000).toISOString().slice(0, 10);
-    })();
+    const dateKey = (inc as any).date || (inc.createdAt ? fromUnix(inc.createdAt) : null);
     if (dateKey) {
       incomeByDate[dateKey] = (incomeByDate[dateKey] || 0) + inc.amount;
     }
@@ -253,9 +250,7 @@ function renderIncomeTable(): void {
 
   tbody.innerHTML = S.incomes
     .map((inc) => {
-      const dateStr = inc.createdAt
-        ? fmtDate(new Date(inc.createdAt * 1000).toISOString().slice(0, 10))
-        : '-';
+      const dateStr = inc.createdAt ? fmtDate(fromUnix(inc.createdAt)) : '-';
       return `
     <tr>
       <td>${inc.name}</td>

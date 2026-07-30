@@ -79,6 +79,11 @@ export function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+/** Convert Unix timestamp (seconds) to YYYY-MM-DD */
+export function fromUnix(ts: number): string {
+  return new Date(ts * 1000).toISOString().slice(0, 10);
+}
+
 /** Format YYYY-MM-DD to DD/MM/YYYY */
 export function fmtDate(str: string | null | undefined): string {
   if (!str) return '-';
