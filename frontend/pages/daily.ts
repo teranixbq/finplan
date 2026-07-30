@@ -146,8 +146,18 @@ function renderDailyChart(): void {
     expenseByDate[d.date] = (expenseByDate[d.date] || 0) + d.amount;
   });
   S.incomes.forEach((inc) => {
-    if (inc.date) {
-      incomeByDate[inc.date] = (incomeByDate[inc.date] || 0) + inc.amount;
+    // use inc.date if available (migration 0007), fallback to salary date
+    const dateKey = (inc as any).date || (() => {
+      const m = S.summary?.month;
+      if (!m) return null;
+      const now = new Date();
+      const y = now.getFullYear();
+      const mo = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(m.salaryDate).padStart(2, '0');
+      return `${y}-${mo}-${d}`;
+    })();
+    if (dateKey) {
+      incomeByDate[dateKey] = (incomeByDate[dateKey] || 0) + inc.amount;
     }
   });
 
