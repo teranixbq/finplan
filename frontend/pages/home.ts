@@ -95,9 +95,9 @@ function renderSchedule(s: SummaryResponse, now: Date, today_day: number, days_l
         .slice(0, 5)
         .map(
           (it) => `
-          <div class="proj-item-row">
-            <span class="proj-item-name">${it.name}</span>
-            <span class="proj-item-amount">${rp(it.amount)}</span>
+          <div class="sched-proj-row">
+            <span class="sched-proj-name">${it.name}</span>
+            <span>${rp(it.amount)}</span>
           </div>`,
         )
         .join('');
