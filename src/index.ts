@@ -21,7 +21,7 @@ app.get('/', async (c) => {
   const cookie = c.req.header('Cookie') || '';
   const session = await getSession(c.env.DB, cookie);
   if (!session) return c.redirect('/login');
-  return c.env.ASSETS.fetch(new Request(c.req.url, c.req.raw));
+  return c.env.ASSETS.fetch(c.req.raw);
 });
 
 app.use('/api/*', authMiddleware);
@@ -41,7 +41,7 @@ app.get('/api/me', authMiddleware, async (c) => {
 
 // Catch-all: serve static assets for all other routes
 app.all('*', async (c) => {
-  return c.env.ASSETS.fetch(new Request(c.req.url, c.req.raw));
+  return c.env.ASSETS.fetch(c.req.raw);
 });
 
 export default app;
