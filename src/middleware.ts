@@ -12,7 +12,7 @@ declare module 'hono' {
 export const authMiddleware: MiddlewareHandler<{ Bindings: Env }> = async (c, next) => {
   const cookie = c.req.header('Cookie') || '';
   const session = await getSession(c.env.DB, cookie);
-  if (!session) return c.redirect('/auth/github');
+  if (!session) return c.redirect('/login');
   c.set('session', session);
   await next();
 };

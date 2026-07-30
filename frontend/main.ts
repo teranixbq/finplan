@@ -109,7 +109,7 @@ window.onMonthChange = async () => {
 
 window.logout = async () => {
   await fetch('/auth/logout', { method: 'POST' });
-  window.location.href = '/auth/github';
+  window.location.href = '/login';
 };
 
 window.onDailyExpenseRefChange = () => {

@@ -105,7 +105,7 @@ export async function handleLogout(c: Context<{ Bindings: Env }>) {
   return new Response(null, {
     status: 302,
     headers: {
-      Location: '/auth/github',
+      Location: '/login',
       'Set-Cookie': 'fp_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0',
     },
   });
