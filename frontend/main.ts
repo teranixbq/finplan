@@ -4,7 +4,7 @@
 
 import { S } from './state';
 import { el, today } from './utils';
-import { setLang } from './i18n';
+import { setLang, getCurrentLang } from './i18n';
 import { getMe } from './api';
 import { loadMonths, loadMonthData } from './data';
 import { navigate, switchTab } from './navigation';
@@ -159,6 +159,17 @@ async function initApp() {
 
     // Apply i18n
     setLang((localStorage.getItem('fp_lang') as 'id' | 'en') || 'id');
+
+    // Lang toggle button
+    const langBtn = document.getElementById('lang-toggle');
+    if (langBtn) {
+      langBtn.textContent = (localStorage.getItem('fp_lang') || 'id').toUpperCase();
+      langBtn.addEventListener('click', () => {
+        const next = getCurrentLang() === 'id' ? 'en' : 'id';
+        setLang(next);
+        langBtn.textContent = next.toUpperCase();
+      });
+    }
 
     await loadMonths();
   } catch (e) {
