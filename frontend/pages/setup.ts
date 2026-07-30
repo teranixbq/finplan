@@ -25,6 +25,7 @@ export function renderSalary(): void {
 
 export function renderAssets(): void {
   const tbody = el('assets-body');
+  if (!tbody) return;
   if (!S.assets.length) {
     tbody.innerHTML = `<tr><td colspan="3" class="empty">${t('noData')}</td></tr>`;
     return;
@@ -44,6 +45,7 @@ export function renderAssets(): void {
 
 export function renderInvestments(): void {
   const tbody = el('investments-body');
+  if (!tbody) return;
   if (!S.investments.length) {
     tbody.innerHTML = `<tr><td colspan="4" class="empty">${t('noData')}</td></tr>`;
     return;
@@ -64,6 +66,7 @@ export function renderInvestments(): void {
 
 export function renderExpenses(): void {
   const tbody = el('expenses-body');
+  if (!tbody) return;
   if (!S.expenses.length) {
     tbody.innerHTML = `<tr><td colspan="6" class="empty">${t('noData')}</td></tr>`;
     return;

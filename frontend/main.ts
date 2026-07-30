@@ -131,8 +131,18 @@ window.onDailyExpenseRefChange = () => {
 // ============================================================
 
 async function initApp() {
+  // Step 1: auth check — redirect to GitHub login if not authenticated
+  let me: { name: string; email: string };
   try {
-    const me = await getMe();
+    me = await getMe();
+  } catch (e) {
+    console.error('Auth failed:', e);
+    window.location.href = '/auth/github';
+    return;
+  }
+
+  // Step 2: render UI — errors here should NOT redirect to login
+  try {
     el('user-name').textContent = me.name;
     el('user-email').textContent = me.email;
 
@@ -152,8 +162,8 @@ async function initApp() {
 
     await loadMonths();
   } catch (e) {
-    console.error('Init failed:', e);
-    window.location.href = '/auth/github';
+    console.error('App init error:', e);
+    // do NOT redirect — log only so we can debug
   }
 }
 
