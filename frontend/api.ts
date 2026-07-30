@@ -67,7 +67,6 @@ export const postIncome = (body: {
   assetId?: number;
   name: string;
   amount: number;
-  date?: string;
 }) => request<Income>('POST', '/incomes', body);
 export const deleteIncome = (id: number) => request<{ ok: boolean }>('DELETE', `/incomes/${id}`);
 

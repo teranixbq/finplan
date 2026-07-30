@@ -2,7 +2,7 @@
 // frontend/actions/income.ts
 // ============================================================
 
-import { el, parseAmount, today } from '../utils';
+import { el, parseAmount } from '../utils';
 import { t } from '../i18n';
 import { showToast } from '../toast';
 import { closeModal } from '../modals';
@@ -26,7 +26,6 @@ export async function submitAddIncome(): Promise<void> {
       name,
       amount,
       assetId: assetId ? parseInt(assetId) : undefined,
-      date: today(),
     });
     closeModal('modal-income');
     (el('inc-name') as HTMLInputElement).value = '';
