@@ -3,7 +3,7 @@
 // ============================================================
 
 import { S } from '../state';
-import { el, rp, daysInMonth, fmtFullDate, fmtDate, MONTH_NAMES, CHART_COLORS } from '../utils';
+import { el, rp, daysInMonth, fmtFullDate, MONTH_NAMES, CHART_COLORS } from '../utils';
 import { t } from '../i18n';
 import type { SummaryResponse } from '../../src/shared/types';
 
