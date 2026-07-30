@@ -3,7 +3,7 @@
 // ============================================================
 
 import { S } from './state';
-import { el, today } from './utils';
+import { el, today, fmtAmountInput } from './utils';
 import { setLang, getCurrentLang } from './i18n';
 import { getMe } from './api';
 import { loadMonths, loadMonthData } from './data';
@@ -178,4 +178,13 @@ async function initApp() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', () => {
+  // Global amount input formatter — format semua .amount-input dengan thousand separator
+  document.addEventListener('input', (e) => {
+    const target = e.target as HTMLInputElement;
+    if (target.classList.contains('amount-input')) {
+      fmtAmountInput(target);
+    }
+  });
+  initApp();
+});

@@ -56,6 +56,7 @@ export const incomes = sqliteTable('incomes', {
   assetId: integer('asset_id'),
   name: text('name').notNull(),
   amount: real('amount').notNull().default(0),
+  date: text('date'),
   createdAt: integer('created_at').notNull(),
 });
 

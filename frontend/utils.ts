@@ -91,6 +91,17 @@ export function fmtFullDate(d: Date): string {
   return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${FULL_MONTH[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+/** Format number input with thousand separators (id-ID) */
+export function fmtAmountInput(input: HTMLInputElement): void {
+  const raw = input.value.replace(/\./g, '').replace(/\D/g, '');
+  const num = parseInt(raw, 10);
+  if (!isNaN(num)) {
+    input.value = num.toLocaleString('id-ID');
+  } else {
+    input.value = '';
+  }
+}
+
 /** Get DOM element by id */
 export function el(id: string): HTMLElement {
   return document.getElementById(id) as HTMLElement;

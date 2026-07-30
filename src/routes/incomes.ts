@@ -27,6 +27,7 @@ app.post('/', async (c) => {
     assetId?: number;
     name: string;
     amount: number;
+    date?: string;
   }>();
   if (!body.name?.trim() || typeof body.amount !== 'number' || body.amount <= 0) {
     return c.json({ error: 'name and a positive amount are required' }, 400);
@@ -40,6 +41,7 @@ app.post('/', async (c) => {
       assetId: body.assetId,
       name: body.name.trim(),
       amount: body.amount,
+      date: body.date || null,
       createdAt: ts,
     })
     .returning()
