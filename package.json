@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "worker:dev": "wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply finplan --local",
     "db:migrate:remote": "wrangler d1 migrations apply finplan --remote",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\" \"frontend/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"frontend/**/*.ts\""
   },
   "dependencies": {
     "chart.js": "^4.5.1",
@@ -17,10 +20,12 @@
     "hono": "^4.7.11"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "1.0.0",
     "@cloudflare/workers-types": "^5.20260729.1",
     "drizzle-kit": "^0.31.1",
     "prettier": "3.9.6",
     "typescript": "^5.8.3",
+    "vite": "6.3.5",
     "wrangler": "^4.22.0"
   }
 }

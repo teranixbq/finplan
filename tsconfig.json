@@ -1,16 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "ES2021",
-    "module": "ES2022",
-    "moduleResolution": "bundler",
-    "lib": ["ES2021"],
-    "types": ["@cloudflare/workers-types"],
-    "strict": true,
-    "noImplicitAny": true,
-    "skipLibCheck": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "references": [
+    { "path": "./tsconfig.worker.json" },
+    { "path": "./tsconfig.app.json" }
+  ],
+  "files": []
 }
