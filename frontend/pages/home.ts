@@ -45,7 +45,7 @@ export function renderHome(): void {
   if (investEl) investEl.textContent = rp(s.totalInvestment);
 
   renderSchedule(s, now, today_day, days_left);
-  renderCharts(s);
+  requestAnimationFrame(() => renderCharts(s));
   renderBVA(s);
 }
 

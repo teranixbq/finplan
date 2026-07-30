@@ -46,7 +46,7 @@ export function renderDaily(): void {
   populateCategoryFilter();
 
   renderDailyList();
-  renderDailyChart();
+  requestAnimationFrame(() => renderDailyChart());
   renderIncomeTable();
 }
 

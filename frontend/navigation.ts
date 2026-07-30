@@ -6,6 +6,7 @@ import { S } from './state';
 import { el } from './utils';
 import { t } from './i18n';
 import { renderDaily } from './pages/daily';
+import { renderCharts } from './pages/home';
 
 export function navigate(page: string): void {
   S.currentPage = page;
@@ -28,6 +29,10 @@ export function navigate(page: string): void {
   const pageEl = el('page-' + page);
   if (pageEl) pageEl.classList.add('active');
 
+  // render charts AFTER page is visible so canvas has dimensions
+  if (page === 'home' && S.summary) {
+    requestAnimationFrame(() => renderCharts(S.summary!));
+  }
   if (page === 'daily') renderDaily();
 }
 
