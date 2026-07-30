@@ -68,12 +68,14 @@ function renderSchedule(s: SummaryResponse, now: Date, today_day: number, days_l
   const schedTodayFullEl = el('sched-today-full');
   if (schedTodayFullEl) schedTodayFullEl.textContent = fmtFullDate(now);
 
+  // countdown
+  const countdownEl = el('sched-countdown');
+  if (countdownEl) countdownEl.textContent = `${days_left} ${t('daysLeft')}`;
+
   // projection
   const proj = S.projection;
   const projItems = proj?.items || [];
   const projTotal = projItems.reduce((s: number, i) => s + i.amount, 0);
-  const currentTotal = s.totalBudget;
-  const diff = projTotal - currentTotal;
 
   const projLabelEl = el('proj-target-label');
   if (projLabelEl) {
@@ -82,6 +84,25 @@ function renderSchedule(s: SummaryResponse, now: Date, today_day: number, days_l
   }
   const projTotalEl = el('proj-total');
   if (projTotalEl) projTotalEl.textContent = rp(projTotal);
+
+  // schedule-proj-list: render upcoming projection items
+  const projListEl = el('schedule-proj-list');
+  if (projListEl) {
+    if (!projItems.length) {
+      projListEl.innerHTML = `<div class="empty-state">${t('noData')}</div>`;
+    } else {
+      projListEl.innerHTML = projItems
+        .slice(0, 5)
+        .map(
+          (it) => `
+          <div class="proj-item-row">
+            <span class="proj-item-name">${it.name}</span>
+            <span class="proj-item-amount">${rp(it.amount)}</span>
+          </div>`,
+        )
+        .join('');
+    }
+  }
 }
 
 function renderBVA(s: SummaryResponse): void {
