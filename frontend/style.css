@@ -494,55 +494,94 @@ body::after {
    BREAKDOWN MODAL
    ============================================ */
 .breakdown-modal {
-  max-width: 380px;
+  max-width: 340px;
   width: 92vw;
+  font-family: 'Courier New', Courier, monospace;
 }
 .breakdown-modal-body {
   padding: 4px 0 8px;
 }
-.bd-calc-rows {
+.struk-wrap {
+  background: var(--glass-bg);
+  border-radius: var(--radius);
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0;
 }
-.bd-calc-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2px 0;
+.struk-header {
+  text-align: center;
+  margin-bottom: 12px;
 }
-.bd-calc-row.indent { padding-left: 16px; }
-.bd-calc-row.subtotal .bd-calc-label,
-.bd-calc-row.subtotal .bd-calc-value {
-  font-weight: 600;
-  color: var(--text);
-}
-.bd-calc-row.result .bd-calc-label {
+.struk-header-title {
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
-}
-.bd-calc-row.section-label .bd-calc-label {
-  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  font-weight: 600;
+  letter-spacing: 0.1em;
 }
-.bd-calc-label {
-  font-size: 13px;
+.struk-header-sub {
+  font-size: 11px;
   color: var(--text-dim);
+  margin-top: 2px;
 }
-.bd-calc-value {
-  font-size: 13px;
-  font-weight: 500;
+.struk-divider {
+  border: none;
+  border-top: 1px dashed rgba(180,196,180,0.25);
+  margin: 10px 0;
+}
+.struk-divider.solid {
+  border-top: 1px solid rgba(180,196,180,0.2);
+}
+.struk-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 12px;
+}
+.struk-row.indent { padding-left: 12px; }
+.struk-row.subtotal .struk-label,
+.struk-row.subtotal .struk-val {
+  font-weight: 700;
   color: var(--text);
 }
-.bd-calc-value.neg { color: #d98a7f; }
-.bd-calc-value.highlight {
+.struk-row.minus .struk-val { color: #d98a7f; }
+.struk-row.plus .struk-val { color: var(--canopy-bright); }
+.struk-label { color: var(--text-dim); }
+.struk-val {
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.struk-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0 4px;
+}
+.struk-total-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.struk-total-val {
   font-size: 16px;
   font-weight: 800;
-  color: #8fb88f;
+  font-variant-numeric: tabular-nums;
+}
+.struk-total-val.positive { color: var(--canopy-bright); }
+.struk-total-val.negative { color: #d98a7f; }
+.struk-note {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(180,196,180,0.15);
+}
 }
 .bd-calc-divider {
   height: 1px;

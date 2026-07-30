@@ -37,46 +37,60 @@ export function showBreakdownModal(type: 'sisaSebelumGajian' | 'sisaAkhirBulan')
   if (type === 'sisaSebelumGajian') {
     titleEl.textContent = 'Detail: Sisa Sebelum Gajian';
     bodyEl.innerHTML = `
-      <div class="bd-calc-rows">
-        <div class="bd-calc-row">
-          <span class="bd-calc-label">Dana Cair</span>
-          <span class="bd-calc-value">${rp(s.totalCash)}</span>
+      <div class="struk-wrap">
+        <div class="struk-header">
+          <div class="struk-header-title">RINCIAN PERHITUNGAN</div>
+          <div class="struk-header-sub">Sisa Sebelum Gajian</div>
         </div>
-        <div class="bd-calc-row">
-          <span class="bd-calc-label">Investasi</span>
-          <span class="bd-calc-value">${rp(s.totalInvestment)}</span>
+        <hr class="struk-divider">
+        <div class="struk-row">
+          <span class="struk-label">Dana Cair</span>
+          <span class="struk-val">${rp(s.totalCash)}</span>
         </div>
-        <div class="bd-calc-row bd-calc-subtotal">
-          <span class="bd-calc-label">Subtotal Aset</span>
-          <span class="bd-calc-value">${rp(s.totalCash + s.totalInvestment)}</span>
+        <div class="struk-row">
+          <span class="struk-label">Investasi</span>
+          <span class="struk-val">${rp(s.totalInvestment)}</span>
         </div>
-        <div class="bd-calc-row bd-calc-minus">
-          <span class="bd-calc-label">Pengeluaran Harian (aktual)</span>
-          <span class="bd-calc-value">- ${rp(s.totalDaily)}</span>
+        <hr class="struk-divider">
+        <div class="struk-row subtotal">
+          <span class="struk-label">SUBTOTAL ASET</span>
+          <span class="struk-val">${rp(s.totalCash + s.totalInvestment)}</span>
         </div>
-        <div class="bd-calc-row bd-calc-result">
-          <span class="bd-calc-label">= Sisa Sebelum Gajian</span>
-          <span class="bd-calc-value ${s.sisaSebelumGajian >= 0 ? 'positive' : 'negative'}">${rp(s.sisaSebelumGajian)}</span>
+        <hr class="struk-divider">
+        <div class="struk-row minus">
+          <span class="struk-label">Pengeluaran Harian</span>
+          <span class="struk-val">- ${rp(s.totalDaily)}</span>
         </div>
-        <div class="bd-calc-note">
+        <hr class="struk-divider solid">
+        <div class="struk-total-row">
+          <span class="struk-total-label">SISA</span>
+          <span class="struk-total-val ${s.sisaSebelumGajian >= 0 ? 'positive' : 'negative'}">${rp(s.sisaSebelumGajian)}</span>
+        </div>
+        <div class="struk-note">
           Manual (tidak terhubung budget): ${rp(manualActual)}
         </div>
       </div>`;
   } else {
     titleEl.textContent = 'Detail: Sisa Akhir Bulan';
     bodyEl.innerHTML = `
-      <div class="bd-calc-rows">
-        <div class="bd-calc-row">
-          <span class="bd-calc-label">Sisa Sebelum Gajian</span>
-          <span class="bd-calc-value">${rp(s.sisaSebelumGajian)}</span>
+      <div class="struk-wrap">
+        <div class="struk-header">
+          <div class="struk-header-title">RINCIAN PERHITUNGAN</div>
+          <div class="struk-header-sub">Sisa Akhir Bulan</div>
         </div>
-        <div class="bd-calc-row bd-calc-plus">
-          <span class="bd-calc-label">+ Gaji</span>
-          <span class="bd-calc-value">${rp(s.month.salary)}</span>
+        <hr class="struk-divider">
+        <div class="struk-row">
+          <span class="struk-label">Sisa Sebelum Gajian</span>
+          <span class="struk-val">${rp(s.sisaSebelumGajian)}</span>
         </div>
-        <div class="bd-calc-row bd-calc-result">
-          <span class="bd-calc-label">= Sisa Akhir Bulan</span>
-          <span class="bd-calc-value ${s.sisaAkhirBulan >= 0 ? 'positive' : 'negative'}">${rp(s.sisaAkhirBulan)}</span>
+        <div class="struk-row plus">
+          <span class="struk-label">Gaji</span>
+          <span class="struk-val">+ ${rp(s.month.salary)}</span>
+        </div>
+        <hr class="struk-divider solid">
+        <div class="struk-total-row">
+          <span class="struk-total-label">TOTAL</span>
+          <span class="struk-total-val ${s.sisaAkhirBulan >= 0 ? 'positive' : 'negative'}">${rp(s.sisaAkhirBulan)}</span>
         </div>
       </div>`;
   }
