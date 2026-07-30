@@ -247,18 +247,22 @@ function renderIncomeTable(): void {
   if (!tbody) return;
 
   if (!S.incomes.length) {
-    tbody.innerHTML = `<tr><td colspan="3" class="empty">${t('noData')}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" class="empty">${t('noData')}</td></tr>`;
     return;
   }
 
   tbody.innerHTML = S.incomes
-    .map(
-      (inc) => `
+    .map((inc) => {
+      const dateStr = inc.createdAt
+        ? fmtDate(new Date(inc.createdAt * 1000).toISOString().slice(0, 10))
+        : '-';
+      return `
     <tr>
       <td>${inc.name}</td>
+      <td>${dateStr}</td>
       <td style="text-align:right">${rp(inc.amount)}</td>
       <td><button class="btn-icon danger sm" onclick="window.deleteIncome(${inc.id})">${t('delete')}</button></td>
-    </tr>`,
-    )
+    </tr>`;
+    })
     .join('');
 }
