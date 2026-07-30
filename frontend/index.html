@@ -340,17 +340,19 @@
 
           <!-- RIGHT COL: Filter + Expense List -->
           <div class="daily-right">
-            <!-- FILTER BAR -->
-            <div class="daily-filter-bar">
-              <div class="daily-filter-left">
-                <select id="daily-filter-category" class="form-select sm" onchange="window.applyDailyFilter()">
-                  <option value="all" data-i18n="all">Semua</option>
-                </select>
-                <input id="daily-filter-date-input" type="date" class="form-input sm" onchange="window.applyDailyFilter()">
+            <div class="daily-right-inner">
+              <!-- FILTER BAR -->
+              <div class="daily-filter-bar">
+                <div class="daily-filter-left">
+                  <select id="daily-filter-category" class="form-select sm" onchange="window.applyDailyFilter()">
+                    <option value="all" data-i18n="all">Semua</option>
+                  </select>
+                  <input id="daily-filter-date-input" type="date" class="form-input sm" onchange="window.applyDailyFilter()">
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="window.clearDailyFilter()" data-i18n="allDate">Reset</button>
               </div>
-              <button class="btn btn-ghost btn-sm" onclick="window.clearDailyFilter()" data-i18n="allDate">Reset</button>
+              <div id="daily-list" class="daily-list-scroll"></div>
             </div>
-            <div id="daily-list"></div>
           </div>
 
         </div>

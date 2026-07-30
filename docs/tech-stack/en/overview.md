@@ -4,7 +4,7 @@
 
 ## Overview
 
-FinPlan is a personal finance tracker application running entirely on Cloudflare infrastructure. Single-user, private, no frontend build step.
+FinPlan is a personal finance tracker application running entirely on Cloudflare infrastructure. Single-user, private. Frontend is built with Vite + TypeScript and served as static assets via Cloudflare Workers Assets.
 
 ---
 
@@ -57,24 +57,48 @@ npm run deploy        # wrangler deploy
 
 | Component | Technology | Notes |
 |-----------|------------|-------|
-| Language | Vanilla JS (ES6+) | No framework, no build step |
-| Styling | Vanilla CSS (glassmorphism) | No Tailwind, no build |
-| Charts | Chart.js | ^4.5.1 — self-hosted at `/public/vendor/` |
-| Icons | FontAwesome | Self-hosted at `/public/vendor/fontawesome/` |
-| i18n | Custom (`/public/i18n.js`) | ID/EN support |
+| Build Tool | Vite | 6.3.5 — bundler + dev server |
+| Language | TypeScript | ^5.8.3 — strict mode |
+| Styling | Vanilla CSS (glassmorphism) | No Tailwind, no CSS framework |
+| Charts | Chart.js | ^4.5.1 — self-hosted in `frontend/assets/vendor/` |
+| Icons | FontAwesome | Self-hosted in `frontend/assets/vendor/fontawesome/` |
+| i18n | Custom (`frontend/i18n.ts`) | ID/EN support |
 
-**Static files:** Served via Cloudflare Assets binding (`ASSETS`)
+**Entry point:** `frontend/main.ts` → bundled by Vite → `dist/`
 
-**Frontend state management:** Global `S` object in `app.js`:
-```javascript
-const S = {
-  months, currentMonthId, summary,
-  assets, expenses, investments,
-  incomes, daily, projection,
-  currentPage, currentTab,
-  deleteConfirm, charts
-}
+**Static assets:** Served via Cloudflare Workers Assets (`assets.directory: "./dist"` in `wrangler.jsonc`)
+
+**Frontend module structure:**
 ```
+frontend/
+├── main.ts              # Entry point — expose window.* globals
+├── state.ts             # Global state (AppState, S)
+├── api.ts               # Typed fetch wrapper to /api/*
+├── i18n.ts              # Translations ID/EN
+├── utils.ts             # Helper functions (rp, fmtDate, etc)
+├── toast.ts             # Toast notification
+├── modals.ts            # Modal open/close + breakdown modal
+├── navigation.ts        # Page navigation & tab switching
+├── selects.ts           # Populate dropdown selects
+├── data.ts              # Data loading (loadMonths, loadMonthData, reloadAll)
+├── pages/
+│   ├── home.ts          # Render homepage
+│   ├── setup.ts         # Render setup page
+│   └── daily.ts         # Render daily page + chart + filter
+├── actions/
+│   ├── asset.ts         # Submit/delete asset
+│   ├── confirm.ts       # Double-tap delete confirm
+│   ├── daily.ts         # Submit/delete daily expense
+│   ├── expense.ts       # Submit/delete/toggle expense
+│   ├── income.ts        # Submit/delete income
+│   ├── investment.ts    # Submit/delete investment
+│   ├── month.ts         # Submit new month / edit salary
+│   └── projection.ts    # Submit/edit/delete projection
+└── assets/
+    └── vendor/          # chart.min.js, fontawesome (self-hosted)
+```
+
+**Shared types:** `src/shared/types.ts` — used by both backend (`src/`) and frontend (`frontend/`) as API contract.
 
 ---
 
@@ -134,20 +158,35 @@ finplan/
 │   │   ├── daily.ts          # Actual daily expenses
 │   │   └── projections.ts    # Next month projections
 │   └── validators/           # Input validators
-├── public/
-│   ├── index.html            # Main SPA
+├── frontend/                 # Frontend source (Vite + TypeScript)
+│   ├── index.html            # Main SPA entry
 │   ├── login.html            # Login page
 │   ├── unauthorized.html     # Unauthorized page
-│   ├── app.js                # Frontend state, render, API calls
+│   ├── main.ts               # Entry point — expose window.* globals
+│   ├── state.ts              # Global state
+│   ├── api.ts                # Typed fetch wrapper
+│   ├── i18n.ts               # Translations ID/EN
+│   ├── utils.ts              # Helpers
+│   ├── toast.ts              # Toast notifications
+│   ├── modals.ts             # Modal management
+│   ├── navigation.ts         # Page navigation
+│   ├── selects.ts            # Dropdown population
+│   ├── data.ts               # Data loading
 │   ├── style.css             # Glassmorphism CSS
-│   ├── i18n.js               # Translations (ID/EN)
-│   └── vendor/               # chart.min.js, fontawesome
-├── drizzle/
-│   └── migrations/           # SQL migration files
+│   ├── pages/                # Page render functions
+│   ├── actions/              # Form submit/delete handlers
+│   └── assets/vendor/        # chart.min.js, fontawesome
+├── src/shared/
+│   └── types.ts              # Shared API contract types (backend + frontend)
+├── dist/                     # Vite build output (gitignored)
+├── migrations/               # SQL migration files
 ├── docs/                     # Project documentation
 ├── AGENT.md                  # AI agent instructions
 ├── CODERULES.md              # Coding conventions
-├── migrations/MIGRATION.md          # DB migration guide
+├── vite.config.mts           # Vite config
+├── tsconfig.json             # TS project references root
+├── tsconfig.worker.json      # TS config for backend (src/)
+├── tsconfig.app.json         # TS config for frontend (frontend/)
 ├── wrangler.jsonc            # Cloudflare Workers config
 ├── drizzle.config.ts         # Drizzle Kit config
 └── package.json

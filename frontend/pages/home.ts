@@ -82,7 +82,7 @@ function renderSchedule(s: SummaryResponse, now: Date, today_day: number, days_l
 }
 
 function renderBVA(s: SummaryResponse): void {
-  const listEl = el('bva-list');
+  const listEl = el('budget-actual-list');
   if (!listEl) return;
 
   const activeExpenses = S.expenses.filter((e) => e.isActive);
