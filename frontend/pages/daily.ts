@@ -45,14 +45,6 @@ export function renderDaily(): void {
   // populate category filter with active expense refs
   populateCategoryFilter();
 
-  // set default date filter to today on first render
-  const dateInputEl = el('daily-filter-date-input') as HTMLInputElement;
-  if (dateInputEl && !dateInputEl.dataset['initialized']) {
-    dateInputEl.value = today();
-    _filterDateInput = today();
-    dateInputEl.dataset['initialized'] = '1';
-  }
-
   renderDailyList();
   renderDailyChart();
   renderIncomeTable();
