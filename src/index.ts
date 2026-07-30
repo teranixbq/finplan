@@ -16,14 +16,6 @@ app.get('/auth/github', handleGithubLogin);
 app.get('/auth/github/callback', handleGithubCallback);
 app.post('/auth/logout', handleLogout);
 
-// Protect root — redirect to /login if no session
-app.get('/', async (c) => {
-  const cookie = c.req.header('Cookie') || '';
-  const session = await getSession(c.env.DB, cookie);
-  if (!session) return c.redirect('/login');
-  return c.env.ASSETS.fetch(c.req.raw);
-});
-
 app.use('/api/*', authMiddleware);
 app.route('/api/months', monthsRoute);
 app.route('/api/assets', assetsRoute);
