@@ -1345,13 +1345,12 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   display: grid;
   grid-template-columns: 460px 1fr;
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 .daily-left { min-width: 0; }
 .daily-right {
   min-width: 0;
-  position: sticky;
-  top: 16px;
+  height: 100%;
 }
 
 /* STATS CARDS: Total Pengeluaran + Total Pemasukan */

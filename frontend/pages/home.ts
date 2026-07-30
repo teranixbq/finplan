@@ -26,21 +26,23 @@ export function renderHome(): void {
   const cashflowStatus = pct >= 90 ? 'danger' : pct >= 70 ? 'warning' : 'safe';
 
   // sisa cards
-  const sisaEl = el('val-sisa-sebelum-gajian');
+  const sisaEl = el('val-remaining-before');
   if (sisaEl) sisaEl.textContent = rp(s.sisaSebelumGajian);
-  const sisaAkhirEl = el('val-sisa-akhir-bulan');
+  const sisaAkhirEl = el('val-remaining');
   if (sisaAkhirEl) sisaAkhirEl.textContent = rp(s.sisaAkhirBulan);
 
   // cashflow badge
-  const badgeEl = el('cashflow-badge');
+  const badgeEl = el('income-status-badge');
   if (badgeEl) {
     badgeEl.textContent = t(cashflowStatus);
-    badgeEl.className = `cashflow-badge ${cashflowStatus}`;
+    badgeEl.className = `income-status-badge ${cashflowStatus}`;
   }
 
-  // total aset card
-  const grandEl = el('val-grand-total');
-  if (grandEl) grandEl.textContent = rp(s.grandTotal);
+  // total cash & investment
+  const cashEl = el('val-total-cash');
+  if (cashEl) cashEl.textContent = rp(s.totalCash);
+  const investEl = el('val-total-investment');
+  if (investEl) investEl.textContent = rp(s.totalInvestment);
 
   renderSchedule(s, now, today_day, days_left);
   renderCharts(s);
@@ -49,36 +51,27 @@ export function renderHome(): void {
 
 function renderSchedule(s: SummaryResponse, now: Date, today_day: number, days_left: number): void {
   const m = s.month;
-  const salaryDateEl = el('val-salary-date');
-  if (salaryDateEl) salaryDateEl.textContent = `${t('salaryInfo')} ${m.salaryDate}`;
 
-  const daysLeftEl = el('val-days-left');
-  if (daysLeftEl) daysLeftEl.textContent = `${days_left} ${t('daysLeft')}`;
+  // income card
+  const salaryEl = el('val-salary');
+  if (salaryEl) salaryEl.textContent = rp(s.totalIncome || 0);
+  const incomeSubEl = el('income-sub');
+  if (incomeSubEl) incomeSubEl.textContent = `${t('salaryInfo')} ${m.salaryDate} · ${days_left} ${t('daysLeft')}`;
 
-  const todayEl = el('val-today');
-  if (todayEl) todayEl.textContent = fmtFullDate(now);
-
-  // projection comparison
+  // projection label
   const proj = S.projection;
   const projItems = proj?.items || [];
   const projTotal = projItems.reduce((s: number, i) => s + i.amount, 0);
   const currentTotal = s.totalBudget;
   const diff = projTotal - currentTotal;
 
-  const projLabelEl = el('proj-next-month-label');
+  const projLabelEl = el('proj-target-label');
   if (projLabelEl) {
     const tgt = proj?.target;
     projLabelEl.textContent = tgt ? `${MONTH_NAMES[tgt.month - 1]} ${tgt.year}` : '-';
   }
-  const projCurrentEl = el('proj-current-amount');
-  if (projCurrentEl) projCurrentEl.textContent = rp(currentTotal);
-  const projNextEl = el('proj-next-amount');
-  if (projNextEl) projNextEl.textContent = rp(projTotal);
-  const projDiffEl = el('proj-diff-amount');
-  if (projDiffEl) {
-    projDiffEl.textContent = (diff >= 0 ? '+' : '') + rp(diff);
-    projDiffEl.className = `proj-diff ${diff >= 0 ? 'up' : 'down'}`;
-  }
+  const projTotalEl = el('proj-total');
+  if (projTotalEl) projTotalEl.textContent = rp(projTotal);
 }
 
 function renderBVA(s: SummaryResponse): void {
