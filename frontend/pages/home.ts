@@ -58,8 +58,15 @@ function renderSchedule(s: SummaryResponse, now: Date, today_day: number, days_l
   const incomeSubEl = el('income-sub');
   if (incomeSubEl) incomeSubEl.textContent = `${t('salaryInfo')} ${m.salaryDate} · ${days_left} ${t('daysLeft')}`;
 
-  // projection label
-  const proj = S.projection;
+  // schedule card
+  const schedNumEl = el('sched-salary-num');
+  if (schedNumEl) schedNumEl.textContent = String(m.salaryDate);
+  const schedFullEl = el('sched-salary-full');
+  if (schedFullEl) schedFullEl.textContent = `${days_left} ${t('daysLeft')}`;
+  const schedTodayNumEl = el('sched-today-num');
+  if (schedTodayNumEl) schedTodayNumEl.textContent = String(today_day);
+  const schedTodayFullEl = el('sched-today-full');
+  if (schedTodayFullEl) schedTodayFullEl.textContent = fmtFullDate(now);
   const projItems = proj?.items || [];
   const projTotal = projItems.reduce((s: number, i) => s + i.amount, 0);
   const currentTotal = s.totalBudget;

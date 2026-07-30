@@ -7,10 +7,20 @@ import { el, rp, CAT_ICON, CAT_ICON_COLOR, MONTH_NAMES } from '../utils';
 import { t } from '../i18n';
 
 export function renderSetup(): void {
+  renderSalary();
   renderAssets();
   renderInvestments();
   renderExpenses();
   renderProjection();
+}
+
+export function renderSalary(): void {
+  const s = S.summary;
+  if (!s) return;
+  const salaryEl = el('setup-salary-value');
+  if (salaryEl) salaryEl.textContent = rp(s.month.salary);
+  const salaryDateEl = el('setup-salarydate-value');
+  if (salaryDateEl) salaryDateEl.textContent = `Tgl ${s.month.salaryDate}`;
 }
 
 export function renderAssets(): void {
