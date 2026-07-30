@@ -67,6 +67,9 @@ function renderSchedule(s: SummaryResponse, now: Date, today_day: number, days_l
   if (schedTodayNumEl) schedTodayNumEl.textContent = String(today_day);
   const schedTodayFullEl = el('sched-today-full');
   if (schedTodayFullEl) schedTodayFullEl.textContent = fmtFullDate(now);
+
+  // projection
+  const proj = S.projection;
   const projItems = proj?.items || [];
   const projTotal = projItems.reduce((s: number, i) => s + i.amount, 0);
   const currentTotal = s.totalBudget;
