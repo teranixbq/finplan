@@ -1337,3 +1337,64 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 }
 .btn-add-full:hover { background: rgba(107,143,107,0.12); }
 .btn-add-full span:first-child { font-size: 16px; line-height: 1; }
+
+/* ============================================
+   DAILY PAGE — FILTER BAR & 2-COL LAYOUT
+   ============================================ */
+.daily-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.daily-filter-left {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.form-select.sm,
+.form-input.sm {
+  font-size: 12px;
+  padding: 6px 10px;
+  height: auto;
+}
+
+.daily-two-col {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+.daily-left { min-width: 0; }
+.daily-right { min-width: 0; }
+
+/* card title inside daily right */
+.daily-right .card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.daily-right .card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+
+/* mobile: stack vertically */
+@media (max-width: 860px) {
+  .daily-two-col {
+    grid-template-columns: 1fr;
+  }
+  .daily-right {
+    order: -1; /* chart + income di atas list di mobile */
+  }
+}

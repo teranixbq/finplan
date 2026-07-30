@@ -28,6 +28,7 @@ import {
   deleteProjection,
   resetProjection,
 } from './actions/projection';
+import { applyDailyFilter } from './pages/daily';
 
 // ============================================================
 // Global functions for onclick handlers in HTML
@@ -65,6 +66,7 @@ declare global {
     onMonthChange: () => void;
     logout: () => void;
     onDailyExpenseRefChange: () => void;
+    applyDailyFilter: typeof applyDailyFilter;
   }
 }
 
@@ -95,6 +97,7 @@ window.editProjection = editProjection;
 window.submitProjection = submitProjection;
 window.deleteProjection = deleteProjection;
 window.resetProjection = resetProjection;
+window.applyDailyFilter = applyDailyFilter;
 
 window.onMonthChange = async () => {
   const select = el('month-select') as HTMLSelectElement;
