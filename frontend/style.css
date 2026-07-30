@@ -1348,6 +1348,26 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   align-items: stretch;
 }
 .daily-left { min-width: 0; }
+.daily-income-section {
+  width: 100%;
+  margin-top: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 16px 20px;
+}
+.daily-income-section .section-header {
+  margin-bottom: 12px;
+}
+.daily-income-section .table-wrap {
+  width: 100%;
+}
+.daily-income-section table {
+  width: 100%;
+}
 .daily-right {
   min-width: 0;
   display: flex;
