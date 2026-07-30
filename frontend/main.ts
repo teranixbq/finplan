@@ -153,7 +153,7 @@ async function initApp() {
     await loadMonths();
   } catch (e) {
     console.error('Init failed:', e);
-    window.location.href = '/login.html';
+    window.location.href = '/auth/github';
   }
 }
 
