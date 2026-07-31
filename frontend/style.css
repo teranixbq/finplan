@@ -1070,8 +1070,8 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   color: var(--text);
   box-shadow: var(--shadow);
 }
-.toast.toast-show { opacity: 1; transform: translateX(0); }
-.toast.toast-hide { opacity: 0; transform: translateX(16px); }
+.toast.show { opacity: 1; transform: translateX(0); }
+.toast.hide { opacity: 0; transform: translateX(16px); }
 .toast-msg { flex: 1; line-height: 1.4; }
 .toast-close {
   background: none; border: none; cursor: pointer;
