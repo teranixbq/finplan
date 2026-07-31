@@ -4,7 +4,7 @@
 
 import { S } from './state';
 import { el, today, fmtAmountInput } from './utils';
-import { setLang, getCurrentLang } from './i18n';
+import { setLang, getCurrentLang, t } from './i18n';
 import { getMe } from './api';
 import { loadMonths, loadMonthData } from './data';
 import { navigate, switchTab } from './navigation';
@@ -108,6 +108,7 @@ window.onMonthChange = async () => {
 };
 
 window.logout = async () => {
+  if (!confirm(t('logoutConfirm'))) return;
   await fetch('/auth/logout', { method: 'POST' });
   window.location.href = '/login';
 };
