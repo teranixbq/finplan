@@ -1138,7 +1138,7 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 
 @media (max-width: 768px) {
   .sidebar { display: none; }
-  .main-wrap { padding: 16px; max-width: 100%; }
+  .main-wrap { padding: 16px; max-width: 100%; overflow-x: hidden; }
   .bottom-nav { display: block; }
   .main { padding: 0 0 96px; }
 
@@ -1626,5 +1626,31 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   .daily-right-inner { max-height: 60vh; }
   .daily-stat-cards {
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .daily-stat-card {
+    padding: 14px;
+    gap: 10px;
+  }
+  .daily-stat-card-top {
+    gap: 8px;
+  }
+  .daily-stat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+  .daily-stat-label {
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    margin-bottom: 2px;
+  }
+  .daily-stat-value {
+    font-size: 16px;
+  }
+  .daily-stat-card .btn {
+    font-size: 10px;
+    padding: 6px 8px;
+    gap: 4px;
   }
 }
