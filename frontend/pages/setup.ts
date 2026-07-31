@@ -116,7 +116,7 @@ export function renderProjection(): void {
     .map((it) => {
       const assetName = S.assets.find((a) => a.id === it.assetId)?.name || '-';
       return `<tr>
-      <td><span class="bd-left"><span class="bd-icon" style="color:${CAT_ICON_COLOR[it.category] || ''}">${CAT_ICON[it.category] || ''}</span><span>${it.name}</span></span></td>
+      <td>${it.name}</td>
       <td>${t(it.category)}</td>
       <td>${assetName}</td>
       <td style="text-align:right">${rp(it.amount)}</td>
