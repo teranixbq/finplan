@@ -1626,31 +1626,35 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   .daily-right-inner { max-height: 60vh; }
   .daily-stat-cards {
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .daily-stat-card {
-    padding: 14px;
-    gap: 10px;
-  }
-  .daily-stat-card-top {
     gap: 8px;
   }
+  .daily-stat-card {
+    padding: 12px;
+    gap: 8px;
+    border-radius: var(--radius);
+  }
+  .daily-stat-card-top {
+    gap: 6px;
+  }
   .daily-stat-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 15px;
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+    border-radius: 8px;
   }
   .daily-stat-label {
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 0.02em;
     margin-bottom: 2px;
   }
   .daily-stat-value {
-    font-size: 16px;
+    font-size: 14px;
+    letter-spacing: -0.3px;
   }
   .daily-stat-card .btn {
     font-size: 10px;
-    padding: 6px 8px;
-    gap: 4px;
+    padding: 5px 8px;
+    gap: 3px;
+    border-radius: 8px;
   }
 }
