@@ -65,6 +65,7 @@ declare global {
     resetProjection: typeof resetProjection;
     onMonthChange: () => void;
     logout: () => void;
+    confirmLogout: () => void;
     onDailyExpenseRefChange: () => void;
     applyDailyFilter: typeof applyDailyFilter;
     clearDailyFilter: typeof clearDailyFilter;
@@ -107,8 +108,11 @@ window.onMonthChange = async () => {
   await loadMonthData();
 };
 
-window.logout = async () => {
-  if (!confirm(t('logoutConfirm'))) return;
+window.logout = () => {
+  openModal('modal-logout');
+};
+
+window.confirmLogout = async () => {
   await fetch('/auth/logout', { method: 'POST' });
   window.location.href = '/login';
 };
