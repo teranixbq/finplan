@@ -35,7 +35,7 @@ export function renderAssets(): void {
     <tr>
       <td data-label="Nama">${a.name}</td>
       <td data-label="Nominal" style="text-align:right">${rp(a.amount)}</td>
-      <td><button class="btn-icon danger" onclick="window.deleteAsset(${a.id})">${t('delete')}</button></td>
+      <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteAsset(${a.id})"><i class="fa-solid fa-trash"></i></button></td>
     </tr>
   `,
     )
@@ -56,7 +56,7 @@ export function renderInvestments(): void {
       <td data-label="Nama">${inv.name}</td>
       <td data-label="Tipe">${t(inv.type)}</td>
       <td data-label="Nominal" style="text-align:right">${rp(inv.amount)}</td>
-      <td><button class="btn-icon danger" onclick="window.deleteInvestment(${inv.id})">${t('delete')}</button></td>
+      <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteInvestment(${inv.id})"><i class="fa-solid fa-trash"></i></button></td>
     </tr>
   `,
     )
@@ -87,7 +87,7 @@ export function renderExpenses(): void {
           ${exp.isActive ? t('active') : t('inactive')}
         </button>
       </td>
-      <td><button class="btn-icon danger" onclick="window.deleteExpense(${exp.id})">${t('delete')}</button></td>
+      <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteExpense(${exp.id})"><i class="fa-solid fa-trash"></i></button></td>
     </tr>`;
     })
     .join('');

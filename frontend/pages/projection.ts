@@ -82,8 +82,8 @@ function renderPlanSection(): string {
     : items.map((it) => {
         const assetName = S.assets.find((a) => a.id === it.assetId)?.name || '-';
         const editBtn = isEditable
-          ? `<button class="btn-icon" onclick="window.editProjection(${it.id})">${t('edit')}</button>
-             <button class="btn-icon danger" onclick="window.deleteProjection(${it.id})">${t('delete')}</button>`
+          ? `<button class="btn-icon" onclick="window.editProjection(${it.id})"><i class="fa-solid fa-pen"></i></button>
+             <button class="btn-icon danger" onclick="window.deleteProjection(${it.id})"><i class="fa-solid fa-trash"></i></button>`
           : '';
         return `<tr>
           <td data-label="Nama">${it.name}</td>

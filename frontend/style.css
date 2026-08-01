@@ -1169,7 +1169,7 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   .td-actions { text-align: right !important; }
 
   /* Income table — custom 2-line mobile layout */
-  .income-cell-main { display: table-cell; }
+  .income-cell-main { display: table-cell !important; padding: 10px 12px !important; }
   .income-desktop { display: none !important; }
   .income-name {
     display: block;
@@ -1196,6 +1196,9 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   }
   .income-delete {
     flex-shrink: 0;
+    padding: 4px 7px !important;
+    color: var(--bad) !important;
+    border-color: rgba(217,138,127,0.35) !important;
     color: var(--bad) !important;
     border-color: rgba(217,138,127,0.3) !important;
   }
@@ -1480,41 +1483,7 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 .income-cell-main { display: none; }
 .income-desktop { display: table-cell; }
 
-/* Income row — mobile: custom 2-line layout */
-@media (max-width: 600px) {
-  .income-cell-main { display: table-cell !important; padding: 10px 12px !important; }
-  .income-desktop { display: none !important; }
-  .income-name {
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 5px;
-  }
-  .income-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .income-date {
-    font-size: 11px;
-    color: var(--text-muted);
-    flex: 1;
-  }
-  .income-amount {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--canopy-bright);
-    font-variant-numeric: tabular-nums;
-  }
-  .income-delete {
-    flex-shrink: 0;
-    padding: 4px 7px !important;
-    color: var(--bad) !important;
-    border-color: rgba(217,138,127,0.35) !important;
-  }
-  .income-delete i { pointer-events: none; }
-}
+/* Income row — mobile handled in @media (max-width: 768px) block above */
 .daily-right {
   min-width: 0;
   display: flex;
@@ -1850,7 +1819,7 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   font-size: 13px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .proj-compare-wrap { padding: 12px; }
   .proj-compare-selectors { gap: 8px; }
 
@@ -1862,4 +1831,13 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   .proj-compare-table td { font-size: 11px; }
   .proj-compare-table th { padding: 8px 10px; }
   .proj-compare-table td.proj-compare-label { font-size: 11px; max-width: 110px; }
+
+  /* Projection plan section — responsive action buttons */
+  .proj-plan-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .proj-plan-actions .btn { font-size: 11px; padding: 6px 10px; }
 }

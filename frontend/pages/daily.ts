@@ -117,7 +117,7 @@ function renderDailyList(): void {
             </div>
             <div class="daily-item-right">
               <span class="daily-item-amount">${rp(item.amount)}</span>
-              <button class="btn-icon danger sm" onclick="window.deleteDaily(${item.id})">${t('delete')}</button>
+              <button class="btn-icon danger sm" onclick="window.deleteDaily(${item.id})"><i class="fa-solid fa-trash"></i></button>
             </div>
           </div>`,
         )

@@ -186,60 +186,66 @@
 
         <!-- TAB: ASSETS -->
         <div id="tab-assets" class="tab-panel active">
-          <div class="section-note" data-i18n="setupAssetNote">Dana cair dikonfigurasi sekali. Saldo otomatis carryover ke bulan berikutnya.</div>
-          <div class="section-header">
-            <span class="section-title" data-i18n="assets">Dana Cair</span>
-            <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-asset')" data-i18n="addAsset">Tambah Dana</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr>
-                <th data-i18n="name">Nama</th>
-                <th style="text-align:right" data-i18n="amount">Nominal</th>
-                <th></th>
-              </tr></thead>
-              <tbody id="assets-body"></tbody>
-            </table>
+          <div class="card">
+            <div class="section-note" data-i18n="setupAssetNote">Dana cair dikonfigurasi sekali. Saldo otomatis carryover ke bulan berikutnya.</div>
+            <div class="section-header">
+              <span class="section-title" data-i18n="assets">Dana Cair</span>
+              <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-asset')" data-i18n="addAsset">Tambah Dana</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr>
+                  <th data-i18n="name">Nama</th>
+                  <th style="text-align:right" data-i18n="amount">Nominal</th>
+                  <th></th>
+                </tr></thead>
+                <tbody id="assets-body"></tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         <!-- TAB: INVESTMENTS -->
         <div id="tab-investments" class="tab-panel">
-          <div class="section-header">
-            <span class="section-title" data-i18n="investments">Investasi</span>
-            <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-investment')" data-i18n="addInvestment">Tambah Investasi</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr>
-                <th data-i18n="name">Nama</th>
-                <th data-i18n="type">Tipe</th>
-                <th style="text-align:right" data-i18n="amount">Nominal</th>
-                <th></th>
-              </tr></thead>
-              <tbody id="investments-body"></tbody>
-            </table>
+          <div class="card">
+            <div class="section-header">
+              <span class="section-title" data-i18n="investments">Investasi</span>
+              <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-investment')" data-i18n="addInvestment">Tambah Investasi</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr>
+                  <th data-i18n="name">Nama</th>
+                  <th data-i18n="type">Tipe</th>
+                  <th style="text-align:right" data-i18n="amount">Nominal</th>
+                  <th></th>
+                </tr></thead>
+                <tbody id="investments-body"></tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         <!-- TAB: EXPENSES -->
         <div id="tab-expenses" class="tab-panel">
-          <div class="section-header">
-            <span class="section-title" data-i18n="expenses">Pengeluaran</span>
-            <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-expense')" data-i18n="addExpense">Tambah Pengeluaran</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr>
-                <th data-i18n="name">Nama</th>
-                <th data-i18n="category">Kategori</th>
-                <th data-i18n="source">Sumber</th>
-                <th style="text-align:right" data-i18n="amount">Nominal</th>
-                <th data-i18n="active">Aktif</th>
-                <th></th>
-              </tr></thead>
-              <tbody id="expenses-body"></tbody>
-            </table>
+          <div class="card">
+            <div class="section-header">
+              <span class="section-title" data-i18n="expenses">Pengeluaran</span>
+              <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-expense')" data-i18n="addExpense">Tambah Pengeluaran</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr>
+                  <th data-i18n="name">Nama</th>
+                  <th data-i18n="category">Kategori</th>
+                  <th data-i18n="source">Sumber</th>
+                  <th style="text-align:right" data-i18n="amount">Nominal</th>
+                  <th data-i18n="active">Aktif</th>
+                  <th></th>
+                </tr></thead>
+                <tbody id="expenses-body"></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
