@@ -1398,6 +1398,8 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   font-weight: 700;
   color: var(--text);
   border-top: 1px solid rgba(180,196,180,0.18);
+  padding-top: 14px;
+  padding-bottom: 14px;
   font-variant-numeric: tabular-nums;
 }
 .proj-total-row td:last-child { color: var(--canopy-bright); }
