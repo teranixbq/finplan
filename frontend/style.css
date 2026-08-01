@@ -1191,7 +1191,7 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
     color: var(--text-muted);
     flex: 1;
   }
-  .income-amount {
+  .income-row-amount {
     font-size: 12px;
     font-weight: 600;
     color: var(--canopy-bright);

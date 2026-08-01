@@ -261,7 +261,7 @@ function renderIncomeTable(): void {
         <span class="income-name">${inc.name}</span>
         <span class="income-meta">
           <span class="income-date">${dateStr}</span>
-          <span class="income-amount">${rp(inc.amount)}</span>
+          <span class="income-row-amount">${rp(inc.amount)}</span>
           <button class="btn-icon danger sm income-delete" onclick="window.deleteIncome(${inc.id})">
             <i class="fa-solid fa-trash"></i>
           </button>
