@@ -68,9 +68,9 @@ export async function loadMonthData(): Promise<void> {
 
   renderHome();
   renderSetup();
+  renderDaily();
   populateAssetSelects();
   populateDailyExpenseSelect();
-  if (S.currentPage === 'daily') renderDaily();
 }
 
 /** Alias untuk reloadAll — konsisten dengan pattern lama */
