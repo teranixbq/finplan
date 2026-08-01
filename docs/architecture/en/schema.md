@@ -36,6 +36,24 @@ One row = one financial period month.
 
 **Constraint:** month + year combination must be unique (checked manually in route, not DB constraint).
 
+**Month Lifecycle:**
+- **First month:** Created manually by user via "Bulan Baru" button during initial setup
+- **Subsequent months:** Auto-created when user logs in and current real-world month is ahead of latest month in database
+- **Skip behavior:** If user doesn't login for multiple months, those months are skipped (not created). System jumps directly to current month.
+  - Example: Latest month is August 2026, user logs in December 2026 → September, October, November are skipped, only December 2026 is created
+- **Data inheritance on auto-create:**
+  - `salary` and `salary_date` copied from previous month
+  - `expenses` (WHERE `is_active = 1`) copied from previous month
+  - `investments` copied from previous month
+  - `assets` remain global (no copy needed)
+  - `incomes` and `daily_expenses` start empty
+
+**Edit Rules:**
+- **Latest month:** Fully editable (can edit salary, salary_date, expenses, investments, add incomes/daily expenses)
+- **Past months:** Read-only (cannot edit salary, cannot add/edit/delete expenses, cannot add incomes/daily expenses)
+
+See `docs/business-logic/en/month-lifecycle.md` for detailed auto-creation logic.
+
 ---
 
 ### `assets`
