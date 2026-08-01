@@ -25,8 +25,8 @@
   --glass-blur: blur(22px) saturate(130%);
   --glass-blur-heavy: blur(26px) saturate(150%);
 
-  --radius: 12px;
-  --radius-lg: 22px;
+  --radius: 10px;
+  --radius-lg: 16px;
   --radius-pill: 999px;
   --sidebar-w: 96px;
   --shadow: 0 10px 40px rgba(0,0,0,0.38);
@@ -1155,7 +1155,16 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   .stat-value { font-size: 18px; }
   .salary-card .value { font-size: 22px; }
 
-  /* Mobile tables — horizontal scroll, tidak pakai card pattern */
+  /* Card padding lebih kecil di mobile */
+  .card { padding: 14px 16px; }
+  .section-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .proj-plan-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
   .table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
