@@ -75,9 +75,9 @@ If a key is not found in translation, `t()` returns the key itself as a string. 
 
 ## Language Toggle
 
-Toggle button is in navbar with id `lang-toggle`. Logic in `init()` in `app.js`:
+Toggle button is in navbar with id `lang-toggle`. Logic in `init()` in `frontend/main.ts`:
 
-```javascript
+```typescript
 el('lang-toggle').addEventListener('click', () => {
   const next = (localStorage.getItem('fp_lang') || 'id') === 'id' ? 'en' : 'id';
   setLang(next);
@@ -85,7 +85,7 @@ el('lang-toggle').addEventListener('click', () => {
 });
 ```
 
-The `setLang(lang)` function updates all `[data-i18n]` elements at once.
+The `setLang(lang)` function from `frontend/i18n.ts` updates all `[data-i18n]` elements at once.
 
 ---
 

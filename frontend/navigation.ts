@@ -25,9 +25,9 @@ export function navigate(page: string): void {
   };
   el('page-title').textContent = titles[page] || '';
 
-  // Hide month selector on projection page (it has its own selectors)
+  // Show month selector on all pages (including projection — used as reference for plan section)
   const monthSelectWrap = document.querySelector('.month-select-wrap') as HTMLElement | null;
-  if (monthSelectWrap) monthSelectWrap.style.display = page === 'projection' ? 'none' : '';
+  if (monthSelectWrap) monthSelectWrap.style.display = '';
 
   if (!S.months.length) return;
 
