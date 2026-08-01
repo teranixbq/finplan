@@ -1413,6 +1413,14 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 .history-amount.sub { color: var(--bad); }
 .history-balance { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-top: 1px; }
 
+/* Projection plan actions — desktop */
+.proj-plan-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 /* projection tab (setup) */
 .proj-target {
   color: var(--canopy-bright);
@@ -1482,6 +1490,7 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 /* Income row — desktop: normal table row */
 .income-cell-main { display: none; }
 .income-desktop { display: table-cell; }
+.income-cell-name { display: table-cell; }
 
 /* Income row — mobile handled in @media (max-width: 768px) block above */
 .daily-right {

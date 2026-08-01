@@ -253,6 +253,10 @@ function renderIncomeTable(): void {
       const dateStr = inc.createdAt ? fmtDate(fromUnix(inc.createdAt)) : '-';
       return `
     <tr class="income-row">
+      <td class="income-cell-name income-desktop">${inc.name}</td>
+      <td class="income-cell-date income-desktop">${dateStr}</td>
+      <td class="income-cell-amount income-desktop" style="text-align:right">${rp(inc.amount)}</td>
+      <td class="income-cell-action income-desktop"><button class="btn-icon danger sm" onclick="window.deleteIncome(${inc.id})"><i class="fa-solid fa-trash"></i></button></td>
       <td class="income-cell-main">
         <span class="income-name">${inc.name}</span>
         <span class="income-meta">
@@ -263,9 +267,6 @@ function renderIncomeTable(): void {
           </button>
         </span>
       </td>
-      <td class="income-cell-date income-desktop">${dateStr}</td>
-      <td class="income-cell-amount income-desktop" style="text-align:right">${rp(inc.amount)}</td>
-      <td class="income-cell-action income-desktop"><button class="btn-icon danger sm" onclick="window.deleteIncome(${inc.id})"><i class="fa-solid fa-trash"></i></button></td>
     </tr>`;
     })
     .join('');
