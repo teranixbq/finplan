@@ -18,7 +18,11 @@ import { renderHome } from '../pages/home';
 import { renderSetup } from '../pages/setup';
 import { renderDaily } from '../pages/daily';
 import { renderProjection } from '../pages/projection';
-import { populateAssetSelects, populateDailyExpenseSelect, populateMonthSelect } from '../helpers/selects';
+import {
+  populateAssetSelects,
+  populateDailyExpenseSelect,
+  populateMonthSelect,
+} from '../helpers/selects';
 
 export async function loadMonths(): Promise<void> {
   S.months = await getMonths();

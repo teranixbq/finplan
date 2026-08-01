@@ -12,27 +12,27 @@ const app = new Hono<{ Bindings: Env }>();
 // Auto-create month if current real-world month is ahead of latest month in DB
 async function checkAndAutoCreateMonth(c: Context<{ Bindings: Env }>): Promise<void> {
   const db = getDb(c.env.DB);
-  
+
   // Get all months sorted by year and month
   const allMonths = await db.select().from(months).all();
-  
+
   if (allMonths.length === 0) {
     // First-time user — no auto-create needed
     return;
   }
-  
+
   // Sort to ensure we get the latest month
   allMonths.sort((a, b) => a.year * 100 + a.month - (b.year * 100 + b.month));
   const latestMonth = allMonths[allMonths.length - 1];
-  
+
   const now = new Date();
   const currentMonth = now.getMonth() + 1; // 1-12
   const currentYear = now.getFullYear();
-  
+
   // Check if current real-world month is ahead
   const latestYearMonth = latestMonth.year * 100 + latestMonth.month;
   const currentYearMonth = currentYear * 100 + currentMonth;
-  
+
   if (currentYearMonth > latestYearMonth) {
     // Auto-create needed — skip gap months and create current month only
     await autoCreateMonth(db, currentMonth, currentYear, latestMonth);
@@ -44,10 +44,10 @@ async function autoCreateMonth(
   db: DrizzleD1Database,
   targetMonth: number,
   targetYear: number,
-  sourceMonth: any
+  sourceMonth: any,
 ): Promise<void> {
   const nowTimestamp = now();
-  
+
   // 1. Create new month row
   const [newMonth] = await db
     .insert(months)
@@ -60,14 +60,14 @@ async function autoCreateMonth(
     })
     .returning()
     .all();
-  
+
   // 2. Copy active expenses from source month
   const sourceExpenses = await db
     .select()
     .from(expenses)
     .where(and(eq(expenses.monthId, sourceMonth.id), eq(expenses.isActive, 1)))
     .all();
-  
+
   for (const exp of sourceExpenses) {
     await db.insert(expenses).values({
       monthId: newMonth.id,
@@ -80,14 +80,14 @@ async function autoCreateMonth(
       isActive: 1,
     });
   }
-  
+
   // 3. Copy investments from source month
   const sourceInvestments = await db
     .select()
     .from(investments)
     .where(eq(investments.monthId, sourceMonth.id))
     .all();
-  
+
   for (const inv of sourceInvestments) {
     await db.insert(investments).values({
       monthId: newMonth.id,
@@ -96,7 +96,7 @@ async function autoCreateMonth(
       amount: inv.amount,
     });
   }
-  
+
   // 4. Assets are global — no copy needed
   // 5. incomes, daily_expenses start empty — no copy needed
 }
@@ -104,7 +104,7 @@ async function autoCreateMonth(
 app.get('/', async (c) => {
   // Check and auto-create month if needed BEFORE returning months
   await checkAndAutoCreateMonth(c);
-  
+
   const db = getDb(c.env.DB);
   const all = await db.select().from(months).all();
   return c.json(all);
@@ -120,14 +120,24 @@ app.get('/compare', async (c) => {
   async function buildSummary(id: number) {
     const month = await db.select().from(months).where(eq(months.id, id)).get();
     if (!month) return null;
-    const { allAssets, allInvestments, allExpenses, allIncomes, allDaily } =
-      await getSummaryData(db, id);
+    const { allAssets, allInvestments, allExpenses, allIncomes, allDaily } = await getSummaryData(
+      db,
+      id,
+    );
     const totalCash = allAssets.reduce((s: number, a) => s + a.amount, 0);
     const totalInvestment = allInvestments.reduce((s: number, i) => s + i.amount, 0);
-    const totalFixed = allExpenses.filter((e) => e.isActive && e.category === 'fixed').reduce((s: number, e) => s + e.amount, 0);
-    const totalVariable = allExpenses.filter((e) => e.isActive && e.category === 'variable').reduce((s: number, e) => s + e.amount, 0);
-    const totalPeriodic = allExpenses.filter((e) => e.isActive && e.category === 'periodic').reduce((s: number, e) => s + e.amount, 0);
-    const totalTabungan = allExpenses.filter((e) => e.isActive && e.category === 'tabungan').reduce((s: number, e) => s + e.amount, 0);
+    const totalFixed = allExpenses
+      .filter((e) => e.isActive && e.category === 'fixed')
+      .reduce((s: number, e) => s + e.amount, 0);
+    const totalVariable = allExpenses
+      .filter((e) => e.isActive && e.category === 'variable')
+      .reduce((s: number, e) => s + e.amount, 0);
+    const totalPeriodic = allExpenses
+      .filter((e) => e.isActive && e.category === 'periodic')
+      .reduce((s: number, e) => s + e.amount, 0);
+    const totalTabungan = allExpenses
+      .filter((e) => e.isActive && e.category === 'tabungan')
+      .reduce((s: number, e) => s + e.amount, 0);
     const totalDaily = allDaily.reduce((s: number, d) => s + d.amount, 0);
     const totalIncomes = allIncomes.reduce((s: number, i) => s + i.amount, 0);
     const totalBudget = totalFixed + totalVariable + totalPeriodic + totalTabungan;
@@ -135,10 +145,18 @@ app.get('/compare', async (c) => {
     const sisaAkhirBulan = sisaSebelumGajian + month.salary;
     return {
       month,
-      totalCash, totalInvestment, totalFixed, totalVariable,
-      totalPeriodic, totalTabungan, totalDaily, totalIncomes,
-      totalBudget, totalOut: totalBudget + totalDaily,
-      sisaSebelumGajian, sisaAkhirBulan,
+      totalCash,
+      totalInvestment,
+      totalFixed,
+      totalVariable,
+      totalPeriodic,
+      totalTabungan,
+      totalDaily,
+      totalIncomes,
+      totalBudget,
+      totalOut: totalBudget + totalDaily,
+      sisaSebelumGajian,
+      sisaAkhirBulan,
       grandTotal: totalCash + totalInvestment,
     };
   }

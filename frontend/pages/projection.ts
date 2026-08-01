@@ -71,28 +71,33 @@ function renderPlanSection(): string {
 
   const total = items.reduce((s: number, i) => s + i.amount, 0);
 
-  const actionBtns = isEditable ? `
+  const actionBtns = isEditable
+    ? `
     <div class="proj-plan-actions">
       <button class="btn btn-ghost btn-sm action-btn" onclick="window.resetProjection()" data-i18n="resetProjection">Samakan dengan Bulan Ini</button>
       <button class="btn btn-primary btn-sm action-btn" onclick="window.openProjectionModal()" data-i18n="addProjection">+ Tambah Item</button>
-    </div>` : '';
+    </div>`
+    : '';
 
-  const tableRows = items.length === 0
-    ? `<tr><td colspan="5" class="empty">${t('noProjection')}</td></tr>`
-    : items.map((it) => {
-        const assetName = S.assets.find((a) => a.id === it.assetId)?.name || '-';
-        const editBtn = isEditable
-          ? `<button class="btn-icon" onclick="window.editProjection(${it.id})"><i class="fa-solid fa-pen"></i></button>
+  const tableRows =
+    items.length === 0
+      ? `<tr><td colspan="5" class="empty">${t('noProjection')}</td></tr>`
+      : items
+          .map((it) => {
+            const assetName = S.assets.find((a) => a.id === it.assetId)?.name || '-';
+            const editBtn = isEditable
+              ? `<button class="btn-icon" onclick="window.editProjection(${it.id})"><i class="fa-solid fa-pen"></i></button>
              <button class="btn-icon danger" onclick="window.deleteProjection(${it.id})"><i class="fa-solid fa-trash"></i></button>`
-          : '';
-        return `<tr>
+              : '';
+            return `<tr>
           <td data-label="${t('name')}">${it.name}</td>
           <td data-label="${t('category')}">${t(it.category)}</td>
           <td data-label="${t('source')}">${assetName}</td>
           <td data-label="${t('amount')}" style="text-align:right">${rp(it.amount)}</td>
           <td class="row-actions">${editBtn}</td>
         </tr>`;
-      }).join('');
+          })
+          .join('');
 
   return `
     <div class="proj-plan-wrap card section">

@@ -6,7 +6,11 @@ import { el, parseAmount } from '../helpers/utils';
 import { t } from '../helpers/i18n';
 import { showToast } from '../helpers/toast';
 import { closeModal } from '../helpers/modals';
-import { postExpense, deleteExpense as apiDeleteExpense, patchExpenseActive } from '../services/api';
+import {
+  postExpense,
+  deleteExpense as apiDeleteExpense,
+  patchExpenseActive,
+} from '../services/api';
 import { S } from '../services/state';
 import { reloadAll } from '../services/data';
 import { confirmDelete } from './confirm';

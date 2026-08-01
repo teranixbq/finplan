@@ -69,6 +69,7 @@ npm run db:migrate:local     # apply to local
 ### When frontend changes (HTML/CSS/TS)
 - If removing element from `index.html`: grep `frontend/` first for all references
 - If adding new feature: update `docs/tech-stack/overview-en.md` if relevant
+- **ALWAYS run `npm run format` before committing** — format semua TS files dengan Prettier
 - After changes: `npm run build` to verify, then `git push` — Cloudflare deploys automatically
 
 ### When adding/editing UI strings
