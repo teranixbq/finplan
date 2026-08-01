@@ -189,6 +189,33 @@ There is **NO** `'daily'` category in the `expenses` table.
 ### Assets = Global
 The `assets` table has no `month_id` — it is global across all months.
 
+### Toggle Switch Component
+Use these exact class names for all toggle switch components — do not create variants:
+- Container: `.toggle-switch`
+- Input: `.toggle-input` (with `data-id` attribute)
+- Slider: `.toggle-slider`
+
+Use event delegation on the table container, not per-row listeners:
+```typescript
+el('expense-table')?.addEventListener('change', async (e) => {
+  const input = e.target as HTMLInputElement;
+  if (!input.classList.contains('toggle-input')) return;
+  // handle toggle...
+});
+```
+
+### CSS Class Naming — Amount Fields
+- `.income-amount` — stat card amount (font-size 28px), used on homepage
+- `.income-row-amount` — amount cell inside income table rows
+These two must stay separate. Never reuse `.income-amount` for table rows.
+
+### Shared Types
+`src/shared/types.ts` is the source of truth for API response field names.
+Always cross-check frontend field access against this file. Example:
+```bash
+grep -n "totalIncome" frontend/pages/home.ts src/shared/types.ts
+```
+
 ---
 
 ## Environment Variables
