@@ -83,9 +83,11 @@ export function renderExpenses(): void {
       <td data-label="${t('source')}">${assetName}</td>
       <td data-label="${t('amount')}" style="text-align:right">${rp(exp.amount)}</td>
       <td data-label="${t('active')}">
-        <button class="toggle-btn ${exp.isActive ? 'active' : 'inactive'}" onclick="window.toggleExpense(${exp.id}, ${exp.isActive})">
-          ${exp.isActive ? t('active') : t('inactive')}
-        </button>
+        <label class="toggle-switch" onclick="window.toggleExpense(${exp.id}, ${exp.isActive})">
+          <span class="toggle-switch-track ${exp.isActive ? 'active' : ''}">
+            <span class="toggle-switch-thumb"></span>
+          </span>
+        </label>
       </td>
       <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteExpense(${exp.id})"><i class="fa-solid fa-trash"></i></button></td>
     </tr>`;

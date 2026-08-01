@@ -919,28 +919,41 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 /* ============================================
    TOGGLE BTN
    ============================================ */
-.toggle-btn {
-  display: inline-block;
-  padding: 3px 11px;
-  border-radius: 20px;
-  font-size: 10.5px;
-  font-weight: 600;
+/* Toggle Switch */
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
   cursor: pointer;
-  border: 1px solid transparent;
-  font-family: inherit;
-  transition: all 0.15s;
 }
-.toggle-btn.active {
-  background: rgba(127,191,127,0.2);
-  color: var(--good);
-  border-color: rgba(127,191,127,0.32);
+.toggle-switch-track {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(180,196,180,0.15);
+  border: 1px solid var(--glass-border);
+  transition: all 0.2s;
+  display: block;
 }
-.toggle-btn.inactive {
-  background: rgba(180,196,180,0.08);
-  color: var(--text-dim);
-  border-color: var(--glass-border);
+.toggle-switch-track.active {
+  background: rgba(127,191,127,0.35);
+  border-color: rgba(127,191,127,0.5);
 }
-.toggle-btn:hover { opacity: 0.8; }
+.toggle-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  transition: all 0.2s;
+}
+.toggle-switch-track.active .toggle-switch-thumb {
+  left: 18px;
+  background: var(--good);
+}
+.toggle-switch:hover .toggle-switch-track { opacity: 0.8; }
 
 /* ============================================
    DAILY GROUPS
@@ -1217,7 +1230,9 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
 
   /* btn-icon di mobile lebih kecil */
   .btn-icon { font-size: 11px; padding: 4px 8px; }
-  .toggle-btn { font-size: 10px; padding: 3px 8px; }
+  .toggle-switch-track { width: 28px; height: 16px; }
+  .toggle-switch-thumb { width: 10px; height: 10px; }
+  .toggle-switch-track.active .toggle-switch-thumb { left: 16px; }
 
   /* Mobile modal — bottom sheet */
   .modal-overlay { align-items: flex-end; padding: 0; }
