@@ -110,6 +110,44 @@ app.get('/', async (c) => {
   return c.json(all);
 });
 
+// GET /compare?a=<monthId>&b=<monthId> — must be BEFORE /:id to avoid route collision
+app.get('/compare', async (c) => {
+  const db = getDb(c.env.DB);
+  const aId = parseId(c.req.query('a') ?? '');
+  const bId = parseId(c.req.query('b') ?? '');
+  if (!aId || !bId) return c.json({ error: 'Provide ?a=<id>&b=<id>' }, 400);
+
+  async function buildSummary(id: number) {
+    const month = await db.select().from(months).where(eq(months.id, id)).get();
+    if (!month) return null;
+    const { allAssets, allInvestments, allExpenses, allIncomes, allDaily } =
+      await getSummaryData(db, id);
+    const totalCash = allAssets.reduce((s: number, a) => s + a.amount, 0);
+    const totalInvestment = allInvestments.reduce((s: number, i) => s + i.amount, 0);
+    const totalFixed = allExpenses.filter((e) => e.isActive && e.category === 'fixed').reduce((s: number, e) => s + e.amount, 0);
+    const totalVariable = allExpenses.filter((e) => e.isActive && e.category === 'variable').reduce((s: number, e) => s + e.amount, 0);
+    const totalPeriodic = allExpenses.filter((e) => e.isActive && e.category === 'periodic').reduce((s: number, e) => s + e.amount, 0);
+    const totalTabungan = allExpenses.filter((e) => e.isActive && e.category === 'tabungan').reduce((s: number, e) => s + e.amount, 0);
+    const totalDaily = allDaily.reduce((s: number, d) => s + d.amount, 0);
+    const totalIncomes = allIncomes.reduce((s: number, i) => s + i.amount, 0);
+    const totalBudget = totalFixed + totalVariable + totalPeriodic + totalTabungan;
+    const sisaSebelumGajian = totalCash + totalInvestment - totalDaily;
+    const sisaAkhirBulan = sisaSebelumGajian + month.salary;
+    return {
+      month,
+      totalCash, totalInvestment, totalFixed, totalVariable,
+      totalPeriodic, totalTabungan, totalDaily, totalIncomes,
+      totalBudget, totalOut: totalBudget + totalDaily,
+      sisaSebelumGajian, sisaAkhirBulan,
+      grandTotal: totalCash + totalInvestment,
+    };
+  }
+
+  const [a, b] = await Promise.all([buildSummary(aId), buildSummary(bId)]);
+  if (!a || !b) return c.json({ error: 'One or both months not found' }, 404);
+  return c.json({ a, b });
+});
+
 app.post('/', async (c) => {
   const db = getDb(c.env.DB);
   const body = await c.req.json<{
@@ -298,44 +336,6 @@ app.get('/:id/summary', async (c) => {
     busiestDay: busiestDay ? { date: busiestDay[0], amount: busiestDay[1] } : null,
     assets: allAssets,
   });
-});
-
-// GET /compare?a=<monthId>&b=<monthId> — side-by-side summary for 2 months
-app.get('/compare', async (c) => {
-  const db = getDb(c.env.DB);
-  const aId = parseId(c.req.query('a') ?? '');
-  const bId = parseId(c.req.query('b') ?? '');
-  if (!aId || !bId) return c.json({ error: 'Provide ?a=<id>&b=<id>' }, 400);
-
-  async function buildSummary(id: number) {
-    const month = await db.select().from(months).where(eq(months.id, id)).get();
-    if (!month) return null;
-    const { allAssets, allInvestments, allExpenses, allIncomes, allDaily } =
-      await getSummaryData(db, id);
-    const totalCash = allAssets.reduce((s: number, a) => s + a.amount, 0);
-    const totalInvestment = allInvestments.reduce((s: number, i) => s + i.amount, 0);
-    const totalFixed = allExpenses.filter((e) => e.isActive && e.category === 'fixed').reduce((s: number, e) => s + e.amount, 0);
-    const totalVariable = allExpenses.filter((e) => e.isActive && e.category === 'variable').reduce((s: number, e) => s + e.amount, 0);
-    const totalPeriodic = allExpenses.filter((e) => e.isActive && e.category === 'periodic').reduce((s: number, e) => s + e.amount, 0);
-    const totalTabungan = allExpenses.filter((e) => e.isActive && e.category === 'tabungan').reduce((s: number, e) => s + e.amount, 0);
-    const totalDaily = allDaily.reduce((s: number, d) => s + d.amount, 0);
-    const totalIncomes = allIncomes.reduce((s: number, i) => s + i.amount, 0);
-    const totalBudget = totalFixed + totalVariable + totalPeriodic + totalTabungan;
-    const sisaSebelumGajian = totalCash + totalInvestment - totalDaily;
-    const sisaAkhirBulan = sisaSebelumGajian + month.salary;
-    return {
-      month,
-      totalCash, totalInvestment, totalFixed, totalVariable,
-      totalPeriodic, totalTabungan, totalDaily, totalIncomes,
-      totalBudget, totalOut: totalBudget + totalDaily,
-      sisaSebelumGajian, sisaAkhirBulan,
-      grandTotal: totalCash + totalInvestment,
-    };
-  }
-
-  const [a, b] = await Promise.all([buildSummary(aId), buildSummary(bId)]);
-  if (!a || !b) return c.json({ error: 'One or both months not found' }, 404);
-  return c.json({ a, b });
 });
 
 export default app;
