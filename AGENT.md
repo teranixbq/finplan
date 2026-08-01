@@ -64,6 +64,24 @@ npm run db:migrate:local     # apply to local
 - If adding new feature: update `docs/tech-stack/overview-en.md` if relevant
 - After changes: `npm run build` to verify, then `git push` — Cloudflare deploys automatically
 
+### When adding/editing UI strings
+- **All strings must go through `t()`** — no hardcoded Indonesian/English in template literals or HTML
+- Static HTML: use `data-i18n="key"` on elements
+- Input placeholders: use `data-i18n-placeholder="key"`
+- Dynamic TS: use `t('key')` in template literals
+- `data-label` on `<td>`: use `data-label="${t('key')}"` — visible as label on mobile
+- When adding key to `id:`, always add English equivalent to `en:` in same commit
+- Audit command: `grep -rn 'data-label="[A-Z]' frontend/pages/`
+
+### CSS / Responsive Rules
+- **One mobile breakpoint only: `@media (max-width: 768px)`** — never use `600px` for mobile
+- Never reuse class names across different components (e.g. `.income-amount` in stat card vs table row)
+- All border-radius must use `var(--radius)` or `var(--radius-lg)` — no hardcoded px values
+- Sibling card containers must have the same width — avoid `max-width` on cards placed side by side
+- For tables with different desktop/mobile layout: use separate `thead` (e.g. `income-thead-desktop`, `income-thead-mobile`)
+- Desktop and mobile column visibility: use explicit class pairs (e.g. `income-desktop`, `income-cell-main`)
+- Current global CSS variables: `--radius: 10px`, `--radius-lg: 16px`
+
 ---
 
 ## Key File Map

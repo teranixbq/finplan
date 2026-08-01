@@ -62,7 +62,7 @@ git push   # Cloudflare auto-deploys on push to main
 | Styling | Vanilla CSS (glassmorphism) | No Tailwind, no CSS framework |
 | Charts | Chart.js | ^4.5.1 — self-hosted in `frontend/public/assets/vendor/` |
 | Icons | FontAwesome | Self-hosted in `frontend/public/assets/vendor/fontawesome/` |
-| i18n | Custom (`frontend/helpers/i18n.ts`) | ID/EN support |
+| i18n | Custom (`frontend/helpers/i18n.ts`) | ID/EN support — all UI strings must use `t()` |
 
 **Entry point:** `frontend/main.ts` → bundled by Vite → `dist/`
 
