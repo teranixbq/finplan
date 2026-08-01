@@ -86,10 +86,10 @@ function renderPlanSection(): string {
              <button class="btn-icon danger" onclick="window.deleteProjection(${it.id})"><i class="fa-solid fa-trash"></i></button>`
           : '';
         return `<tr>
-          <td data-label="Nama">${it.name}</td>
-          <td data-label="Kategori">${t(it.category)}</td>
-          <td data-label="Sumber">${assetName}</td>
-          <td data-label="Nominal" style="text-align:right">${rp(it.amount)}</td>
+          <td data-label="${t('name')}">${it.name}</td>
+          <td data-label="${t('category')}">${t(it.category)}</td>
+          <td data-label="${t('source')}">${assetName}</td>
+          <td data-label="${t('amount')}" style="text-align:right">${rp(it.amount)}</td>
           <td class="row-actions">${editBtn}</td>
         </tr>`;
       }).join('');

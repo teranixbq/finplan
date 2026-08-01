@@ -33,8 +33,8 @@ export function renderAssets(): void {
     .map(
       (a) => `
     <tr>
-      <td data-label="Nama">${a.name}</td>
-      <td data-label="Nominal" style="text-align:right">${rp(a.amount)}</td>
+      <td data-label="${t('name')}">${a.name}</td>
+      <td data-label="${t('amount')}" style="text-align:right">${rp(a.amount)}</td>
       <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteAsset(${a.id})"><i class="fa-solid fa-trash"></i></button></td>
     </tr>
   `,
@@ -53,9 +53,9 @@ export function renderInvestments(): void {
     .map(
       (inv) => `
     <tr>
-      <td data-label="Nama">${inv.name}</td>
-      <td data-label="Tipe">${t(inv.type)}</td>
-      <td data-label="Nominal" style="text-align:right">${rp(inv.amount)}</td>
+      <td data-label="${t('name')}">${inv.name}</td>
+      <td data-label="${t('type')}">${t(inv.type)}</td>
+      <td data-label="${t('amount')}" style="text-align:right">${rp(inv.amount)}</td>
       <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteInvestment(${inv.id})"><i class="fa-solid fa-trash"></i></button></td>
     </tr>
   `,
@@ -78,11 +78,11 @@ export function renderExpenses(): void {
         periodNote = ` <span class="badge">${exp.periodMonths}x/${exp.periodType === 'year' ? 'thn' : 'bln'}</span>`;
       }
       return `<tr>
-      <td data-label="Nama">${exp.name}${periodNote}</td>
-      <td data-label="Kategori">${t(exp.category)}</td>
-      <td data-label="Sumber">${assetName}</td>
-      <td data-label="Nominal" style="text-align:right">${rp(exp.amount)}</td>
-      <td data-label="Aktif">
+      <td data-label="${t('name')}">${exp.name}${periodNote}</td>
+      <td data-label="${t('category')}">${t(exp.category)}</td>
+      <td data-label="${t('source')}">${assetName}</td>
+      <td data-label="${t('amount')}" style="text-align:right">${rp(exp.amount)}</td>
+      <td data-label="${t('active')}">
         <button class="toggle-btn ${exp.isActive ? 'active' : 'inactive'}" onclick="window.toggleExpense(${exp.id}, ${exp.isActive})">
           ${exp.isActive ? t('active') : t('inactive')}
         </button>

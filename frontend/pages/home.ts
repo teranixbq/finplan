@@ -155,7 +155,7 @@ function renderBVA(s: SummaryResponse): void {
     const selisihPct = totalBudget > 0 ? Math.round((Math.abs(selisih) / totalBudget) * 100) : 0;
     const overBudget = selisih < 0;
     const selisihColor = overBudget ? '#d98a7f' : '#8fb88f';
-    const selisihLabel = overBudget ? 'Over Budget' : 'Sisa Budget';
+    const selisihLabel = overBudget ? t('overBudget') : t('remainingBudget');
     footerEl.innerHTML = `
       <div class="bva-total-row">
         <div class="bva-total-item">

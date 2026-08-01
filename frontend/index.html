@@ -104,14 +104,14 @@
                 <div class="stat-label" data-i18n="remainingBeforeSalary">Sisa Sebelum Gajian</div>
                 <div class="stat-value-row">
                   <span id="val-remaining-before">Rp0</span>
-                  <button class="info-icon-btn" onclick="showBreakdownModal('sisaSebelumGajian')" title="Lihat detail perhitungan"><i class="fa-solid fa-circle-info"></i></button>
+                  <button class="info-icon-btn" onclick="showBreakdownModal('sisaSebelumGajian')" data-i18n-title="seeDetail" title="Lihat detail perhitungan"><i class="fa-solid fa-circle-info"></i></button>
                 </div>
               </div>
               <div class="stat-card yellow">
                 <div class="stat-label" data-i18n="remaining">Sisa Akhir Bulan</div>
                 <div class="stat-value-row">
                   <span id="val-remaining">Rp0</span>
-                  <button class="info-icon-btn" onclick="showBreakdownModal('sisaAkhirBulan')" title="Lihat detail perhitungan"><i class="fa-solid fa-circle-info"></i></button>
+                  <button class="info-icon-btn" onclick="showBreakdownModal('sisaAkhirBulan')" data-i18n-title="seeDetail" title="Lihat detail perhitungan"><i class="fa-solid fa-circle-info"></i></button>
                 </div>
               </div>
             </div>
@@ -319,7 +319,7 @@
         <!-- INCOME TABLE: full width below 2-col -->
           <div class="daily-income-section">
           <div class="section-header">
-            <span class="section-title">Rincian Pemasukan</span>
+            <span class="section-title" data-i18n="incomeSection">Rincian Pemasukan</span>
           </div>
           <div class="table-wrap">
             <table>
@@ -451,7 +451,7 @@
     <div class="modal-title" data-i18n="addInvestment">Tambah Investasi</div>
     <div class="form-group">
       <label class="form-label" data-i18n="name">Nama</label>
-      <input id="inv-name" type="text" class="form-input" placeholder="Nama investasi">
+      <input id="inv-name" type="text" class="form-input" data-i18n-placeholder="placeholderInvName" placeholder="Nama investasi">
     </div>
     <div class="form-group">
       <label class="form-label" data-i18n="type">Tipe</label>
@@ -478,7 +478,7 @@
     <div class="modal-title" data-i18n="addExpense">Tambah Pengeluaran</div>
     <div class="form-group">
       <label class="form-label" data-i18n="name">Nama</label>
-      <input id="exp-name" type="text" class="form-input" placeholder="Nama pengeluaran">
+      <input id="exp-name" type="text" class="form-input" data-i18n-placeholder="placeholderExpName" placeholder="Nama pengeluaran">
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -510,7 +510,7 @@
         <div class="form-group">
           <label class="form-label" data-i18n="type">Tipe</label>
           <select id="exp-period-type" class="form-select">
-            <option value="month">Bulan</option>
+            <option value="month" data-i18n="periodMonthOption">Bulan</option>
             <option value="year">Tahun</option>
           </select>
         </div>
@@ -538,7 +538,7 @@
     <div class="form-group">
       <label class="form-label" data-i18n="source">Masuk ke Dana Cair</label>
       <select id="inc-asset" class="form-select">
-        <option value="">- Pilih Sumber -</option>
+        <option value="" data-i18n="chooseSource">- Pilih Sumber -</option>
       </select>
     </div>
     <div class="modal-footer">
@@ -569,7 +569,7 @@
     <input type="hidden" id="proj-id">
     <div class="form-group">
       <label class="form-label" data-i18n="name">Nama</label>
-      <input id="proj-name" type="text" class="form-input" placeholder="Nama pengeluaran">
+      <input id="proj-name" type="text" class="form-input" data-i18n-placeholder="placeholderProjName" placeholder="Nama pengeluaran">
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -614,7 +614,7 @@
     </div>
     <div class="form-group">
       <label class="form-label" data-i18n="name">Nama</label>
-      <input id="daily-name" type="text" class="form-input" placeholder="Nama pengeluaran">
+      <input id="daily-name" type="text" class="form-input" data-i18n-placeholder="placeholderDailyName" placeholder="Nama pengeluaran">
     </div>
     <div class="form-group">
       <label class="form-label" data-i18n="amount">Nominal</label>
@@ -622,7 +622,7 @@
     </div>
     <div class="form-group">
       <label class="form-label" data-i18n="note">Catatan (opsional)</label>
-      <input id="daily-note" type="text" class="form-input" placeholder="Catatan...">
+      <input id="daily-note" type="text" class="form-input" data-i18n-placeholder="placeholderNote" placeholder="Catatan...">
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-daily')" data-i18n="cancel">Batal</button>
