@@ -54,7 +54,7 @@ function renderSchedule(s: SummaryResponse, now: Date, today_day: number, days_l
 
   // income card
   const salaryEl = el('val-salary');
-  if (salaryEl) salaryEl.textContent = rp(s.totalIncome || 0);
+  if (salaryEl) salaryEl.textContent = rp(s.totalIncomes || 0);
 
   // schedule card
   const schedNumEl = el('sched-salary-num');
