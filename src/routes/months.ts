@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import type { Context } from 'hono';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
 import { months, expenses, assets, investments, incomes, dailyExpenses } from '../db/schema';
 import { eq, and } from 'drizzle-orm';
@@ -8,7 +9,102 @@ import { parseId } from '../lib/params';
 
 const app = new Hono<{ Bindings: Env }>();
 
+// Auto-create month if current real-world month is ahead of latest month in DB
+async function checkAndAutoCreateMonth(c: Context<{ Bindings: Env }>): Promise<void> {
+  const db = getDb(c.env.DB);
+  
+  // Get all months sorted by year and month
+  const allMonths = await db.select().from(months).all();
+  
+  if (allMonths.length === 0) {
+    // First-time user — no auto-create needed
+    return;
+  }
+  
+  // Sort to ensure we get the latest month
+  allMonths.sort((a, b) => a.year * 100 + a.month - (b.year * 100 + b.month));
+  const latestMonth = allMonths[allMonths.length - 1];
+  
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1; // 1-12
+  const currentYear = now.getFullYear();
+  
+  // Check if current real-world month is ahead
+  const latestYearMonth = latestMonth.year * 100 + latestMonth.month;
+  const currentYearMonth = currentYear * 100 + currentMonth;
+  
+  if (currentYearMonth > latestYearMonth) {
+    // Auto-create needed — skip gap months and create current month only
+    await autoCreateMonth(db, currentMonth, currentYear, latestMonth);
+  }
+}
+
+// Auto-create month by copying data from source month
+async function autoCreateMonth(
+  db: DrizzleD1Database,
+  targetMonth: number,
+  targetYear: number,
+  sourceMonth: any
+): Promise<void> {
+  const nowTimestamp = now();
+  
+  // 1. Create new month row
+  const [newMonth] = await db
+    .insert(months)
+    .values({
+      month: targetMonth,
+      year: targetYear,
+      salary: sourceMonth.salary,
+      salaryDate: sourceMonth.salaryDate,
+      createdAt: nowTimestamp,
+    })
+    .returning()
+    .all();
+  
+  // 2. Copy active expenses from source month
+  const sourceExpenses = await db
+    .select()
+    .from(expenses)
+    .where(and(eq(expenses.monthId, sourceMonth.id), eq(expenses.isActive, 1)))
+    .all();
+  
+  for (const exp of sourceExpenses) {
+    await db.insert(expenses).values({
+      monthId: newMonth.id,
+      assetId: exp.assetId,
+      name: exp.name,
+      category: exp.category,
+      amount: exp.amount,
+      periodMonths: exp.periodMonths,
+      periodType: exp.periodType,
+      isActive: 1,
+    });
+  }
+  
+  // 3. Copy investments from source month
+  const sourceInvestments = await db
+    .select()
+    .from(investments)
+    .where(eq(investments.monthId, sourceMonth.id))
+    .all();
+  
+  for (const inv of sourceInvestments) {
+    await db.insert(investments).values({
+      monthId: newMonth.id,
+      name: inv.name,
+      type: inv.type,
+      amount: inv.amount,
+    });
+  }
+  
+  // 4. Assets are global — no copy needed
+  // 5. incomes, daily_expenses start empty — no copy needed
+}
+
 app.get('/', async (c) => {
+  // Check and auto-create month if needed BEFORE returning months
+  await checkAndAutoCreateMonth(c);
+  
   const db = getDb(c.env.DB);
   const all = await db.select().from(months).all();
   return c.json(all);
@@ -202,6 +298,44 @@ app.get('/:id/summary', async (c) => {
     busiestDay: busiestDay ? { date: busiestDay[0], amount: busiestDay[1] } : null,
     assets: allAssets,
   });
+});
+
+// GET /compare?a=<monthId>&b=<monthId> — side-by-side summary for 2 months
+app.get('/compare', async (c) => {
+  const db = getDb(c.env.DB);
+  const aId = parseId(c.req.query('a') ?? '');
+  const bId = parseId(c.req.query('b') ?? '');
+  if (!aId || !bId) return c.json({ error: 'Provide ?a=<id>&b=<id>' }, 400);
+
+  async function buildSummary(id: number) {
+    const month = await db.select().from(months).where(eq(months.id, id)).get();
+    if (!month) return null;
+    const { allAssets, allInvestments, allExpenses, allIncomes, allDaily } =
+      await getSummaryData(db, id);
+    const totalCash = allAssets.reduce((s: number, a) => s + a.amount, 0);
+    const totalInvestment = allInvestments.reduce((s: number, i) => s + i.amount, 0);
+    const totalFixed = allExpenses.filter((e) => e.isActive && e.category === 'fixed').reduce((s: number, e) => s + e.amount, 0);
+    const totalVariable = allExpenses.filter((e) => e.isActive && e.category === 'variable').reduce((s: number, e) => s + e.amount, 0);
+    const totalPeriodic = allExpenses.filter((e) => e.isActive && e.category === 'periodic').reduce((s: number, e) => s + e.amount, 0);
+    const totalTabungan = allExpenses.filter((e) => e.isActive && e.category === 'tabungan').reduce((s: number, e) => s + e.amount, 0);
+    const totalDaily = allDaily.reduce((s: number, d) => s + d.amount, 0);
+    const totalIncomes = allIncomes.reduce((s: number, i) => s + i.amount, 0);
+    const totalBudget = totalFixed + totalVariable + totalPeriodic + totalTabungan;
+    const sisaSebelumGajian = totalCash + totalInvestment - totalDaily;
+    const sisaAkhirBulan = sisaSebelumGajian + month.salary;
+    return {
+      month,
+      totalCash, totalInvestment, totalFixed, totalVariable,
+      totalPeriodic, totalTabungan, totalDaily, totalIncomes,
+      totalBudget, totalOut: totalBudget + totalDaily,
+      sisaSebelumGajian, sisaAkhirBulan,
+      grandTotal: totalCash + totalInvestment,
+    };
+  }
+
+  const [a, b] = await Promise.all([buildSummary(aId), buildSummary(bId)]);
+  if (!a || !b) return c.json({ error: 'One or both months not found' }, 404);
+  return c.json({ a, b });
 });
 
 export default app;

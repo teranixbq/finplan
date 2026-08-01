@@ -33,6 +33,10 @@ export async function loadMonths(): Promise<void> {
   el('no-month').classList.add('hidden');
   document.querySelector('.main-wrap')?.classList.remove('empty-mode');
 
+  // Hide "Bulan Baru" button once there are months — auto-create handles it
+  const btnNewMonth = document.getElementById('btn-new-month');
+  if (btnNewMonth) btnNewMonth.style.display = 'none';
+
   const activePage = document.querySelector('.page.active');
   if (!activePage) el('page-' + S.currentPage)?.classList.add('active');
 

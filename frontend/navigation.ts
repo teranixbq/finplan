@@ -7,6 +7,7 @@ import { el } from './utils';
 import { t } from './i18n';
 import { renderDaily } from './pages/daily';
 import { renderCharts } from './pages/home';
+import { renderProjection } from './pages/projection';
 
 export function navigate(page: string): void {
   S.currentPage = page;
@@ -20,6 +21,7 @@ export function navigate(page: string): void {
     home: t('home'),
     setup: t('setup'),
     daily: t('daily'),
+    projection: t('projectionPage'),
   };
   el('page-title').textContent = titles[page] || '';
 
@@ -34,6 +36,7 @@ export function navigate(page: string): void {
     requestAnimationFrame(() => renderCharts(S.summary!));
   }
   if (page === 'daily') renderDaily();
+  if (page === 'projection') renderProjection();
 }
 
 export function switchTab(tab: string): void {

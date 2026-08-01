@@ -86,5 +86,9 @@ export const deleteProjection = (id: number) =>
 export const resetProjection = (monthId: number) =>
   request<unknown>('POST', `/projections/${monthId}/reset`);
 
+// ---- Compare ----
+export const getMonthsCompare = (aId: number, bId: number) =>
+  request<{ a: SummaryResponse; b: SummaryResponse }>('GET', `/months/compare?a=${aId}&b=${bId}`);
+
 // ---- Me ----
 export const getMe = () => request<MeResponse>('GET', '/me');
