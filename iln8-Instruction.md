@@ -13,20 +13,20 @@ Language is stored in `localStorage` with key `fp_lang`.
 
 ## Main File
 
-**`public/i18n.js`** — contains all translation keys and helper functions.
+**`frontend/i18n.ts`** — contains all translation keys and helper functions.
 
 ---
 
-## Usage in JavaScript
+## Usage in TypeScript
 
-```javascript
+```typescript
 // Get text based on active language
 t('save')        // → "Save" (EN) or "Simpan" (ID)
 t('noData')      // → "No data" or "Tidak ada data"
 t('totalBudget') // → "Total Budget" (same in both languages)
 ```
 
-The `t()` helper is available globally in `app.js`.
+The `t()` helper is imported from `frontend/i18n.ts` and used across all page modules.
 
 ---
 
@@ -45,9 +45,9 @@ The system automatically updates text when language is switched.
 
 ## Adding New Keys
 
-Edit `public/i18n.js`, add key in both languages:
+Edit `frontend/i18n.ts`, add key in both languages:
 
-```javascript
+```typescript
 const TRANSLATIONS = {
   id: {
     // ... existing keys ...

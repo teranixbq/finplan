@@ -18,7 +18,7 @@
 - Read `docs/architecture/schema-en.md` to understand database structure
 - Read `docs/business-logic/calculations-en.md` to understand calculation logic
 - Read `CODERULES.md` for code conventions
-- Grep HTML element references before deleting: `grep -n "element-id" public/app.js`
+- Grep HTML element references before deleting: `grep -rn "element-id" frontend/`
 
 ### 2. Deploy
 **NEVER run `npx wrangler deploy` or any manual deploy command.**
@@ -70,16 +70,52 @@ npm run db:migrate:local     # apply to local
 
 ```
 src/
-├── routes/months.ts       ← Core summary/calculation logic
+├── index.ts               ← Worker entry point, route registration
+├── auth.ts                ← GitHub OAuth, session handling
+├── middleware.ts          ← Auth middleware
 ├── db/schema.ts           ← Database schema (source of truth)
-public/
-├── app.js                 ← Frontend state, render, all API calls
-├── index.html             ← SPA HTML (single page)
+├── lib/db.ts              ← Drizzle DB client
+├── lib/params.ts          ← URL param helpers
+├── shared/types.ts        ← Shared TypeScript types
+├── routes/
+│   ├── months.ts          ← Core summary/calculation logic + auto-create
+│   ├── expenses.ts        ← Budget expenses CRUD
+│   ├── daily.ts           ← Daily expense CRUD
+│   ├── incomes.ts         ← Income CRUD
+│   ├── investments.ts     ← Investment CRUD
+│   ├── projections.ts     ← Projection CRUD
+│   └── assets.ts          ← Global assets CRUD
+└── validators/            ← Zod validators per entity
+frontend/
+├── index.html             ← Main SPA HTML
+├── login.html             ← Login page
+├── main.ts                ← App bootstrap
+├── navigation.ts          ← Page routing, topbar, dropdown control
+├── data.ts                ← API calls, state, read-only mode
+├── i18n.ts                ← Translations (ID/EN)
+├── state.ts               ← Reactive state helpers
+├── modals.ts              ← Modal open/close helpers
+├── selects.ts             ← Dropdown populate helpers
+├── toast.ts               ← Toast notifications
+├── utils.ts               ← Utility functions
+├── api.ts                 ← Fetch wrapper
 ├── style.css              ← Glassmorphism CSS
+├── pages/
+│   ├── home.ts            ← Dashboard/summary page
+│   ├── setup.ts           ← Budget setup page
+│   ├── daily.ts           ← Daily expenses page
+│   └── projection.ts      ← Standalone projection page
+├── actions/               ← Form submit handlers per entity
+└── public/
+    └── assets/vendor/     ← Chart.js, FontAwesome (static)
+database/
+└── seeds/seed-dummy.sql   ← Dummy data for local development
+migrations/                ← Drizzle SQL migration files
 docs/
 ├── architecture/          ← schema-id.md, schema-en.md
 ├── business-logic/        ← calculations-id.md, calculations-en.md
 ├── tech-stack/            ← overview-id.md, overview-en.md
+├── features/              ← Feature documentation
 └── problem-solution/      ← 001-...-id.md, 001-...-en.md, etc.
 ```
 
