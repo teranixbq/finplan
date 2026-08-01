@@ -58,6 +58,13 @@ npm run db:migrate:local     # apply to local
 2. Sequential numbering from `001`, `002`, etc.
 3. Criteria for "important": problem that breaks a core feature, or a bug pattern likely to recur
 4. Template: see `docs/problem-solution/001-blank-homepage-breakdown-element-en.md`
+5. **MANDATORY: update the doc immediately after the fix is verified and pushed** — do not delay
+6. Every problem-solution doc must contain:
+   - Deskripsi masalah yang jelas
+   - Root cause (bukan hanya gejala)
+   - Solusi lengkap dengan code before/after
+   - Lessons learned / aturan baru agar masalah tidak terulang
+   - Commit hash yang relevan
 
 ### When frontend changes (HTML/CSS/TS)
 - If removing element from `index.html`: grep `frontend/` first for all references
