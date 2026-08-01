@@ -77,16 +77,18 @@ export async function loadMonthData(): Promise<void> {
 function updateReadOnlyMode(): void {
   const isEditable = isLatestMonth(S.months, S.currentMonthId);
   
-  // Disable/enable all add buttons
-  const addButtons = [
-    'btn-add-income',
-    'btn-add-daily',
-    'btn-add-asset',
-    'btn-add-expense',
-    'btn-add-investment',
-  ];
+  // Hide/show action buttons for daily page
+  const dailyActionButtons = ['btn-add-income', 'btn-add-daily'];
+  dailyActionButtons.forEach(btnId => {
+    const btn = el(btnId);
+    if (btn) {
+      btn.style.display = isEditable ? '' : 'none';
+    }
+  });
   
-  addButtons.forEach(btnId => {
+  // Disable/enable other add buttons
+  const otherAddButtons = ['btn-add-asset', 'btn-add-expense', 'btn-add-investment'];
+  otherAddButtons.forEach(btnId => {
     const btn = el(btnId);
     if (btn) {
       if (isEditable) {
@@ -101,16 +103,13 @@ function updateReadOnlyMode(): void {
     }
   });
   
-  // Disable/enable all delete buttons in tables
+  // Hide delete buttons in tables for read-only months
   document.querySelectorAll('.btn-icon.danger').forEach((btn) => {
     if (isEditable) {
+      (btn as HTMLElement).style.display = '';
       (btn as HTMLButtonElement).removeAttribute('disabled');
-      (btn as HTMLElement).style.opacity = '1';
-      (btn as HTMLElement).style.cursor = 'pointer';
     } else {
-      (btn as HTMLButtonElement).setAttribute('disabled', 'true');
-      (btn as HTMLElement).style.opacity = '0.5';
-      (btn as HTMLElement).style.cursor = 'not-allowed';
+      (btn as HTMLElement).style.display = 'none';
     }
   });
 }
