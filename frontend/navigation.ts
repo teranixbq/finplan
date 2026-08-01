@@ -39,7 +39,7 @@ export function navigate(page: string): void {
   if (page === 'home' && S.summary) {
     requestAnimationFrame(() => renderCharts(S.summary!));
   }
-  if (page === 'daily') renderDaily();
+  if (page === 'daily') requestAnimationFrame(() => renderDaily());
   if (page === 'projection') renderProjection();
 }
 
