@@ -18,7 +18,7 @@ FinPlan adalah aplikasi personal finance tracker yang berjalan sepenuhnya di Clo
 
 **Cara deploy:**
 ```bash
-npm run deploy        # wrangler deploy
+git push   # Cloudflare auto-deploy saat push ke main
 ```
 
 ---
@@ -60,9 +60,9 @@ npm run deploy        # wrangler deploy
 | Build Tool | Vite | 6.3.5 — bundler + dev server |
 | Language | TypeScript | ^5.8.3 — strict mode |
 | Styling | Vanilla CSS (glassmorphism) | Tidak ada Tailwind, tidak ada framework CSS |
-| Charts | Chart.js | ^4.5.1 — self-hosted di `frontend/assets/vendor/` |
-| Icons | FontAwesome | Self-hosted di `frontend/assets/vendor/fontawesome/` |
-| i18n | Custom (`frontend/i18n.ts`) | Support ID/EN |
+| Charts | Chart.js | ^4.5.1 — self-hosted di `frontend/public/assets/vendor/` |
+| Icons | FontAwesome | Self-hosted di `frontend/public/assets/vendor/fontawesome/` |
+| i18n | Custom (`frontend/helpers/i18n.ts`) | Support ID/EN |
 
 **Entry point:** `frontend/main.ts` → di-bundle Vite → `dist/`
 
@@ -72,19 +72,23 @@ npm run deploy        # wrangler deploy
 ```
 frontend/
 ├── main.ts              # Entry point — expose window.* globals
-├── state.ts             # Global state (AppState, S)
-├── api.ts               # Typed fetch wrapper ke /api/*
-├── i18n.ts              # Translations ID/EN
-├── utils.ts             # Helper functions (rp, fmtDate, dll)
-├── toast.ts             # Toast notification
-├── modals.ts            # Modal open/close + breakdown modal
-├── navigation.ts        # Page navigation & tab switching
-├── selects.ts           # Populate dropdown selects
-├── data.ts              # Data loading (loadMonths, loadMonthData, reloadAll)
+├── style.css            # Glassmorphism CSS
+├── services/
+│   ├── state.ts         # Global state (AppState, S)
+│   ├── api.ts           # Typed fetch wrapper ke /api/*
+│   ├── data.ts          # Data loading (loadMonths, loadMonthData, reloadAll)
+│   └── navigation.ts    # Page navigation & tab switching
+├── helpers/
+│   ├── i18n.ts          # Translations ID/EN
+│   ├── utils.ts         # Helper functions (rp, fmtDate, dll)
+│   ├── toast.ts         # Toast notification
+│   ├── modals.ts        # Modal open/close + breakdown modal
+│   └── selects.ts       # Populate dropdown selects
 ├── pages/
 │   ├── home.ts          # Render homepage
 │   ├── setup.ts         # Render setup page
-│   └── daily.ts         # Render daily page + chart + filter
+│   ├── daily.ts         # Render daily page + chart + filter
+│   └── projection.ts    # Render projection page (standalone)
 ├── actions/
 │   ├── asset.ts         # Submit/delete asset
 │   ├── confirm.ts       # Double-tap delete confirm
@@ -94,8 +98,10 @@ frontend/
 │   ├── investment.ts    # Submit/delete investment
 │   ├── month.ts         # Submit new month / edit salary
 │   └── projection.ts    # Submit/edit/delete projection
-└── assets/
-    └── vendor/          # chart.min.js, fontawesome (self-hosted)
+└── public/
+    └── assets/
+        ├── images/      # bg.jpeg, logo.jpeg, favicon.png
+        └── vendor/      # chart.min.js, fontawesome (self-hosted)
 ```
 
 **Shared types:** `src/shared/types.ts` — dipakai oleh backend (`src/`) dan frontend (`frontend/`) untuk kontrak API.
@@ -163,19 +169,12 @@ finplan/
 │   ├── login.html            # Login page
 │   ├── unauthorized.html     # Unauthorized page
 │   ├── main.ts               # Entry point — expose window.* globals
-│   ├── state.ts              # Global state
-│   ├── api.ts                # Typed fetch wrapper
-│   ├── i18n.ts               # Translations ID/EN
-│   ├── utils.ts              # Helpers
-│   ├── toast.ts              # Toast notifications
-│   ├── modals.ts             # Modal management
-│   ├── navigation.ts         # Page navigation
-│   ├── selects.ts            # Populate dropdowns
-│   ├── data.ts               # Data loading
 │   ├── style.css             # Glassmorphism CSS
+│   ├── services/             # Core app logic
+│   ├── helpers/              # Utilities & UI helpers
 │   ├── pages/                # Fungsi render per halaman
 │   ├── actions/              # Form submit/delete handlers
-│   └── assets/vendor/        # chart.min.js, fontawesome
+│   └── public/assets/        # images/, vendor/ (chart.min.js, fontawesome)
 ├── src/shared/
 │   └── types.ts              # Shared API contract types (backend + frontend)
 ├── dist/                     # Hasil build Vite (gitignored)
