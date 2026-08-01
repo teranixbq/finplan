@@ -17,6 +17,7 @@ import {
 import { renderHome } from './pages/home';
 import { renderSetup } from './pages/setup';
 import { renderDaily } from './pages/daily';
+import { renderProjection } from './pages/projection';
 import { populateAssetSelects, populateDailyExpenseSelect, populateMonthSelect } from './selects';
 
 export async function loadMonths(): Promise<void> {
@@ -73,6 +74,8 @@ export async function loadMonthData(): Promise<void> {
   renderHome();
   renderSetup();
   renderDaily();
+  // Re-render projection page if currently active
+  if (S.currentPage === 'projection') renderProjection();
   populateAssetSelects();
   populateDailyExpenseSelect();
   updateReadOnlyMode();
@@ -80,33 +83,18 @@ export async function loadMonthData(): Promise<void> {
 
 function updateReadOnlyMode(): void {
   const isEditable = isLatestMonth(S.months, S.currentMonthId);
-  
-  // Hide/show all action buttons for read-only months
-  const actionButtons = [
-    'btn-add-income',      // Daily: Tambah Pemasukan
-    'btn-add-daily',       // Daily: Catat Harian
-    'btn-add-asset',       // Setup: Tambah Asset
-    'btn-add-expense',     // Setup: Tambah Pengeluaran
-    'btn-add-investment',  // Setup: Tambah Investasi
-    'btn-open-salary',     // Setup: Edit Gaji
-    'btn-new-month',       // Top: Bulan Baru
-    'btn-add-projection',  // Setup: Tambah Item (Proyeksi)
-    'btn-reset-projection' // Setup: Samakan dengan Bulan Ini
-  ];
-  
-  actionButtons.forEach(btnId => {
-    const btn = el(btnId);
-    if (btn) {
-      btn.style.display = isEditable ? '' : 'none';
-    }
+
+  // All action buttons have class "action-btn" — hide for read-only months
+  document.querySelectorAll('.action-btn').forEach((btn) => {
+    (btn as HTMLElement).style.display = isEditable ? '' : 'none';
   });
-  
-  // Hide delete buttons in tables for read-only months
+
+  // Hide delete buttons in tables
   document.querySelectorAll('.btn-icon.danger').forEach((btn) => {
     (btn as HTMLElement).style.display = isEditable ? '' : 'none';
   });
-  
-  // Hide edit buttons in tables for read-only months
+
+  // Hide edit buttons in tables
   document.querySelectorAll('.btn-icon').forEach((btn) => {
     const btnText = (btn as HTMLElement).textContent?.trim();
     if (btnText === 'Edit' || btnText === 'edit') {

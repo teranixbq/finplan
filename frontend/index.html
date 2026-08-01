@@ -173,8 +173,8 @@
             <span class="setup-manage-value" id="setup-salarydate-value">-</span>
           </div>
           <div class="setup-manage-actions">
-            <button class="btn btn-ghost btn-sm" onclick="openEditSalary()" data-i18n="editSalary">Edit Gaji</button>
-            <button class="btn btn-primary btn-sm" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
+            <button class="btn btn-ghost btn-sm action-btn" onclick="openEditSalary()" data-i18n="editSalary">Edit Gaji</button>
+            <button class="btn btn-primary btn-sm action-btn" onclick="openModal('modal-newmonth')" data-i18n="newMonth">Bulan Baru</button>
           </div>
         </div>
 
@@ -182,7 +182,6 @@
           <button class="tab-btn active" data-tab="assets" onclick="switchTab('assets')" data-i18n="assets">Dana Cair</button>
           <button class="tab-btn" data-tab="investments" onclick="switchTab('investments')" data-i18n="investments">Investasi</button>
           <button class="tab-btn" data-tab="expenses" onclick="switchTab('expenses')" data-i18n="expenses">Pengeluaran</button>
-          <button class="tab-btn" data-tab="projection" onclick="switchTab('projection')" data-i18n="projection">Proyeksi Bulan Depan</button>
         </div>
 
         <!-- TAB: ASSETS -->
@@ -190,7 +189,7 @@
           <div class="section-note" data-i18n="setupAssetNote">Dana cair dikonfigurasi sekali. Saldo otomatis carryover ke bulan berikutnya.</div>
           <div class="section-header">
             <span class="section-title" data-i18n="assets">Dana Cair</span>
-            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-asset')" data-i18n="addAsset">Tambah Dana</button>
+            <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-asset')" data-i18n="addAsset">Tambah Dana</button>
           </div>
           <div class="table-wrap">
             <table>
@@ -208,7 +207,7 @@
         <div id="tab-investments" class="tab-panel">
           <div class="section-header">
             <span class="section-title" data-i18n="investments">Investasi</span>
-            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-investment')" data-i18n="addInvestment">Tambah Investasi</button>
+            <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-investment')" data-i18n="addInvestment">Tambah Investasi</button>
           </div>
           <div class="table-wrap">
             <table>
@@ -227,7 +226,7 @@
         <div id="tab-expenses" class="tab-panel">
           <div class="section-header">
             <span class="section-title" data-i18n="expenses">Pengeluaran</span>
-            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-expense')" data-i18n="addExpense">Tambah Pengeluaran</button>
+            <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-expense')" data-i18n="addExpense">Tambah Pengeluaran</button>
           </div>
           <div class="table-wrap">
             <table>
@@ -240,38 +239,6 @@
                 <th></th>
               </tr></thead>
               <tbody id="expenses-body"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB: PROJECTION (next month) -->
-        <div id="tab-projection" class="tab-panel">
-          <div class="section-note" data-i18n="projectionNote">Rencana pengeluaran bulan depan. Otomatis disalin dari bulan ini (periodik tidak disertakan). Ubah bila perlu.</div>
-          <div class="section-header">
-            <span class="section-title">
-              <span data-i18n="projectionForMonth">Proyeksi untuk</span>
-              <span id="proj-target-label" class="proj-target">-</span>
-            </span>
-            <div class="setup-manage-actions">
-              <button class="btn btn-ghost btn-sm" onclick="resetProjection()" data-i18n="resetProjection">Samakan dengan Bulan Ini</button>
-              <button class="btn btn-primary btn-sm" onclick="openProjectionModal()" data-i18n="addProjection">Tambah Item</button>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr>
-                <th data-i18n="name">Nama</th>
-                <th data-i18n="category">Kategori</th>
-                <th data-i18n="source">Sumber</th>
-                <th style="text-align:right" data-i18n="amount">Nominal</th>
-                <th></th>
-              </tr></thead>
-              <tbody id="projection-body"></tbody>
-              <tfoot><tr class="proj-total-row">
-                <td colspan="3" data-i18n="projectionTotal">Total Proyeksi</td>
-                <td style="text-align:right" id="proj-total">Rp0</td>
-                <td></td>
-              </tr></tfoot>
             </table>
           </div>
         </div>
@@ -294,7 +261,7 @@
                     <div class="daily-stat-value" id="val-total-daily">Rp0</div>
                   </div>
                 </div>
-                <button class="btn btn-primary btn-sm" onclick="openModal('modal-daily')" data-i18n="addDaily">+ Catat Harian</button>
+                <button class="btn btn-primary btn-sm action-btn" onclick="openModal('modal-daily')" data-i18n="addDaily">+ Catat Harian</button>
               </div>
               <div class="daily-stat-card daily-stat-income">
                 <div class="daily-stat-card-top">
@@ -304,7 +271,7 @@
                     <div class="daily-stat-value" id="val-total-income-daily">Rp0</div>
                   </div>
                 </div>
-                <button class="btn btn-ghost btn-sm" onclick="openModal('modal-income')" data-i18n="addIncome">+ Tambah Pemasukan</button>
+                <button class="btn btn-ghost btn-sm action-btn" onclick="openModal('modal-income')" data-i18n="addIncome">+ Tambah Pemasukan</button>
               </div>
             </div>
 

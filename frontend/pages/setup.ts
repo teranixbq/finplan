@@ -11,7 +11,6 @@ export function renderSetup(): void {
   renderAssets();
   renderInvestments();
   renderExpenses();
-  renderProjection();
 }
 
 export function renderSalary(): void {
@@ -89,41 +88,6 @@ export function renderExpenses(): void {
         </button>
       </td>
       <td><button class="btn-icon danger" onclick="window.deleteExpense(${exp.id})">${t('delete')}</button></td>
-    </tr>`;
-    })
-    .join('');
-}
-
-export function renderProjection(): void {
-  const tbody = el('projection-body');
-  if (!tbody) return;
-  const proj = S.projection;
-  const items = proj?.items || [];
-
-  const tgt = proj?.target;
-  const lbl = el('proj-target-label');
-  if (lbl) lbl.textContent = tgt ? `${MONTH_NAMES[tgt.month - 1]} ${tgt.year}` : '-';
-
-  const total = items.reduce((s: number, i) => s + i.amount, 0);
-  const totalEl = el('proj-total');
-  if (totalEl) totalEl.textContent = rp(total);
-
-  if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty">${t('noProjection')}</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = items
-    .map((it) => {
-      const assetName = S.assets.find((a) => a.id === it.assetId)?.name || '-';
-      return `<tr>
-      <td>${it.name}</td>
-      <td>${t(it.category)}</td>
-      <td>${assetName}</td>
-      <td style="text-align:right">${rp(it.amount)}</td>
-      <td class="row-actions">
-        <button class="btn-icon" onclick="window.editProjection(${it.id})">${t('edit')}</button>
-        <button class="btn-icon danger" onclick="window.deleteProjection(${it.id})">${t('delete')}</button>
-      </td>
     </tr>`;
     })
     .join('');
