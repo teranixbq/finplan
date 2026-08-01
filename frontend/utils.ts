@@ -123,3 +123,15 @@ export function isLatestMonth(months: { id: number }[], currentMonthId: number |
   const latestMonth = months[months.length - 1];
   return currentMonthId === latestMonth.id;
 }
+
+/** Check if current month is editable, show toast if not */
+export function isEditableMonth(): boolean {
+  const { S } = require('./state') as { S: any };
+  const editable = isLatestMonth(S.months, S.currentMonthId);
+  if (!editable) {
+    const { showToast } = require('./toast');
+    const { t } = require('./i18n');
+    showToast(t('readOnlyMonth') || 'Bulan ini sudah terkunci (read-only)', 'warning');
+  }
+  return editable;
+}
