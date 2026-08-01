@@ -2,9 +2,9 @@
 // frontend/actions/confirm.ts — double-tap delete confirm
 // ============================================================
 
-import { S } from '../state';
-import { showToast } from '../toast';
-import { t } from '../i18n';
+import { S } from '../services/state';
+import { showToast } from '../helpers/toast';
+import { t } from '../helpers/i18n';
 
 export function confirmDelete(key: string): boolean {
   const now = Date.now();

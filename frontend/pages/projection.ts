@@ -4,10 +4,10 @@
 // Section 2: Comparison dua bulan
 // ============================================================
 
-import { S } from '../state';
-import { rp, MONTH_NAMES, isLatestMonth } from '../utils';
-import { t } from '../i18n';
-import { getMonthsCompare } from '../api';
+import { S } from '../services/state';
+import { rp, MONTH_NAMES, isLatestMonth } from '../helpers/utils';
+import { t } from '../helpers/i18n';
+import { getMonthsCompare } from '../services/api';
 
 type CompareSide = {
   month: { id: number; month: number; year: number; salary: number };

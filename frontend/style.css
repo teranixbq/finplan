@@ -41,7 +41,7 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   background: #0f160f;
-  background-image: url('/bg.jpeg');
+  background-image: url('/assets/images/bg.jpeg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

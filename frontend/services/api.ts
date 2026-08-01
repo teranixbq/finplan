@@ -12,7 +12,7 @@ import type {
   Projection,
   SummaryResponse,
   MeResponse,
-} from '../src/shared/types';
+} from '../../src/shared/types';
 
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const opts: RequestInit = { method, headers: { 'Content-Type': 'application/json' } };

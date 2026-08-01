@@ -2,13 +2,13 @@
 // frontend/actions/asset.ts
 // ============================================================
 
-import { S } from '../state';
-import { el, parseAmount } from '../utils';
-import { t } from '../i18n';
-import { showToast } from '../toast';
-import { openModal, closeModal } from '../modals';
-import { postAsset, deleteAsset as apiDeleteAsset } from '../api';
-import { reloadAll } from '../data';
+import { S } from '../services/state';
+import { el, parseAmount } from '../helpers/utils';
+import { t } from '../helpers/i18n';
+import { showToast } from '../helpers/toast';
+import { openModal, closeModal } from '../helpers/modals';
+import { postAsset, deleteAsset as apiDeleteAsset } from '../services/api';
+import { reloadAll } from '../services/data';
 import { confirmDelete } from './confirm';
 
 export async function submitAddAsset(): Promise<void> {

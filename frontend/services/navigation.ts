@@ -3,11 +3,11 @@
 // ============================================================
 
 import { S } from './state';
-import { el } from './utils';
-import { t } from './i18n';
-import { renderDaily } from './pages/daily';
-import { renderCharts } from './pages/home';
-import { renderProjection } from './pages/projection';
+import { el } from '../helpers/utils';
+import { t } from '../helpers/i18n';
+import { renderDaily } from '../pages/daily';
+import { renderCharts } from '../pages/home';
+import { renderProjection } from '../pages/projection';
 
 export function navigate(page: string): void {
   S.currentPage = page;

@@ -2,13 +2,13 @@
 // frontend/actions/daily.ts
 // ============================================================
 
-import { el, parseAmount, today } from '../utils';
-import { t } from '../i18n';
-import { showToast } from '../toast';
-import { closeModal } from '../modals';
-import { postDaily, deleteDaily as apiDeleteDaily } from '../api';
-import { S } from '../state';
-import { reloadAll } from '../data';
+import { el, parseAmount, today } from '../helpers/utils';
+import { t } from '../helpers/i18n';
+import { showToast } from '../helpers/toast';
+import { closeModal } from '../helpers/modals';
+import { postDaily, deleteDaily as apiDeleteDaily } from '../services/api';
+import { S } from '../services/state';
+import { reloadAll } from '../services/data';
 import { confirmDelete } from './confirm';
 
 export async function submitAddDaily(): Promise<void> {

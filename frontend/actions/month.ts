@@ -2,14 +2,14 @@
 // frontend/actions/month.ts — month submit/edit handlers
 // ============================================================
 
-import { S } from '../state';
-import { el, parseAmount, today } from '../utils';
-import { t } from '../i18n';
-import { showToast } from '../toast';
-import { openModal, closeModal } from '../modals';
-import { postMonth, putMonth } from '../api';
-import { loadMonths, loadMonthData } from '../data';
-import { populateMonthSelect } from '../selects';
+import { S } from '../services/state';
+import { el, parseAmount, today } from '../helpers/utils';
+import { t } from '../helpers/i18n';
+import { showToast } from '../helpers/toast';
+import { openModal, closeModal } from '../helpers/modals';
+import { postMonth, putMonth } from '../services/api';
+import { loadMonths, loadMonthData } from '../services/data';
+import { populateMonthSelect } from '../helpers/selects';
 
 export async function submitNewMonth(): Promise<void> {
   const month = parseInt((el('nm-month') as HTMLInputElement).value);

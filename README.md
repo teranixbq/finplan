@@ -33,13 +33,25 @@ src/                        ← Cloudflare Worker (Hono)
 └── validators/             ← Zod validators
 frontend/                   ← Vite SPA (TypeScript)
 ├── index.html              ← Main HTML
-├── main.ts                 ← Bootstrap
-├── navigation.ts           ← Page routing, topbar
-├── data.ts                 ← API calls, read-only mode
-├── i18n.ts                 ← Translations (ID/EN)
+├── main.ts                 ← Bootstrap (entry point)
+├── style.css               ← Glassmorphism CSS
+├── services/               ← Core app logic
+│   ├── api.ts              ← Fetch wrapper & API calls
+│   ├── data.ts             ← Data loading, read-only mode
+│   ├── navigation.ts       ← Page routing, topbar
+│   └── state.ts            ← Reactive app state
+├── helpers/                ← Utilities & UI helpers
+│   ├── i18n.ts             ← Translations (ID/EN)
+│   ├── modals.ts           ← Modal helpers
+│   ├── selects.ts          ← Dropdown helpers
+│   ├── toast.ts            ← Toast notifications
+│   └── utils.ts            ← Utility functions
 ├── pages/                  ← home, setup, daily, projection
 ├── actions/                ← Form submit handlers
-└── public/assets/vendor/   ← Chart.js, FontAwesome (static)
+└── public/
+    └── assets/
+        ├── images/         ← bg.jpeg, logo.jpeg, favicon.png
+        └── vendor/         ← Chart.js, FontAwesome (static)
 database/
 └── seeds/seed-dummy.sql    ← Dummy data for local dev
 migrations/                 ← Drizzle SQL migrations

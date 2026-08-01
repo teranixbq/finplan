@@ -11,7 +11,7 @@ import type {
   DailyExpense,
   Projection,
   SummaryResponse,
-} from '../src/shared/types';
+} from '../../src/shared/types';
 
 export interface AppState {
   months: Month[];

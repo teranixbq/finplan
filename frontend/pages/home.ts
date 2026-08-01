@@ -2,9 +2,9 @@
 // frontend/pages/home.ts — home page render functions
 // ============================================================
 
-import { S } from '../state';
-import { el, rp, daysInMonth, fmtFullDate, MONTH_NAMES, CHART_COLORS } from '../utils';
-import { t } from '../i18n';
+import { S } from '../services/state';
+import { el, rp, daysInMonth, fmtFullDate, MONTH_NAMES, CHART_COLORS } from '../helpers/utils';
+import { t } from '../helpers/i18n';
 import type { SummaryResponse } from '../../src/shared/types';
 
 declare const Chart: any;

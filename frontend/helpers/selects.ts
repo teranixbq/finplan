@@ -2,7 +2,7 @@
 // frontend/selects.ts — populate select dropdowns
 // ============================================================
 
-import { S } from './state';
+import { S } from '../services/state';
 import { el, rp } from './utils';
 import { t } from './i18n';
 import { MONTH_NAMES } from './utils';

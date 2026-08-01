@@ -2,9 +2,9 @@
 // frontend/pages/daily.ts — daily page render
 // ============================================================
 
-import { S } from '../state';
-import { el, rp, fmtDate, fromUnix, CHART_COLORS } from '../utils';
-import { t } from '../i18n';
+import { S } from '../services/state';
+import { el, rp, fmtDate, fromUnix, CHART_COLORS } from '../helpers/utils';
+import { t } from '../helpers/i18n';
 
 declare const Chart: any;
 

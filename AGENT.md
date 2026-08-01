@@ -89,25 +89,32 @@ src/
 frontend/
 ├── index.html             ← Main SPA HTML
 ├── login.html             ← Login page
-├── main.ts                ← App bootstrap
-├── navigation.ts          ← Page routing, topbar, dropdown control
-├── data.ts                ← API calls, state, read-only mode
-├── i18n.ts                ← Translations (ID/EN)
-├── state.ts               ← Reactive state helpers
-├── modals.ts              ← Modal open/close helpers
-├── selects.ts             ← Dropdown populate helpers
-├── toast.ts               ← Toast notifications
-├── utils.ts               ← Utility functions
-├── api.ts                 ← Fetch wrapper
+├── unauthorized.html      ← Unauthorized page
+├── main.ts                ← App bootstrap (entry point)
 ├── style.css              ← Glassmorphism CSS
-├── pages/
+├── services/              ← Core app logic
+│   ├── api.ts             ← Fetch wrapper & API calls
+│   ├── data.ts            ← Data loading, read-only mode
+│   ├── navigation.ts      ← Page routing, topbar control
+│   └── state.ts           ← Reactive app state
+├── helpers/               ← Utilities & UI helpers
+│   ├── i18n.ts            ← Translations (ID/EN)
+│   ├── modals.ts          ← Modal open/close helpers
+│   ├── selects.ts         ← Dropdown populate helpers
+│   ├── toast.ts           ← Toast notifications
+│   └── utils.ts           ← Utility functions
+├── pages/                 ← Page render functions
 │   ├── home.ts            ← Dashboard/summary page
 │   ├── setup.ts           ← Budget setup page
 │   ├── daily.ts           ← Daily expenses page
 │   └── projection.ts      ← Standalone projection page
 ├── actions/               ← Form submit handlers per entity
+│   ├── asset.ts, confirm.ts, daily.ts, expense.ts
+│   ├── income.ts, investment.ts, month.ts, projection.ts
 └── public/
-    └── assets/vendor/     ← Chart.js, FontAwesome (static)
+    └── assets/
+        ├── images/        ← bg.jpeg, logo.jpeg, favicon.png
+        └── vendor/        ← Chart.js, FontAwesome (static)
 database/
 └── seeds/seed-dummy.sql   ← Dummy data for local development
 migrations/                ← Drizzle SQL migration files

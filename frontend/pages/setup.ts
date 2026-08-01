@@ -2,9 +2,9 @@
 // frontend/pages/setup.ts — setup page render functions
 // ============================================================
 
-import { S } from '../state';
-import { el, rp, CAT_ICON, CAT_ICON_COLOR, MONTH_NAMES } from '../utils';
-import { t } from '../i18n';
+import { S } from '../services/state';
+import { el, rp, CAT_ICON, CAT_ICON_COLOR, MONTH_NAMES } from '../helpers/utils';
+import { t } from '../helpers/i18n';
 
 export function renderSetup(): void {
   renderSalary();

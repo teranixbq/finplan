@@ -2,18 +2,18 @@
 // frontend/actions/projection.ts
 // ============================================================
 
-import { el, parseAmount } from '../utils';
-import { t } from '../i18n';
-import { showToast } from '../toast';
-import { closeModal, openModal } from '../modals';
+import { el, parseAmount } from '../helpers/utils';
+import { t } from '../helpers/i18n';
+import { showToast } from '../helpers/toast';
+import { closeModal, openModal } from '../helpers/modals';
 import {
   postProjection,
   putProjection,
   deleteProjection as apiDeleteProjection,
   resetProjection as apiResetProjection,
-} from '../api';
-import { S } from '../state';
-import { reloadAll } from '../data';
+} from '../services/api';
+import { S } from '../services/state';
+import { reloadAll } from '../services/data';
 import { confirmDelete } from './confirm';
 
 export function openProjectionModal(): void {

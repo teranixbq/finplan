@@ -3,7 +3,7 @@
 // ============================================================
 
 import { S } from './state';
-import { el, isLatestMonth } from './utils';
+import { el, isLatestMonth } from '../helpers/utils';
 import {
   getMonths,
   getSummary,
@@ -14,11 +14,11 @@ import {
   getDaily,
   getProjection,
 } from './api';
-import { renderHome } from './pages/home';
-import { renderSetup } from './pages/setup';
-import { renderDaily } from './pages/daily';
-import { renderProjection } from './pages/projection';
-import { populateAssetSelects, populateDailyExpenseSelect, populateMonthSelect } from './selects';
+import { renderHome } from '../pages/home';
+import { renderSetup } from '../pages/setup';
+import { renderDaily } from '../pages/daily';
+import { renderProjection } from '../pages/projection';
+import { populateAssetSelects, populateDailyExpenseSelect, populateMonthSelect } from '../helpers/selects';
 
 export async function loadMonths(): Promise<void> {
   S.months = await getMonths();

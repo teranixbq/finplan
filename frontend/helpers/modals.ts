@@ -2,7 +2,7 @@
 // frontend/modals.ts — modal open/close + breakdown modal
 // ============================================================
 
-import { S } from './state';
+import { S } from '../services/state';
 import { el, rp } from './utils';
 
 export function openModal(id: string): void {

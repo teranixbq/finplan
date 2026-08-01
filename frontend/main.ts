@@ -2,13 +2,13 @@
 // frontend/main.ts — entry point
 // ============================================================
 
-import { S } from './state';
-import { el, today, fmtAmountInput } from './utils';
-import { setLang, getCurrentLang, t } from './i18n';
-import { getMe } from './api';
-import { loadMonths, loadMonthData } from './data';
-import { navigate, switchTab } from './navigation';
-import { openModal, closeModal, closeBreakdownModal, showBreakdownModal } from './modals';
+import { S } from './services/state';
+import { el, today, fmtAmountInput } from './helpers/utils';
+import { setLang, getCurrentLang, t } from './helpers/i18n';
+import { getMe } from './services/api';
+import { loadMonths, loadMonthData } from './services/data';
+import { navigate, switchTab } from './services/navigation';
+import { openModal, closeModal, closeBreakdownModal, showBreakdownModal } from './helpers/modals';
 import { openAssetHistory } from './actions/asset';
 import { submitNewMonth, openEditSalary, submitEditSalary } from './actions/month';
 import { submitAddAsset, deleteAsset } from './actions/asset';
