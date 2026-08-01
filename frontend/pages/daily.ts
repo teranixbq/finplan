@@ -253,9 +253,9 @@ function renderIncomeTable(): void {
       const dateStr = inc.createdAt ? fmtDate(fromUnix(inc.createdAt)) : '-';
       return `
     <tr>
-      <td>${inc.name}</td>
-      <td>${dateStr}</td>
-      <td style="text-align:right">${rp(inc.amount)}</td>
+      <td data-label="Nama">${inc.name}</td>
+      <td data-label="Tanggal">${dateStr}</td>
+      <td data-label="Nominal" style="text-align:right">${rp(inc.amount)}</td>
       <td><button class="btn-icon danger sm" onclick="window.deleteIncome(${inc.id})">${t('delete')}</button></td>
     </tr>`;
     })
