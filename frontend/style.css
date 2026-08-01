@@ -1706,8 +1706,6 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
    ============================================ */
 .proj-compare-wrap {
   padding: 20px;
-  max-width: 860px;
-  margin: 0 auto;
 }
 
 .proj-compare-selectors {
