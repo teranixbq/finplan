@@ -1171,6 +1171,7 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   /* Income table — custom 2-line mobile layout */
   .income-cell-main { display: table-cell !important; padding: 10px 12px !important; }
   .income-desktop { display: none !important; }
+  .income-cell-name { display: none !important; }
   .income-name {
     display: block;
     font-size: 13px;
