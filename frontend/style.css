@@ -1172,6 +1172,8 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   .income-cell-main { display: table-cell !important; padding: 10px 12px !important; }
   .income-desktop { display: none !important; }
   .income-cell-name { display: none !important; }
+  .income-thead-desktop { display: none !important; }
+  .income-thead-mobile { display: table-header-group !important; }
   .income-name {
     display: block;
     font-size: 13px;
@@ -1488,7 +1490,9 @@ tbody td { padding: 13px 18px; vertical-align: middle; color: var(--text); }
   width: 100%;
 }
 
-/* Income row — desktop: normal table row */
+/* Income table thead — desktop/mobile switch */
+.income-thead-mobile { display: none; }
+.income-thead-desktop { display: table-header-group; }
 .income-cell-main { display: none; }
 .income-desktop { display: table-cell; }
 .income-cell-name { display: table-cell; }
