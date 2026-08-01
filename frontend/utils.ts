@@ -116,3 +116,10 @@ export function el(id: string): HTMLElement {
 export function daysInMonth(d: Date): number {
   return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
 }
+
+/** Check if selected month is the latest month (editable) */
+export function isLatestMonth(months: { id: number }[], currentMonthId: number | null): boolean {
+  if (!currentMonthId || !months.length) return false;
+  const latestMonth = months[months.length - 1];
+  return currentMonthId === latestMonth.id;
+}

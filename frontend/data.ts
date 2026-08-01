@@ -3,7 +3,7 @@
 // ============================================================
 
 import { S } from './state';
-import { el } from './utils';
+import { el, isLatestMonth } from './utils';
 import {
   getMonths,
   getSummary,
@@ -71,6 +71,48 @@ export async function loadMonthData(): Promise<void> {
   renderDaily();
   populateAssetSelects();
   populateDailyExpenseSelect();
+  updateReadOnlyMode();
+}
+
+function updateReadOnlyMode(): void {
+  const isEditable = isLatestMonth(S.months, S.currentMonthId);
+  
+  // Disable/enable all add buttons
+  const addButtons = [
+    'btn-add-income',
+    'btn-add-daily',
+    'btn-add-asset',
+    'btn-add-expense',
+    'btn-add-investment',
+  ];
+  
+  addButtons.forEach(btnId => {
+    const btn = el(btnId);
+    if (btn) {
+      if (isEditable) {
+        btn.removeAttribute('disabled');
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+      } else {
+        btn.setAttribute('disabled', 'true');
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'not-allowed';
+      }
+    }
+  });
+  
+  // Disable/enable all delete buttons in tables
+  document.querySelectorAll('.btn-icon.danger').forEach((btn) => {
+    if (isEditable) {
+      (btn as HTMLButtonElement).removeAttribute('disabled');
+      (btn as HTMLElement).style.opacity = '1';
+      (btn as HTMLElement).style.cursor = 'pointer';
+    } else {
+      (btn as HTMLButtonElement).setAttribute('disabled', 'true');
+      (btn as HTMLElement).style.opacity = '0.5';
+      (btn as HTMLElement).style.cursor = 'not-allowed';
+    }
+  });
 }
 
 /** Alias untuk reloadAll — konsisten dengan pattern lama */
