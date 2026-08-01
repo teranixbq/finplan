@@ -77,39 +77,36 @@ export async function loadMonthData(): Promise<void> {
 function updateReadOnlyMode(): void {
   const isEditable = isLatestMonth(S.months, S.currentMonthId);
   
-  // Hide/show action buttons for daily page
-  const dailyActionButtons = ['btn-add-income', 'btn-add-daily'];
-  dailyActionButtons.forEach(btnId => {
+  // Hide/show all action buttons for read-only months
+  const actionButtons = [
+    'btn-add-income',      // Daily: Tambah Pemasukan
+    'btn-add-daily',       // Daily: Catat Harian
+    'btn-add-asset',       // Setup: Tambah Asset
+    'btn-add-expense',     // Setup: Tambah Pengeluaran
+    'btn-add-investment',  // Setup: Tambah Investasi
+    'btn-open-salary',     // Setup: Edit Gaji
+    'btn-new-month',       // Top: Bulan Baru
+    'btn-add-projection',  // Setup: Tambah Item (Proyeksi)
+    'btn-reset-projection' // Setup: Samakan dengan Bulan Ini
+  ];
+  
+  actionButtons.forEach(btnId => {
     const btn = el(btnId);
     if (btn) {
       btn.style.display = isEditable ? '' : 'none';
     }
   });
   
-  // Disable/enable other add buttons
-  const otherAddButtons = ['btn-add-asset', 'btn-add-expense', 'btn-add-investment'];
-  otherAddButtons.forEach(btnId => {
-    const btn = el(btnId);
-    if (btn) {
-      if (isEditable) {
-        btn.removeAttribute('disabled');
-        btn.style.opacity = '1';
-        btn.style.cursor = 'pointer';
-      } else {
-        btn.setAttribute('disabled', 'true');
-        btn.style.opacity = '0.5';
-        btn.style.cursor = 'not-allowed';
-      }
-    }
-  });
-  
   // Hide delete buttons in tables for read-only months
   document.querySelectorAll('.btn-icon.danger').forEach((btn) => {
-    if (isEditable) {
-      (btn as HTMLElement).style.display = '';
-      (btn as HTMLButtonElement).removeAttribute('disabled');
-    } else {
-      (btn as HTMLElement).style.display = 'none';
+    (btn as HTMLElement).style.display = isEditable ? '' : 'none';
+  });
+  
+  // Hide edit buttons in tables for read-only months
+  document.querySelectorAll('.btn-icon').forEach((btn) => {
+    const btnText = (btn as HTMLElement).textContent?.trim();
+    if (btnText === 'Edit' || btnText === 'edit') {
+      (btn as HTMLElement).style.display = isEditable ? '' : 'none';
     }
   });
 }
