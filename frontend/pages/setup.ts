@@ -35,7 +35,10 @@ export function renderAssets(): void {
     <tr>
       <td data-label="${t('name')}">${a.name}</td>
       <td data-label="${t('amount')}" style="text-align:right">${rp(a.amount)}</td>
-      <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteAsset(${a.id})"><i class="fa-solid fa-trash"></i></button></td>
+      <td class="td-actions">
+        <button class="btn-icon" onclick="window.openEditAsset(${a.id})"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn-icon danger" onclick="window.deleteAsset(${a.id})"><i class="fa-solid fa-trash"></i></button>
+      </td>
     </tr>
   `,
     )
@@ -56,7 +59,10 @@ export function renderInvestments(): void {
       <td data-label="${t('name')}">${inv.name}</td>
       <td data-label="${t('type')}">${t(inv.type)}</td>
       <td data-label="${t('amount')}" style="text-align:right">${rp(inv.amount)}</td>
-      <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteInvestment(${inv.id})"><i class="fa-solid fa-trash"></i></button></td>
+      <td class="td-actions">
+        <button class="btn-icon" onclick="window.openEditInvestment(${inv.id})"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn-icon danger" onclick="window.deleteInvestment(${inv.id})"><i class="fa-solid fa-trash"></i></button>
+      </td>
     </tr>
   `,
     )
@@ -89,7 +95,10 @@ export function renderExpenses(): void {
           </span>
         </label>
       </td>
-      <td class="td-actions"><button class="btn-icon danger" onclick="window.deleteExpense(${exp.id})"><i class="fa-solid fa-trash"></i></button></td>
+      <td class="td-actions">
+        <button class="btn-icon" onclick="window.openEditExpense(${exp.id})"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn-icon danger" onclick="window.deleteExpense(${exp.id})"><i class="fa-solid fa-trash"></i></button>
+      </td>
     </tr>`;
     })
     .join('');

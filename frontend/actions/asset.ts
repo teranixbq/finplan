@@ -7,20 +7,46 @@ import { el, parseAmount } from '../helpers/utils';
 import { t } from '../helpers/i18n';
 import { showToast } from '../helpers/toast';
 import { openModal, closeModal } from '../helpers/modals';
-import { postAsset, deleteAsset as apiDeleteAsset } from '../services/api';
+import { postAsset, putAsset, deleteAsset as apiDeleteAsset } from '../services/api';
 import { reloadAll } from '../services/data';
 import { confirmDelete } from './confirm';
 
+export function openEditAsset(id: number): void {
+  const asset = S.assets.find((a) => a.id === id);
+  if (!asset) return;
+
+  (el('asset-id') as HTMLInputElement).value = String(id);
+  (el('asset-name') as HTMLInputElement).value = asset.name;
+  (el('asset-amount') as HTMLInputElement).value = String(asset.amount);
+
+  const modalTitle = el('modal-asset')?.querySelector('.modal-title');
+  if (modalTitle) modalTitle.textContent = t('editAsset') || 'Edit Dana Cair';
+
+  openModal('modal-asset');
+}
+
 export async function submitAddAsset(): Promise<void> {
+  const idInput = el('asset-id') as HTMLInputElement;
+  const id = idInput.value ? parseInt(idInput.value) : null;
   const name = (el('asset-name') as HTMLInputElement).value.trim();
   const amount = parseAmount((el('asset-amount') as HTMLInputElement).value);
+
   if (!name) return showToast(t('validNameRequired'), 'error');
 
   try {
-    await postAsset({ name, amount });
+    if (id) {
+      await putAsset(id, { name, amount });
+    } else {
+      await postAsset({ name, amount });
+    }
     closeModal('modal-asset');
+    (el('asset-id') as HTMLInputElement).value = '';
     (el('asset-name') as HTMLInputElement).value = '';
     (el('asset-amount') as HTMLInputElement).value = '';
+
+    const modalTitle = el('modal-asset')?.querySelector('.modal-title');
+    if (modalTitle) modalTitle.textContent = t('addAsset') || 'Tambah Dana Cair';
+
     showToast(t('savedSuccess'), 'success');
     await reloadAll();
   } catch (e) {

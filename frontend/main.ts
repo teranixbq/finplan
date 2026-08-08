@@ -11,14 +11,15 @@ import { navigate, switchTab } from './services/navigation';
 import { openModal, closeModal, closeBreakdownModal, showBreakdownModal } from './helpers/modals';
 import { openAssetHistory } from './actions/asset';
 import { submitNewMonth, openEditSalary, submitEditSalary } from './actions/month';
-import { submitAddAsset, deleteAsset } from './actions/asset';
+import { submitAddAsset, deleteAsset, openEditAsset } from './actions/asset';
 import {
   submitAddExpense,
   deleteExpense,
   toggleExpense,
   onExpenseCategoryChange,
+  openEditExpense,
 } from './actions/expense';
-import { submitAddInvestment, deleteInvestment } from './actions/investment';
+import { submitAddInvestment, deleteInvestment, openEditInvestment } from './actions/investment';
 import { submitAddIncome, deleteIncome } from './actions/income';
 import { submitAddDaily, deleteDaily } from './actions/daily';
 import {
@@ -48,12 +49,15 @@ declare global {
     openEditSalary: typeof openEditSalary;
     submitEditSalary: typeof submitEditSalary;
     submitAddAsset: typeof submitAddAsset;
+    openEditAsset: typeof openEditAsset;
     deleteAsset: typeof deleteAsset;
     submitAddExpense: typeof submitAddExpense;
+    openEditExpense: typeof openEditExpense;
     deleteExpense: typeof deleteExpense;
     toggleExpense: typeof toggleExpense;
     onExpenseCategoryChange: typeof onExpenseCategoryChange;
     submitAddInvestment: typeof submitAddInvestment;
+    openEditInvestment: typeof openEditInvestment;
     deleteInvestment: typeof deleteInvestment;
     submitAddIncome: typeof submitAddIncome;
     deleteIncome: typeof deleteIncome;
@@ -85,12 +89,15 @@ window.submitNewMonth = submitNewMonth;
 window.openEditSalary = openEditSalary;
 window.submitEditSalary = submitEditSalary;
 window.submitAddAsset = submitAddAsset;
+window.openEditAsset = openEditAsset;
 window.deleteAsset = deleteAsset;
 window.submitAddExpense = submitAddExpense;
+window.openEditExpense = openEditExpense;
 window.deleteExpense = deleteExpense;
 window.toggleExpense = toggleExpense;
 window.onExpenseCategoryChange = onExpenseCategoryChange;
 window.submitAddInvestment = submitAddInvestment;
+window.openEditInvestment = openEditInvestment;
 window.deleteInvestment = deleteInvestment;
 window.submitAddIncome = submitAddIncome;
 window.deleteIncome = deleteIncome;

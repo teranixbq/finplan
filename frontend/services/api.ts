@@ -57,6 +57,8 @@ export const patchExpenseActive = (id: number, isActive: number) =>
 export const getInvestments = (monthId: number) =>
   request<Investment[]>('GET', `/investments/${monthId}`);
 export const postInvestment = (body: unknown) => request<Investment>('POST', '/investments', body);
+export const putInvestment = (id: number, body: unknown) =>
+  request<Investment>('PUT', `/investments/${id}`, body);
 export const deleteInvestment = (id: number) =>
   request<{ ok: boolean }>('DELETE', `/investments/${id}`);
 
