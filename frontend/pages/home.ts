@@ -40,7 +40,7 @@ export function renderHome(): void {
 
   // total cash & investment
   const cashEl = el('val-total-cash');
-  if (cashEl) cashEl.textContent = rp(s.totalCash);
+  if (cashEl) cashEl.textContent = rp(s.totalCash - s.totalDaily);
   const investEl = el('val-total-investment');
   if (investEl) investEl.textContent = rp(s.totalInvestment);
 
